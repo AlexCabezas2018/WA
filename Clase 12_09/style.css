@@ -1,0 +1,79 @@
+th, td {
+    padding: 5px;
+    text-align: center;
+}
+
+* {
+    font-family: sans-serif;
+}
+
+header {
+    text-align: center;
+    color: lightpink;
+    background-color: darkred;
+    padding-top: 1%;
+    padding-bottom: 1%;
+    margin-bottom: 25px;
+}
+
+.boton {
+    background-color: black;
+    padding: 10px;
+    color: white;
+    text-decoration: none;
+}
+
+.rojo {
+    color: red;
+}
+
+.resaltado {
+    background: lightgrey;
+}
+
+#tc {
+    margin-top: 20px;
+    font-style: italic;
+    border: 2px solid lightgrey;
+}
+
+img[src$=".png"] {
+    background: black;
+}
+
+caption {
+    background-color: lightgrey;
+    padding: 5%;
+}
+
+.dias {
+    background-color: lightgrey;
+}
+
+.desayuno-fila {
+    background-color: orange;
+}
+
+#desayuno-col {
+    background-color: orangered;
+}
+
+.break-fila {
+    background-color: blueviolet;
+}
+
+#break-col {
+    background-color: purple;
+}
+
+.comida-fila {
+    background-color: lime;
+}
+
+#comida-col {
+    background-color: green;
+}
+
+#blanco {
+    background-color: white;
+}

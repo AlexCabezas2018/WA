@@ -1,0 +1,45 @@
+html{
+  font-family: Arial;
+  background-image: linear-gradient(white, black);
+  height: 100%;
+}
+
+header {
+  background-color: black;
+  color: white;
+  height: 30%;
+}
+
+header h1 {
+  text-align: center;
+  padding-top: 4%;
+  margin-top: 0;
+}
+
+header p {
+  margin: auto 3%;
+  padding-bottom: 2%;
+}
+
+.content {
+  margin-left: 2%;
+}
+
+.list{
+  color: white;
+  display: inline-block;
+  margin-right: 20%;
+}
+
+img {
+  display: inline-block;
+  margin-top: 3%
+}
+
+#orange {
+  color: orange;
+}
+
+#blue {
+  color: blue;
+}

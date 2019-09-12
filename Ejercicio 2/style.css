@@ -1,0 +1,41 @@
+* {
+    font-family: sans-serif;
+}
+
+h1 {
+    font-size: 45px;
+    margin-bottom: 70px;
+}
+
+header {
+    background-color: black;
+    color: white;
+    text-align: center;
+    padding: 5%;
+    padding-top: 1%;
+    padding-bottom: 1%;
+}
+
+strong {
+    color: orange;
+}
+
+html {
+    background: linear-gradient(to top, rgb(0, 0, 0), rgb(255,255,255));
+    height: 100%;
+}
+
+p {
+    color: white;
+    margin-left: 5%;
+}
+
+ul {
+    color: white;
+    margin-left: 5%;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}

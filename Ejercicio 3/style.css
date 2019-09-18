@@ -1,37 +1,84 @@
 * {
-    font-family: "Open Sans" ;
+  font-family: "Open Sans";
 }
 
 body {
-    background-color: #f4f4f4
+  background-color: #f4f4f4;
 }
 
 div {
-    background-color: white;
-    border: 2px solid #f4f4f4;
+  background-color: white;
+  border: 2px solid #dddbdb77;
 }
 
-.subject-head {
-    padding-left: 15px;
-    padding-bottom: 25px;
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
-div.subject-head h1 {
-    font-weight: 400;
-    margin-bottom: 10px;
+li {
+  margin-bottom: 10px;
+}
+
+img {
+  margin-right: 7px;
+  margin-bottom: -5px; /*Is this correct? I think i'm not using it correctly*/
 }
 
 a {
-    font-size: 13px;
-    margin-right: 5px;
-    text-decoration: none;
-    color: #1177D1;
+  font-size: 13px;
+  margin-right: 5px;
+  text-decoration: none;
+  color: #1177d1;
+}
+
+.subject-head {
+  padding-left: 15px;
+  padding-bottom: 25px;
+}
+
+div.subject-head h1 {
+  font-weight: 400;
+  margin-bottom: 10px;
 }
 
 #current {
-    color: black;
+  color: black;
 }
 
 .container {
-    margin-top: 20px;
+  margin-top: 20px;
+  padding-top: 40px;
+  padding-bottom: 50px;
+}
+
+div.container h2 {
+  font-weight: 400;
+  margin-left: 20px;
+}
+
+div.container a {
+  margin-left: 40px;
+}
+
+div.container h2 {
+  margin-bottom: 13px;
+  margin-top: 35px;
+}
+
+a[href="avisos.cv"] > img {
+  content: url("avisos.png");
+}
+
+a[href$="pdf"] > img {
+  content: url("pdf.png");
+}
+
+a[href^="https://cv4.ucm.es"] > img {
+  content: url("url.png");
+}
+
+a[href^="https://docs.google.com"] > img {
+  content: url("tarea.png");
 }

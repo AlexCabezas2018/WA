@@ -67,18 +67,25 @@ div.container h2 {
   margin-top: 35px;
 }
 
-a[href="avisos.cv"] > img {
-  content: url("avisos.png");
-}
 
-a[href$="pdf"] > img {
+a[href$="pdf"]::before {
   content: url("pdf.png");
+  margin-right: 5px;
 }
 
-a[href^="https://cv4.ucm.es"] > img {
+a[href^="https://cv4.ucm.es"]::before {
   content: url("url.png");
+  margin-right: 5px;
 }
 
-a[href^="https://docs.google.com"] > img {
+a[href^="https://docs.google.com"]::before {
   content: url("tarea.png");
+  margin-right: 5px;
 }
+
+a[href*="avisos.cv"]::before {
+  content: url("avisos.png");
+  margin-right: 5px;
+}
+
+

@@ -83,7 +83,7 @@ a[href^="https://docs.google.com"]::before {
   margin-right: 5px;
 }
 
-a[href*="avisos.cv"]::before {
+a[href="avisos.cv"]::before {
   content: url("avisos.png");
   margin-right: 5px;
 }

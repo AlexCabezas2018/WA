@@ -1,0 +1,26 @@
+.contenedor {
+    display: flex;
+    width: 800px;
+    height: 100px;
+    border: solid;
+    border-color: black;
+    border-width: 2px;
+}
+
+.elemento1 {
+    flex-basis: 100px;
+    background-color: pink;
+    flex-grow: 1;
+}
+
+.elemento2 {
+    flex-basis: 200px;
+    background-color: red;
+    flex-grow: 1;
+}
+
+.elemento3 {
+    flex-basis: 300px;
+    background-color: lightgray;
+    flex-grow: 0;
+}

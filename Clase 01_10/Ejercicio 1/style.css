@@ -1,0 +1,144 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-weight: 400;
+    font-family: 'Roboto', sans-serif;
+}
+
+body {
+    background-color: white;
+}
+
+header {
+    border-bottom: 3px solid grey;
+    background-color: white;
+}
+
+h1 {
+    color: darkred;
+    font-size: 2.5em;
+}
+
+h2 {
+    background-color: rgb(245, 244, 244);
+    border-top: 2px solid gray;
+    border-bottom: 2px solid gray;
+    margin: 2% 1%;
+    font-size: 1.6em;
+}
+
+p {
+    margin: 0 1%;
+    margin-bottom: 1%;
+}
+
+label {
+    font-weight: bold;
+    color: rgb(68, 68, 68);
+    font-size: 1.1em;
+}
+
+main {
+    background-color: lightgray;
+}
+
+#key-img {
+    background-color: rgb(245, 244, 244);
+    border-radius: 50%;
+    border: 1px solid grey; 
+    padding: 1.4em;
+    margin: 1.8em 0;
+}
+
+.header-container {
+    display: flex;
+    flex-grow: 1;
+    flex-shrink: 1;
+    width: 80%;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 auto;
+    padding: 1.5%;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    flex-grow: 1;
+    flex-shrink: 1;
+    width: 85%;
+    background-color: white;
+}
+
+.form-container {
+    display: flex;
+    margin: 0 auto;
+    padding-bottom: 1.5em;
+    width: 75%;
+    justify-content: space-between;
+}
+
+.info-container {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    flex-shrink: 1;
+    margin-left: 1%;
+    margin-right: 1%;
+    border-top: 1px solid rgb(235, 234, 234);
+    padding-top: 10px;
+    padding-bottom: 30px;
+    align-items: flex-start;
+}
+
+div.info-container a {
+    color: grey;
+    text-decoration-style: dotted;
+    margin-bottom: 4px;
+}
+
+div.info-container a:hover {
+    color: darkblue;
+    text-decoration-style: double;
+}
+
+.div-mail,.div-pass {
+    display: flex;
+    justify-content: flex-end;
+}
+
+#loggin-button {
+    width: 30%;
+    margin: 0 auto;
+    font-size: 18px;
+    border-radius: 6px;
+    padding: 10px 16px;
+    cursor: pointer;
+}
+
+#loggin-button:hover {
+    background-color: rgb(218, 214, 214);
+}
+
+label {
+    margin-right: 25px;
+}
+
+input {
+    width: 60%;
+    height: 25px;
+    border-radius: 6px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    flex-basis: 600px;
+}
+
+footer {
+    border-top: 3px solid grey;
+    background-color: white;
+}

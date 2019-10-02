@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="style.css">
+    <title>Forms test</title>
+</head>
+<body>
+    <form action="">
+        <button type="submit">Enviar</button>
+        <button type="reset">Borrar formulario</button>
+        <button type="button">Otro</button>
+        <input type="text" name="nombre_campo" pattern="[A-za-z]+">
+        <div>Contraseña: <input type="password" name="contrasenya" required></div>
+        <div>Edad: <input type="number" name="edad"></div>
+        <div>Peso: <input type="range" name="peso" min="30" max="200"></div>
+        <div>Color: <input type="color" name="color_favorito"></div>
+        <div>Fecha de nacimiento <input type="date" name="fecha_nacimiento" min="1998-05-07"></div>
+        <textarea name="observaciones" id="text_observs">
+            Texto por defecto.
+        </textarea>
+        Fumador:
+        <input type="checkbox" name="fuma", value="si">
+        Fumador:
+        <input type="checkbox" name="fuma", value="si" checked>
+        Sexo:
+        <input type="radio" name="sexo" value="hombre"> hombre
+        <input type="radio" name="sexo" value="mujer"> Mujer
+        <select name="opt">
+            <option value="fut">Futbol</option>
+            <option value="bal">Baloncesto</option>
+            <option value="nat">Natación</option>
+            <option value="ten">Tenis</option>
+            <option value="pad">Padel</option>
+        </select>
+    </form>
+</body>
+</html>

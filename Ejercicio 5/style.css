@@ -1,0 +1,47 @@
+* {
+    font-family: arial;
+    color:whitesmoke;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    display:grid;
+    width: 350px;
+    background-color: silver;
+    padding:4px;
+    grid-row-gap: 5px; 
+    grid-row: auto;
+}
+
+.date {
+    display: flex;
+    justify-content: space-evenly ;
+    height: 60px;
+    font-size: 20px;
+    background-color: dimgray;
+    align-items: center;
+    padding: 0 20%;
+}
+
+.datetime {
+    display: flex;
+    height: 100px;
+    align-items: center;
+    background-color: dimgray;
+    justify-content: center;
+}
+
+.hour, .minutes, .colon {
+    font-size: 100px;
+}
+
+.am-pm {
+    display:flex;
+    flex-direction: column;
+    height: 100px;
+    width: 20%;
+    font-size: 30px;
+    align-items: center;
+    justify-content: center;
+}

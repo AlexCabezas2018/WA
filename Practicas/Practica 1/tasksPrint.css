@@ -1,0 +1,45 @@
+* {
+  margin: 0;
+  padding: 0;
+  font-family: Helvetica, sans-serif;
+}
+
+header {
+  margin: 2% 2%;
+  font-size: 18px;
+}
+.tasks-container {
+  margin: 3% 5%;
+}
+
+.user,
+input,
+.done-task-button,
+#add-task-button,
+#remove-task-btn {
+  display: none;
+}
+
+span {
+  font-size: 9px;
+  text-overflow: ellipsis;
+}
+
+span::before {
+  content: "(";
+}
+span::after {
+  content: ")";
+}
+
+#done {
+  text-decoration: line-through;
+  margin-left: 7%;
+}
+
+h2 {
+  display: list-item;
+  list-style-position: inside;
+  margin: 2% auto;
+  font-size: 12px;
+}

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://fonts.googleapis.com/css?family=Concert+One&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Cabin&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="tasksPrint.css" media="print" >
+    <link rel="stylesheet" href="tasksScreen.css" media="screen">
+    <link rel="icon" href="favicon.ico">
+    <title>Gestor de tareas</title>
+</head>
+<body>
+    <header>
+        <h1>TAREAS</h1>
+        <div class="user">
+            <img src="contact-img.png" alt="contact-image">
+            <div class="user-info">
+                <p>USUARIO@GMAIL.COM</p>
+                <a href="">DESCONECTAR</a>
+            </div>
+        </div>
+    </header>
+    <main>
+        <div class="tasks-container">
+            <div class="task">
+                <h2>Preparar práctica AW <span class="tag">AW</span> <span class="tag">Practica</span> </h2>
+                <a class="done-task-button">Marcar finalizada</a>
+            </div>
+            <div class="task" id="done">
+                <h2>Mirar fechas congreso</h2>
+            </div>
+            <div class="task">
+                <h2>Ir al supermercado <span class="tag">Personal</span></h2>
+                <a class="done-task-button">Marcar finalizada</a>
+            </div>
+            <div class="task">
+                <h2>Mudanza <span class="tag">Personal</span></h2>
+                <a class="done-task-button">Marcar finalizada</a>
+            </div>
+            <div class="form-div">
+                <input type="text" id="newtask" placeholder="Introduce tarea...">
+                <a id="add-task-button">AÑADIR </a>
+            </div>
+            <a id="remove-task-btn">ELIMINAR TAREAS COMPLETADAS</a>
+        </div>
+    </main>
+</body>
+</html>

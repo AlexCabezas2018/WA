@@ -106,15 +106,7 @@ console.log(sequence3([
 //3
 function pluck(objects, fieldName) { 
     if(!(objects instanceof Array)) throw new Error(`${objects} must be an array of objects`);
-    let toReturn = [];
-    for(obj of objects) {
-        if(!(obj instanceof Object)) throw new Error(`${obj} is not an Object`);
-        if(obj[fieldName] != undefined) {
-            toReturn.push(obj[fieldName])
-        }
-    }
-
-    return toReturn;
+    return objects.map(elem => elem[fieldName]).filter(elem => elem != undefined);
 }
 
 //Test
@@ -201,5 +193,4 @@ function reduceSquare(arr) {
     return arr.reduce((ac, n) => ac + (n*n))
 }
 
-console.log(reduceSquare([2, 4, 6])) //4 + 16 + 36 = 54
-
+console.log(reduceSquare([2, 4, 6], 0)) //4 + 16 + 36 = 54

@@ -11,6 +11,7 @@ header {
   padding: 1% 2%;
   position: fixed;
   width: 100%;
+  top: 0;
   background-image: linear-gradient(
     to top,
     rgba(160, 13, 23, 0.4),
@@ -27,7 +28,6 @@ header h1 {
 .user {
   display: flex;
   justify-content: space-between;
-  flex-basis: 200px;
 }
 
 div.user img {
@@ -64,7 +64,9 @@ body {
   flex-shrink: 1;
   justify-content: center;
   align-items: center;
-  padding-top: 10%;
+  margin-top: 175px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .task {
@@ -73,7 +75,8 @@ body {
   flex-grow: 1;
   flex-shrink: 1;
   background-color: rgb(160, 13, 23);
-  width: 550px;
+  width: 50%;
+  min-width: 374px;
   margin: 1%;
   padding: 1%;
   font-family: "Cabin", sans-serif;
@@ -122,7 +125,8 @@ div.task h2 {
   display: flex;
   justify-content: space-between;
   background-color: lightslategray;
-  width: 550px;
+  width: 50%;
+  min-width: 374px;
   border-radius: 6px;
   margin: 1%;
   padding: 1%;
@@ -145,6 +149,7 @@ div.task h2 {
   cursor: pointer;
   font-family: "Cabin", sans-serif;
   border: 2px solid grey;
+  text-align: center;
 }
 
 #remove-task-btn:hover {

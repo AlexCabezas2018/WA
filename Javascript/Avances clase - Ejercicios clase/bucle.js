@@ -21,12 +21,12 @@ var alumno = {
 
 //3
 function mayorDeTres(a, b, c) {
-    if (a > b && b > c) return a;
-    if (b > c && b > a) return b;
-    if (c > a && c > b) return c; 
+    if (a >= b && b >= c) return a;
+    if (b >= c && b >= a) return b;
+    if (c >= a && c >= b) return c;
 }
 
-console.log("El mayor numero entre 1, 7 y -2 es: " + mayorDeTres(1, 7, -2));
+console.log("El mayor numero entre 1, 7 y -2 es: " + mayorDeTres(1, 5, 7));
 
 //4
 function esDivisiblePorDos(numero) {
@@ -41,18 +41,17 @@ function cuentaAes(cadena){
     for(let caracter of cadena) {
         if(caracter == 'a') vecesA++;
     }
-
-    return vecesA;
+    return `La cadena: '${cadena}' tiene ${vecesA} a's`;
 }
 
-console.log("Cadena: 'cadena aaa' (Esperadas 5): " + cuentaAes("cadena aaa"));
+console.log(cuentaAes('holaa aaa'));
 
 //6
 function cuentaPalabras(cadena) {
     return cadena.split(" ").length;
 }
 
-console.log("Numero de palabras en la cadena: 'uno dos tres': " + cuentaPalabras("uno dos tres"));
+    console.log("Numero de palabras en la cadena: 'uno dos tres': " + cuentaPalabras("uno dos tres"));
 
 //7
 try {
@@ -70,7 +69,10 @@ function undef(attr) {
     return (attr == undefined) ? "Si" : "No";
 }
 
-console.log("Es undefinded?: " + undef(undefined));
+let test = undefined;
+console.log("Es undefinded?: " + undef(test));
+test = "Ya no es undefined";
+console.log("Es undefinded?: " + undef(test));
 
 //9
 function mostrarTipo(atributo) {
@@ -94,7 +96,7 @@ console.log(isArray("Hola"));
 
 //11
 function primitiveOrObject(param) {
-    if(typeof(param) != 'object'){
+    if(!(param instanceof Object)){
         return `primitive - ${typeof(param)}`
     }
     else return "Object";
@@ -105,6 +107,7 @@ console.log(primitiveOrObject({name: 'Alex'}));
 
 //12
 function describirObjeto(obj) {
+    if(!(obj instanceof Object)) return "No es un objeto.";
     let props = Object.keys(obj);
     console.log("Numero de propiedades: " + props.length);
     for(let prop of props) {

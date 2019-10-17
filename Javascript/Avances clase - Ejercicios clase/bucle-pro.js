@@ -97,9 +97,7 @@ console.log(sequence3([funct1, funct2, funct3], 3, true));
 //Otra forma de escribir funciones anonimas: Arrow functions.
 console.log(sequence3([x => x * x, x => x * 2, x => x / 2], 4, false));
 
-//Clase del 08/10
-
-//3
+//3 y 4
 function pluck(objects, fieldName) {
   if (!(objects instanceof Array))
     throw new Error(`${objects} must be an array of objects`);
@@ -130,8 +128,19 @@ function partition(list, condition) {
   return [trueElems, falseElems];
 }
 
-console.log("Partition with high order functions");
-console.log(partition(personas, pers => pers.edad >= 60));
+// DEVOLVER EL PUTO ACUMULADOR
+function partition2(list, condition) {
+    return list.reduce((ac, n) => {
+      if(condition(n)) ac[0].push(n);
+      else ac[1].push(n);
+      return ac; //Alejandro por tu vida
+    } , [[], []]);
+  }
+  
+  console.log("Partition with high order functions");
+  console.log(partition(personas, pers => pers.edad >= 60));
+  console.log("partition2");
+  console.log(partition2(personas, pers => pers.edad >= 60));
 
 function groupBy(array, f) {
   let groupedSet = {};
@@ -149,8 +158,22 @@ function groupBy(array, f) {
   return groupedSet;
 }
 
+function groupBy2(arr, f) {
+    return arr.reduce((ac, n) => {
+        let result = f(n);
+        if(ac[result] == undefined) ac[result] = [];
+        ac[result].push(n);
+        return ac;
+    }, {})
+}
+
 console.log(
   groupBy(["Mario", "Elvira", "María", "Estela", "Fernando"], str => str[0])
+);
+
+console.log("GroupBy 2")
+console.log(
+    groupBy2(["Mario", "Elvira", "María", "Estela", "Fernando"], str => str[0])
 );
 
 //where
@@ -172,8 +195,7 @@ console.log(where(personas, { apellidos: "García" }));
 console.log(where(personas, { apellidos: "Conde" }));
 console.log(where(personas, { correo: "correo@correo.com" }));
 
-//clase 15/10
-
+// Ejercicio clase dia 15/10
 function mapLengths(array) {
   return array.map(elem => elem.length);
 }
@@ -209,3 +231,4 @@ function reduceSquare(arr) {
 }
 
 console.log(reduceSquare([2, 4, 6], 0)); //4 + 16 + 36 = 54
+// ---------------------------------------------- \\

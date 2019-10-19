@@ -110,7 +110,8 @@ function createTask(texto) {
     text = "";
   if (typeof texto != "undefined" && typeof texto == "string" && texto != "") {
     tags = (texto.match(/@\w+/g) || []).map(tag => tag.replace("@", "")); //Queremos cualquier cadena que coincida con que empieza por arroba y va seguido de cualquier cadena de caracteres hasta llegar al espacio
-    text = texto.replace(/@\w+/g, "").trim();
+    text = texto.replace(/@\w+/g, "").trim().replace(/\s+/g, ' '); //1: "Ir a @deporte      entrenar" --> "Ir a      entrenar"
+                                                                    //2: "Ir a      entrenar" --> "Ir a entrenar" (quitamos espacios entre palabras en el texto).
   }
 
   return { text, tags };
@@ -126,5 +127,6 @@ console.log('createTask("No tiene tags                     "): ', createTask("No
 console.log('createTask("@Sin @Texto"): ', createTask("@Sin @Texto"));
 console.log('createTask(""): ', createTask(""));
 console.log("createTask({ soy_string: false }): ", createTask({ soy_string: false }));
+console.log('createTask("No tiene               tags"): ', createTask("No tiene               tags"));
 console.log("createTask(): ", createTask());
 console.log("=============================================");

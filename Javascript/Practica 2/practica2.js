@@ -91,7 +91,7 @@ console.log("Ejercicio 4: countDone(tasks)");
 console.log("=============================================");
 console.log("countDone(listaTareas): ", countDone(listaTareas)); //1
 console.log("listaTareas_test: ", listaTareas_test);
-console.log("countDone(listaTareas_test) cuatro veces, cada vez con una tarea más completada: ", countDone(listaTareas_test)); //4
+console.log("countDone(listaTareas_test) cuatro veces, cada vez con una tarea menos completada: ", countDone(listaTareas_test)); //4
 listaTareas_test[0]["done"] = false;
 console.log(countDone(listaTareas_test)); //3
 listaTareas_test[1]["done"] = false;

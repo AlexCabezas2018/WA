@@ -232,3 +232,60 @@ function reduceSquare(arr) {
 
 console.log(reduceSquare([2, 4, 6], 0)); //4 + 16 + 36 = 54
 // ---------------------------------------------- \\
+//Ejercicio 5
+function concatenar() {
+  //arguments: guarda los argumentos
+  if(arguments.length < 2) return "";
+  let delimiter = arguments[0];
+
+  return Array.from(arguments).slice(1, arguments.length)
+  .reduce((ac, elem) => ac + (elem + delimiter), "");
+}
+
+console.log(concatenar());
+console.log(concatenar("-"));
+console.log(concatenar("-","uno"));
+console.log(concatenar("-", "uno", "dos", "tres"));
+console.log(concatenar("-", "uno", "dos", "tres", "cuatro", "cinco"));
+
+//Ejercicio 6
+function mapFilter(array, f) {
+  return array.reduce((ac, elem) => {
+    let result;
+    try {
+      result = f(elem); //la funcion puede lanzar excepcion si en ella no se controla el tipo
+    } catch (err) { result = undefined; }
+    if (typeof result != 'undefined') ac.push(result);
+    return ac;
+  }, []);
+}
+
+console.log(mapFilter(["23", "44", "das", "555", "21"], 
+  (str) => {
+    let num = Number(str);
+    if (!isNaN(num)) return num;
+  })
+);
+
+console.log(mapFilter(["hola", {no: false}, "que", "tal"], str => str[0].toUpperCase()));
+
+//Ejercicio 7
+function interpretarColor(str) {
+  let colors = ((str || "").match(/\w{2,2}/g) || []);
+  if(colors.length < 3 || colors.length > 3) return {error: "Bad color format"};
+  return {
+    red: parseInt(colors[0], 16),
+    green: parseInt(colors[1], 16),
+    blue: parseInt(colors[2], 16)
+  };
+}
+
+console.log(interpretarColor("#FA10FF"));
+console.log(interpretarColor("#BABBFA"));
+console.log(interpretarColor("#BA"));
+console.log(interpretarColor("#BBAABBAABBAA"));
+console.log(interpretarColor());
+console.log(interpretarColor(""));
+
+//Ejercicio 8
+

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Amigos y solicitudes de amistad</title>
+    <link href="https://fonts.googleapis.com/css?family=PT+Sans&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header>
+        <img src="logo.png" alt="logo">
+        <div class="links">
+            <a href="">Perfil</a>
+            <a href="">Amigos</a>
+            <a href="">Preguntas</a>
+            <a href="">Desconectar</a>
+            <div class="user-header">
+                <img src="contact-img.png" alt="imagen de usuario" id="header-img">
+                <span>50 pts</span>
+            </div>
+        </div>
+
+    </header>
+    <div class="container">
+        <h2>Solicitudes de amistad</h2>
+        <div class="friend-requests">
+            <div class="friend">
+                <div class="friend-profile">
+                    <img src="contact-img.png" alt="imagen de perfil" id="header-img">
+                    <p>Gerardo Rossini</p>
+                </div>
+                <div class="response">
+                    <a class="accept-reject-button" id='accept-friend-button'>Aceptar</a>
+                    <a class="accept-reject-button" id='reject-friend-button'>Rechazar</a>
+                </div>
+            </div>
+            <div class="friend">
+                <div class="friend-profile">
+                    <img src="contact-img.png" alt="imagen de perfil" id="header-img">
+                    <p>Luke Brown</p>
+                </div>
+                <div class="response">
+                    <a class="accept-reject-button" id='accept-friend-button'>Aceptar</a>
+                    <a class="accept-reject-button" id='reject-friend-button'>Rechazar</a>
+                </div>
+            </div>
+        </div>
+        <h2>Búsqueda de amigos</h2>
+        <div class="search-friend">
+            <input type="search" name="contact-img" id="search-bar-input">
+            <a class="search-button">Buscar</a>
+        </div>
+        <h2>Mis amigos</h2>
+        <div class="friends-list">
+            <div class="friend">
+                <img src="contact-img.png" alt="imagen de perfil" id="header-img">
+                <p>Alex Rockstar</p>
+            </div>
+            <div class="friend">
+                <img src="contact-img.png" alt="imagen de perfil" id="header-img">
+                <p>Juan Barelnew</p>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

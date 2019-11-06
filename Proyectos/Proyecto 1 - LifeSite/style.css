@@ -1,0 +1,505 @@
+*{
+    margin:0;
+    padding:0;
+    font-family: 'PT Sans', sans-serif;
+}
+
+body {
+    background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(226,226,226,1) 43%) no-repeat fixed;
+    background-size: 100% 100%;
+
+}
+header {
+    justify-content: space-between;
+    padding: 1% 2%;
+    background-image: linear-gradient(to top, rgba(160, 13, 23, 0.4), rgba(160, 13, 23, 1));
+}
+
+img{
+    display:block;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.container{
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+h2 {
+    font-size: 2.5em;
+    margin: 2% auto;
+    text-align: center;
+}
+
+.form-container{
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(160, 13, 23); 
+    padding: 2% 0;
+    border-radius:20px;
+    min-width: 60%;
+    font-size: 2em;
+}
+
+span{
+    color: white;
+    margin-right: 1%;
+}
+
+.form-item{
+    width: 70%;
+    margin: 0 auto;
+}
+
+div .form-item input{
+  width: 100%;
+  height: 35px;
+  margin: 0.5% auto;
+  padding-left: 2%;
+  font-size: 18px;
+}
+
+div.links a {
+    color:white;
+    font-size: 2em;
+    text-decoration: none;
+    margin-left: 5%;
+    text-align: center;
+}
+
+div.links a:hover {
+    color: rgb(238, 236, 236);
+}
+
+.links{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+}
+
+.button {
+    text-decoration: none;
+    background-color: rgb(238, 236, 236);
+    padding: 0.3%;
+    cursor:pointer;
+    border-radius:20px;
+    text-align: center;
+}
+
+.button:hover {
+    background-color: lightgray;
+}
+
+.button:active {
+    background-color: rgb(182, 182, 182);
+}
+
+#form-button{
+    min-width: 35%;
+    margin: 0 auto;
+    margin-top: 0.6%;
+}
+
+
+/*Página crear nuevo usuario*/
+.form-container-new-user{
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(160, 13, 23); 
+    padding: 2%;
+    border-radius:20px;
+    min-width: 40%;
+    font-size: 1.5em;
+}
+
+.input-new-user{
+    width: 100%;
+    height: 30px;
+}
+
+.input-new-user,.gender,.birth-date,.img-profile{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-bottom: 1.5%;
+}
+
+.gender{
+    display: flex;
+    color:white;
+}
+
+.gender-options{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 64%;
+}
+
+.img-profile{
+    display: flex;
+    justify-content: space-between;
+    color:white;
+    width:97%;
+}
+
+#search-bar-input{
+    width:63%;
+}
+
+/*Pantalla Perfil usuario*/
+
+
+h3{
+    font-size: 1.5em;
+}
+
+#header-img{
+    width: 32px;
+    height: 32px;
+    margin-right: 0;
+}
+
+#user-image{
+    width: 128px;
+    height: 128px;
+    margin-right: 3%;
+}
+
+.user{
+    display:flex;
+    justify-content: flex-start;
+    min-width: 40%;
+    background-color: rgb(160, 13, 23);
+    border-radius: 30px;
+    padding: 1%;
+    color: white;
+}
+
+p {
+    margin-top: 2%;
+    font-size: 1.2em;
+}
+
+.user-header{
+    display: flex;
+    min-width: 10%;
+    justify-content: space-between;
+    color: white;
+    align-items: center;
+}
+
+.user-info{
+    margin-left: 12%;
+}
+
+.edit-profile-button {
+    background-color: rgb(56, 59, 238);
+    min-width: 20%;
+    border: 1px solid black;
+    margin-top: 0.6%;
+    color: white;
+}
+
+.edit-profile-button:hover {
+    background-color: rgb(129, 131, 255);
+}
+
+/*Pagina lista de amigos y solicitudes*/
+
+.friend-requests{
+    display: flex;
+    flex-direction: column;
+    width: 40%;
+}
+
+.friend{
+    display: flex;
+    justify-content: space-between;
+    background-color: rgb(160, 13, 23);
+    border-radius: 30px;
+    padding: 1%;
+    color: white;
+    margin-bottom: 1%;
+}
+
+.friend-profile{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+
+}
+.response {
+    display:flex;
+    justify-content: flex-end;
+    width: 60%;
+}
+
+.search-friend {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    background-color: rgb(189, 187, 187);
+    border-radius: 30px;
+    width: 40%;
+    padding: 1%;
+}
+
+.friends-list{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+div.friends-list p {
+    display: flex;
+    align-items: center;
+}
+
+#search-bar-input{
+    height: 30px;
+    font-size: 18px;
+}
+
+.search-button {
+    background-color: rgb(221, 221, 221);
+    color: rgb(160, 13, 23);
+    border-radius: 30px;
+    padding: 1% 5%;
+    border: 1px solid grey;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.search-button:hover {
+    background-color: rgb(180, 180, 180);
+}
+
+.accept-reject-button {
+    border-radius: 30px;
+    padding: 1% 5%;
+    cursor: pointer;
+    margin-left: 1%;
+    border: 1px solid white;
+}
+
+#accept-friend-button {
+    background-color: darkgreen;
+    color: white;
+}
+
+#accept-friend-button:hover {
+    background-color: rgb(0, 138, 0);
+}
+
+#reject-friend-button {
+    background-color: darkred;
+    color: white;
+}
+
+#reject-friend-button:hover {
+    background-color: rgb(187, 1, 1);
+}
+
+
+/*Pagina de busqueda*/
+
+.user-search {
+    display: flex;
+    min-width: 700px;
+    justify-content: space-between;
+    background-color: rgba(160, 13, 23, 1);
+    border-radius: 30px;
+    margin-bottom: 2%;
+    align-items: center;
+}
+
+.user-info-search {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    color: white;
+    padding: 0.5%;
+    margin-left: 2%;
+}
+
+.result-picture {
+    width: 64px;
+    height: 64px;
+    margin: 0;
+}
+
+.request-button {
+    border-radius: 30px;
+    padding: 1% 0.1%;
+    cursor: pointer;
+    border: 1px solid white;
+    background-color: rgb(202, 216, 216);
+    margin-right: 1%;
+    min-width: 18%;
+    text-align: center;
+}
+
+.request-button:hover {
+    background-color: rgb(216, 238, 238);
+}
+
+/*Pagina de preguntas aleatorias*/
+.question {
+    display: flex;
+    background:  linear-gradient(to top, rgba(160, 13, 23, 0.4), rgba(160, 13, 23, 1));
+    color:white;
+    border-radius: 20px;
+    width: 70%;
+    margin: 1% auto;
+    padding: 1%;
+    align-items: center;
+}
+
+#random-question-text {
+    margin: 0;
+}
+
+#create-question-button {
+    background-color: lightgrey;
+    font-size: 2em;
+    border: 1px solid black;
+    padding: 1%;
+    border-radius: 10px;
+    margin-bottom: 2%;
+}
+
+#create-question-button:hover {
+    background-color: rgb(228, 226, 226);
+}
+
+/*Vista de pregunta*/
+
+.stats{
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+}
+
+.answer{
+    display:flex;
+    justify-content: space-between;
+    margin: 3% 0%;
+    background-color: rgb(167, 53, 61);
+    border-radius:25px;
+    padding: 2%;
+    color: white;
+    flex-grow: 1;
+    flex-shrink: 1;
+}
+
+.user-profile{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.response {
+    display: flex;
+    justify-content: flex-end;
+    min-width: 190px;
+    color:white;
+    align-items: center;
+}
+
+.guess-button {
+    font-size: 1.5em;
+    padding: 2%;
+    width: 50%;
+    border-radius: 30px;
+    cursor: pointer;
+    border: 1px solid white;
+    background-color: rgb(165, 165, 165);
+    text-align: center;
+    margin-bottom: 2%;
+}
+
+div.response p {
+    font-size: 1.3em;
+    padding: 2%;
+    width: 70%;
+    border-radius: 15px;
+    text-align: center;
+    margin-bottom: 2%;
+}
+
+#correct-answer {
+    background-color: green;
+}
+
+#incorrect-answer {
+    background-color: darkred;
+}
+
+.guess-button:hover {
+    background-color: rgb(187, 187, 187);
+}
+
+div.container h3 {
+    margin-bottom: 2%;
+}
+
+
+
+/*Pagina de Responder de pregunta a ti mismo*/
+
+.option {
+    padding: 1.5%;
+    justify-content: flex-start;
+    background-color: rgb(250, 144, 24);
+    margin-bottom: 1.5%;
+    min-width: 55%;
+    border-radius: 15px;
+    font-size: 18px;
+}
+
+#other {
+    background-color: lightgreen;
+}
+
+#option-input {
+    width: 40%;
+    height: 30px;
+    font-size: 18px;
+    margin-left: 1%;
+}
+
+#submit-button {
+    font-size: 1.5em;
+    padding: 1%;
+    width: 30%;
+    border-radius: 30px;
+    cursor: pointer;
+    border: 1px solid white;
+    background-color: rgba(189, 187, 187, 1);
+    text-align: center;
+    margin-bottom: 2%;
+}
+
+#submit-button:hover {
+    background-color: rgb(199, 199, 199);
+}
+/*Pagina responder preguntas para amigos*/
+
+.container-text {
+    text-align: center;
+    margin-bottom: 1%;
+    min-width: 50%;
+    font-size: 1.2em;
+}
+
+div.container-text span {
+    font-weight: bold;
+    color:black;
+}
+

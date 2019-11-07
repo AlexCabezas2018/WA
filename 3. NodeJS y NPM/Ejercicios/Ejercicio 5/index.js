@@ -9,31 +9,53 @@ let dao = new DAO('localhost', 'root', '', 'AW_Exercises');
 // Establecimiento de la función callback del servidor
 let servidor = http.createServer((request, response) => {
    let method = request.method;
-   let pathName = request.pathName;
-
+   let urlObject=url.parse(request.url,true);
+   let pathName = urlObject.pathname;   
+   console.log(method, pathName);
    if(method === "GET"){
        switch(pathName){
             case "/index.html":
+                fs.readFile("./index.html",(err,content)=>{
+                    if(err) {
+                        response.statusCode = 500;
+                        response.setHeader("Content-Type", "text/html");
+                        response.write("ERROR INTERNO");
+                        response.end();
+                    }
+                    else {
+                        response.statusCode = 200;
+                        response.setHeader("Content-Type", "text/html");
+                        response.write(content);
+                        response.end();
+                    }              
+                });
                break;
+            case "/index.css":
+                    fs.readFile("./index.css",(err,content)=>{
+                        if(err) {
+                            response.statusCode = 500;
+                            response.setHeader("Content-Type", "text/css");
+                            response.write("ERROR INTERNO");
+                            response.end();
+                        }
+                        else {
+                            response.statusCode = 200;
+                            response.setHeader("Content-Type", "text/css");
+                            response.write(content);
+                            response.end();
+                        }              
+                    });
             case "/nuevo_usuario":
+                    let user=urlObject.query;
+                    dao.insertarUsuario(user,err=>{
+                        if(err) console.log(err.message);
+                        else{
+                            console.log("Usuario insertado correctamente");
+                        }
+                    });
                 break;
        }
    }
-
-   /** TODO:
-    *   1- Si el método es get: X
-    *       1.1 Si el pathName es /index.html X
-    *           1.1.1 Cargarlo con fs (controlar si ha leido el archivo correctamente)
-    *           1.1.2 Mandarlo
-    *           1.1.3 Terminar comunicación
-    *       1.2 Si el pathName es /nuevo_usuario
-    *           1.2.1 Obtener los parametros
-    *           1.2.2 Convertirlos a objetos con url
-    *           1.2.3 Añadirlos a la bd con el dao
-    *           1.2.4 Terminar comunicación
-    *       1.3 Si es un path distinto pasamos de el
-    *   2- Si es otro método error
-    */
 });
 
 // Inicio del servidor

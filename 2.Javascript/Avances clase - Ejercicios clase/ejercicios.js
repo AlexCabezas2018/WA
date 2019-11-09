@@ -1,6 +1,6 @@
 "use sctrict";
 
-//1
+//Ejercicio 1
 function producto(x1, x2) {
   if (typeof x1 == "number" && typeof x2 == "number") return x1 * x2;
   if (typeof x1 == "number" && x2 instanceof Array) {
@@ -37,8 +37,7 @@ try {
   console.log(Err.message);
 }
 
-//2
-//todo: Comprobar que es un array y que ese array tiene funciones dentro.
+//Ejercicio 2
 function checkArguments(f) {
   if (!(f instanceof Array)) throw new Error(`${f} is not an Array`);
   for (let funct of f) {
@@ -93,11 +92,9 @@ let funct3 = function(x) {
 };
 
 console.log(sequence3([funct1, funct2, funct3], 3, true));
-
-//Otra forma de escribir funciones anonimas: Arrow functions.
 console.log(sequence3([x => x * x, x => x * 2, x => x / 2], 4, false));
 
-//3 y 4
+//Ejercicio 4 (Sobrescribí el ejercicio 3)
 function pluck(objects, fieldName) {
   if (!(objects instanceof Array))
     throw new Error(`${objects} must be an array of objects`);
@@ -128,12 +125,11 @@ function partition(list, condition) {
   return [trueElems, falseElems];
 }
 
-// DEVOLVER EL PUTO ACUMULADOR
 function partition2(list, condition) {
     return list.reduce((ac, n) => {
       if(condition(n)) ac[0].push(n);
       else ac[1].push(n);
-      return ac; //Alejandro por tu vida
+      return ac;
     } , [[], []]);
   }
   
@@ -176,7 +172,6 @@ console.log(
     groupBy2(["Mario", "Elvira", "María", "Estela", "Fernando"], str => str[0])
 );
 
-//where
 function where(list, model) {
   let attributes = Object.keys(model);
   return list.filter(elem => {
@@ -195,7 +190,7 @@ console.log(where(personas, { apellidos: "García" }));
 console.log(where(personas, { apellidos: "Conde" }));
 console.log(where(personas, { correo: "correo@correo.com" }));
 
-// Ejercicio clase dia 15/10
+// Ejercicios clase dia 15/10
 function mapLengths(array) {
   return array.map(elem => elem.length);
 }
@@ -232,6 +227,7 @@ function reduceSquare(arr) {
 
 console.log(reduceSquare([2, 4, 6], 0)); //4 + 16 + 36 = 54
 // ---------------------------------------------- \\
+
 //Ejercicio 5
 function concatenar() {
   //arguments: guarda los argumentos
@@ -288,4 +284,51 @@ console.log(interpretarColor());
 console.log(interpretarColor(""));
 
 //Ejercicio 8
+class Figura {
+  constructor(x, y, color = '#000000') {
+      this.x = x;
+      this.y = y;
+      this.color = Figura.inHexNotation(color);
+  }
+
+  static inHexNotation(number) {
+      number = number.toUpperCase();
+      let colors = number.match(/\w{2,2}/g);
+      if(colors.length < 3 || colors.length > 3 
+        || typeof number !== 'string') number = '#000000'
+
+      return number;
+  }
+
+  esBlanca() {
+      return this.color === '#FFFFFF';
+  }
+
+  pintar() {
+      return `Nos movemos a la posicion (${this.x}, ${this.y})\nCogemos la pintura de color ${this.color}`;
+  }
+}
+
+class Elipse extends Figura {
+  constructor(x, y, rh, rv, color = '#000000') {
+      super(x, y, color);
+      this.rh = rh;
+      this.rv = rv;
+  }
+
+  pintar() {
+      return super.pintar() + `\nPintamos elipse de radios ${this.rh} y ${this.rv}`;
+  }
+}
+
+class Circulo extends Elipse {
+  constructor(x, y, r, color = '#000000') {
+      super(x, y, r, r, color);
+  }
+}
+
+let circulo = new Circulo(4, -2, 3, '#abcdab');
+console.log(circulo.pintar());
+console.log(circulo.esBlanca());
+
 

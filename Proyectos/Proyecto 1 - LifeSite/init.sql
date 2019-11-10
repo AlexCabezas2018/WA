@@ -3,7 +3,7 @@ CREATE TABLE user (
     pass VARCHAR2(255) NOT NULL,
     username VARCHAR2(255) NOT NULL,
     gender VARCHAR2(255) NOT NULL,
-    register_date DATE NOT NULL,
+    birth_date DATE NOT NULL,
     profile_img BLOB,
     puntuation INT DEFAULT 0
 );
@@ -31,33 +31,18 @@ CREATE TABLE questions (
 
 CREATE TABLE answers(
     id INT AUTO NOT NULL INCREMENT PRIMARY KEY,
-    question_body VARCHAR(255) NOT NULL
+    id_question NOT NULL,
+    answer_body VARCHAR(255) NOT NULL,
+    
+    FOREIGN KEY (id_question) REFERENCES questions(id),
 )
 
-CREATE TABLE own_history_answers(
+CREATE TABLE user_answers (
     username VARCHAR2(255) NOT NULL,
-    id_question INT NOT NULL,
     id_answer INT NOT NULL,
 
     FOREIGN KEY (username) REFERENCES user(email),
-    FOREIGN KEY (id_question) REFERENCES questions(id),
     FOREIGN KEY (id_answer) REFERENCES answers(id),
-
-    PRIMARY KEY (username,id_question,id_answer)
 )
 
-CREATE TABLE friends_history_answers(
-    username VARCHAR2(255) NOT NULL,
-    friend_username VARCHAR(255) NOT NULL,
-    id_question INT NOT NULL,
-    id_answer INT NOT NULL,
 
-    FOREIGN KEY (username,friend_username) REFERENCES user(email),
-    FOREIGN KEY (id_question) REFERENCES questions(id),
-    FOREIGN KEY (id_answer) REFERENCES answers(id),
-
-    PRIMARY KEY (username,friend_username,id_question,id_answer)
-
-)
-
---TODO Como colocar que respuesta es la correcta

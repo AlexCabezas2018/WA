@@ -19,7 +19,7 @@ class DAOTasks {
         this.pool.getConnection((err, conn) => {
             if(err) callback(new Error(this.exceptions.connection_error), undefined);
             else {
-                let GET_TASKS_BY_EMAIL = 'SELECT * FROM task JOIN tag ON(task.id = tag.taskid) WHERE task.user=?';
+                let GET_TASKS_BY_EMAIL = 'SELECT * FROM task LEFT JOIN tag ON(task.id = tag.taskid) WHERE task.user=?';
                 conn.query(GET_TASKS_BY_EMAIL, [email], (err, rows) => {
                     conn.release();
                     if(err) callback(new Error(this.exceptions.query_error), undefined);
@@ -34,7 +34,7 @@ class DAOTasks {
                                     done: item.done,
                                     tags: []
                                 };
-                            tasks[item.id].tags.push(item.tag);
+                            if(item.tag) tasks[item.id].tags.push(item.tag); //Puede que una tarea no tenga tags, la BD lo considera null
                         }
 
                         //Creamos un array con el contenido de que cada entrada del objeto con las tags reagrupadas

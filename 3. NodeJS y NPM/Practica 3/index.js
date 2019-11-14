@@ -13,10 +13,10 @@ let daoTasks = new DAOTasks(opts);
 
 // daoUsers.getUserImageName("correo1", (err, path) => {
 //     if(err) console.log(err.message);
-//     else console.log(path);
+//     else console.log(path ? path: "No user image!");
 // })
 
-// daoUsers.isUserCorrect("correo1", "pass1", (err, exists) => {
+// daoUsers.isUserCorrect("correo3", "pass2", (err, exists) => {
 //     if(err) console.log(err.message);
 //     else console.log(exists);
 // })

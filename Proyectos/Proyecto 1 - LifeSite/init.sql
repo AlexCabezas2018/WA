@@ -3,7 +3,7 @@ CREATE TABLE user (
     pass VARCHAR2(255) NOT NULL,
     username VARCHAR2(255) NOT NULL,
     gender VARCHAR2(255) NOT NULL,
-    birth_date DATE NOT NULL,
+    birth_date DATE,
     profile_img BLOB,
     puntuation INT DEFAULT 0
 );

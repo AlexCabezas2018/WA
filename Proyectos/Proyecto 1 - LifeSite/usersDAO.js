@@ -21,7 +21,8 @@ class usersDAO {
             FIND_BY_ID: 'SELECT * FROM users WHERE id = ?',
             ADD_USER: 'INSERT INTO users VALUES(NULL, ?, ?, ?, ?, ?, ?)',
             GET_FRIENDS: 'SELECT * FROM friendships WHERE username_1 = ?',
-            GET_USERS_BY_NAME: 'SELECT id, name, profile_img FROM users WHERE name LIKE \'%?%\''
+            GET_USERS_BY_NAME: 'SELECT id, name, profile_img FROM users WHERE name LIKE \'%?%\'',
+            UPDATE_USER: 'UPDATE users set pass=?, name=?, gender=?, birth_date=?,profile_img=? WHERE email=?'
         }
     }
 
@@ -37,9 +38,10 @@ class usersDAO {
             else {
                 conn.query(this.queries.FIND_USER, [email, password],
                     (err, rows) => {
+                        conn.release();
                         if (err) callback(new Error(this.exceptions.query_error), undefined);
                         if (rows.length == 0) callback(null, null);
-                        else callback(null, rows[0].id);
+                        else callback(null, rows[0].id)
                     }
                 )
             }
@@ -61,12 +63,15 @@ class usersDAO {
                         else {
                             if (rows.length != 0) callback(new Error(this.exceptions.user_exists, undefined));
                             else {
-                                conn.query(this.queries.ADD_USER,
-                                    [user.email, user.pass, user.gender, user.birth_date, user.img],
+                                conn.query(this.queries.ADD_USER,[null,user.email, user.pass,user.name, user.gender, user.birth_date, user.profile_img],
                                     (err, result) => {
-                                        if (err) callback(new Error(this.queries.query_error));
-                                        else callback(null, result.insertId);
-                                    });
+                                        conn.release();
+                                        if (err) callback(new Error(this.queries.query_error),undefined);
+                                        else {
+                                            callback(null, result.insertId);
+                                        }
+                                    }
+                                );
                             }
                         }
                     }
@@ -81,9 +86,11 @@ class usersDAO {
             else {
                 conn.query(this.queries.FIND_BY_ID, [id],
                     (err, rows) => {
+                        conn.release();
                         if (err) callback(new Error(this.exceptions.query_error), undefined);
                         else {
-                            callback(null, rows[0]);
+                            if(rows[0]!=null) callback(null, rows[0]);
+                            else callback (null,null);
                         }
                     })
             }
@@ -101,6 +108,7 @@ class usersDAO {
             else {
                 conn.query(this.queries.GET_FRIENDS, [email],
                     (err, friends) => {
+                        conn.release();
                         if (err) callback(new Error(this.queries.query_error), undefined);
                         else callback(null, friends);
                     }
@@ -124,6 +132,19 @@ class usersDAO {
                         else callback(undefined, rows);
                     }
                 )
+            }
+        })
+    }
+
+    updateUser(user,callback){
+        this.pool.getConnection((err,conn)=>{
+            if(err) callback(new Error(this.exceptions.connection_error),undefined);
+            else{
+                conn.query(UPDATE_USER,[user.pass,user.name,user.gender,user.birth_date,user.profile_img,user.email],
+                    (err,rows)=>{
+                        if(err) callback(new Error(this.exceptions.query_error),undefined);
+                        else callback (undefined,user.id);
+                    })
             }
         })
     }

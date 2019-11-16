@@ -6,21 +6,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Iniciar Sesión</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="./../css/style.css">
     <link href="https://fonts.googleapis.com/css?family=PT+Sans&display=swap" rel="stylesheet">
 </head>
 
 <body>
     <header>
-        <img src="logo.png" alt="logo">
+        <img src="../img/logo.png" alt="logo">
         <div class="links">
             <a href="">Entrar</a>
             <a href="">Nuevo Usuario</a>
         </div>
     </header>
+
     <div class="container">
         <h2>Entrar</h2>
-        <div class="form-container">
+        <form method="GET" action="procesar_get.html" class="form-container">
             <div class="form-item">
                 <input type="text" id="logIn-input" placeholder="Email" required>
             </div>
@@ -28,7 +29,7 @@
                 <input type="password" name="" id="logIn-input" placeholder="Password" required>
             </div>
             <a class="button" id="form-button">Conectar</a>
-        </div>
+        </form>
     </div>
 </body>
 

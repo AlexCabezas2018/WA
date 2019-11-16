@@ -1,0 +1,46 @@
+CREATE OR REPLACE TABLE users (
+    id INT NOT NULL AUTO_INCREMENT,
+    email VARCHAR(255) NOT NULL,
+    pass VARCHAR(255) NOT NULL,
+    username VARCHAR(255) NOT NULL,
+    gender VARCHAR(255) NOT NULL,
+    birth_date DATE,
+    profile_img BLOB,
+    puntuation INT DEFAULT 0,
+    
+    PRIMARY KEY(id, email)
+);
+
+CREATE OR REPLACE TABLE friend_requests(
+    username_from VARCHAR(255) NOT NULL REFERENCES users(email),
+    username_to VARCHAR(255) NOT NULL REFERENCES users(email),
+
+    PRIMARY KEY (username_from,username_to)
+);
+
+CREATE OR REPLACE TABLE friendships (
+    username_1 VARCHAR(255) NOT NULL REFERENCES users(email) ,
+    username_2 VARCHAR(255) NOT NULL REFERENCES users(email),
+
+    PRIMARY KEY (username_1,username_2)
+);
+
+CREATE TABLE questions (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    question_body VARCHAR(255) NOT NULL 
+);
+
+CREATE TABLE answers(
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    id_question INT NOT NULL,
+    answer_body VARCHAR(255) NOT NULL,
+    
+    FOREIGN KEY (id_question) REFERENCES questions(id)
+);
+
+CREATE TABLE user_answers (
+    username VARCHAR(255) NOT NULL REFERENCES users(email),
+    id_answer INT NOT NULL REFERENCES answers(id),
+
+    PRIMARY KEY (username,id_answer)
+)

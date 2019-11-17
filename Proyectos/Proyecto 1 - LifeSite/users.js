@@ -74,7 +74,7 @@ usersRouter.post('/new-user', (request, response) => {
         name: request.body.name,
         gender: request.body.gender,
         birth_date: request.body.birth_date,
-        profile_img: (request.body.profile_img == undefined) ? null : request.body.profile_img
+        profile_img: (request.body.profile_img == '') ? null : request.body.profile_img //TODO: No estamos insertando imágenes, tenemos que aprender a hacerlo
     }
 
     usersDAO.createUser(usr, (err, usrId) => {
@@ -121,7 +121,6 @@ usersRouter.get('/update-profile', (request, response) => {
 });
 
 usersRouter.post('/update-profile', (request, response) => {
-
     const { currentUser } = request.session;
     const usr = {
         pass: (request.body.pass == '') ? currentUser.pass : request.body.pass,
@@ -129,7 +128,7 @@ usersRouter.post('/update-profile', (request, response) => {
         gender: (request.body.gender == '') ? currentUser.gender : request.body.gender,
         birth_date: (request.body.birth_date == '') ? currentUser.birth_date.split('T')[0] : request.body.birth_date,
         profile_img: request.body.profile_img, //TODO: Poder mantener la foto de perfil si no quiere modificarla.
-        email: request.session.currentUser.email
+        email: currentUser.email
     }
 
     usersDAO.updateUser(usr, (err, correctUpdate) => {

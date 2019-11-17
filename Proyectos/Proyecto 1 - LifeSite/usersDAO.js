@@ -4,7 +4,7 @@ const mysqlOptions = {
     hostname: 'localhost',
     user: 'root',
     password: '',
-    database: "LifeSite"
+    database: "lifesite"
 };
 
 class usersDAO {

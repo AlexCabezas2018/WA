@@ -14,9 +14,7 @@
     <header>
         <img src="../img/logo.png" alt="logo">
         <div class="links">
-            <a href="./logIn">Entrar</a>
-            <!--TODO Redirigir a perfil, ¿Como mantenemos la sesion para tener siempre id?-->
-            <a href="./profile">Ver Perfil</a>
+            <a href="./profile/<%= currentId %>">Ver Perfil</a>
         </div>
     </header>
     <div class="container">
@@ -48,8 +46,8 @@
                 <span>Imagen de Perfil</span>
                 <input type="file" name="profile_img" id="" class="input-new-user">
             </div>
-            <input type="submit" class="button" id='form-button' value ="Conectar">
-        </div>
+            <input type="submit" class="button" id='form-button' value="Conectar">
+    </div>
     </div>
 </body>
 

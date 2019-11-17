@@ -6,37 +6,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Alta Usuario</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="./../css/style.css" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=PT+Sans&display=swap" rel="stylesheet">
 </head>
 
 <body>
     <header>
-        <img src="logo.png" alt="logo">
+        <img src="../img/logo.png" alt="logo">
         <div class="links">
-            <a href="">Entrar</a>
+            <a href="./logIn">Entrar</a>
             <a href="">Nuevo Usuario</a>
         </div>
     </header>
     <div class="container">
         <h2>Nuevo Usuario</h2>
-        <div class="form-container-new-user">
+        <form method="POST" action="new-user" class="form-container-new-user">
             <div class="email">
                 <span>Email</span>
-                <input type="text" class="input-new-user">
+                <input type="text" name="email" class="input-new-user">
             </div>
             <div class="password">
                 <span>Contraseña</span>
-                <input type="password" name="" id="" class="input-new-user">
+                <input type="password" name="pass" id="" class="input-new-user">
             </div>
             <div class="name">
                 <span>Nombre completo</span>
-                <input type="text" class="input-new-user">
+                <input type="text" name="name" class="input-new-user">
             </div>
             <div class="gender">
                 <span id=gender-span>Sexo</span>
                 <div class="gender-options">
-                    <select name="options" id="">
+                    <select name="gender" id="">
                         <option value="Masculino">Masculino</option>
                         <option value="Femenino">Femenino</option>
                         <option value="Otro">Otro</option>
@@ -45,13 +45,13 @@
             </div>
             <div class="birth-date">
                 <span>Fecha de Nacimiento</span>
-                <input type="date" name="" id="" class="input-new-user">
+                <input type="date" name="birth_date" id="" class="input-new-user">
             </div>
             <div class="img-profile">
                 <span>Imagen de Perfil</span>
-                <input type="file" name="" id="" class="input-new-user">
+                <input type="file" name="profile_img" id="" class="input-new-user">
             </div>
-            <a class="button" id='form-button'>Conectar</a>
+            <input type="submit" class="button" id='form-button' value ="Conectar">
         </div>
     </div>
 </body>

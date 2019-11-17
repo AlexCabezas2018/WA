@@ -19,7 +19,7 @@ usersRouter.get('/login', (request, response) => {
     if (request.session.currentUserId == undefined) { //New user
         console.log('[INFO] New user entered!')
         response.status(200);
-        response.sendFile(path.join(absolutePath, 'html', 'login.html'));
+        response.render('logIn');
     }
     else {
         console.log('[INFO] User reconnection');
@@ -28,7 +28,7 @@ usersRouter.get('/login', (request, response) => {
     }
 });
 
-usersRouter.post('/login', (request, response) => {
+usersRouter.post('/logIn', (request, response) => {
     usersDAO.checkCredentials(request.body.email,
         request.body.password,
         (err, usrId) => {
@@ -43,7 +43,7 @@ usersRouter.post('/login', (request, response) => {
                 if (usrId) {
                     request.session.currentUserId = usrId;
                     console.log(`[INFO] User with id ${usrId} logged!`);
-                    response.status(200).redirect(`/users/profile/${usrId}`);
+                    response.status(200).redirect(`profile/${usrId}`);
                 }
                 else response.status(400).json({
                     status: 400,
@@ -53,18 +53,79 @@ usersRouter.post('/login', (request, response) => {
         })
 })
 
-usersRouter.get('/new_user', (request, response) => {
-
-
-
+/* NEW USER*/
+usersRouter.get('/new-user', (request, response) => {
+    response.status(200);
+    response.render('new-user');
 });
 
+usersRouter.post('/new-user', (request, response) => {
+    usr = {
+        email: request.body.email,
+        pass: request.body.pass,
+        name: request.body.name,
+        gender: request.body.gender,
+        birth_date: request.body.birth_date,
+        profile_img: (request.body.profile_img == undefined) ? "" : request.body.profile_img
+    }
+
+    //TODO CONSULTA NO DEVUELVE NADA
+    usersDAO.createUser(usr, (err, usrId) => {
+        if (err) {
+            response.status(400).json({
+                status: 400,
+                reason: err.message
+            });
+        }
+        else response.redirect(`profile/${usrId}`);
+    })
+})
+
+/* PROFILE*/
 usersRouter.get('/profile/:id', (request, response) => {
-    // TODO LLamar al DAO, obtener el perfil dado el id del usuario. Cargar la plantilla con los parámetros necesarios.
-    response.json({
-        message: 'logged as user ' + request.params.id
-    });
+    // TODO Ver porque no carga el css
+    usersDAO.getUserById(request.params.id,
+        (err, usr) => {
+            if (err) {
+                response.status(400).json({
+                    status: 400,
+                    reason: err.message
+                });
+            }
+            else {
+                if (usr == null) response.status(400);
+                else response.render('user-profile', { user: usr });
+            }
+            response.end();
+        });
 });
+
+/* UPDATE PROFILE */
+// TO DO Ver por que no carga update profile, cosa fea en user-profile.ejs en modificar perfil
+usersRouter.get('/update-profile', (request, response) => {
+    response.status(200);
+    response.render('update-profile');
+});
+
+usersRouter.post('/update-profile', (request, response) => {
+    usr = {
+        pass: request.body.pass,
+        name: request.body.name,
+        gender: request.body.gender,
+        birth_date: request.body.birth_date,
+        profile_img: (request.body.profile_img == undefined) ? "" : request.body.profile_img
+    }
+
+    usersDAO.updateUser(usr, (err, usrId) => {
+        if (err) {
+            response.status(400).json({
+                status: 400,
+                reason: err.message
+            });
+        }
+        else response.redirect(`profile/${usrId}`);
+    })
+})
 
 module.exports = usersRouter;
 

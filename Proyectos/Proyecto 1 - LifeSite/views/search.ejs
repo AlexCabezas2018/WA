@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="./../css/style.css" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=PT+Sans&display=swap" rel="stylesheet">
+    <title>Busqueda</title>
+</head>
+
+<body>
+    <header>
+        <img src="../../img/logo.png" alt="logo">
+        <div class="links">
+            <a href="profile/<%=currentUser.id%>">Perfil</a>
+            <a href="friends-page">Amigos</a>
+            <a href="">Preguntas</a>
+            <a href="logout">Desconectar</a>
+            <div class="user-header">
+                <img src="../../img/contact-img.png" alt="imagen de usuario" id="header-img">
+                <span><%= currentUser.puntuation %> pts</span>
+            </div>
+        </div>
+    </header>
+    <div class="container">
+
+        <h2>Resultados de la búsqueda: "<%=name%>"</h2>
+        <% users.forEach(user => {%>
+            <div class="user-search">
+                <div class="user-info-search">
+                    <img src="../../img/contact-img.png" alt="profile-picture" class='result-picture'>
+                    <h3><%= user.username %></h3>
+                </div>
+                <a class='request-button'>Solicitar amistad</a>
+            </div>
+        <%});%>
+    </div>
+
+</body>
+
+</html>

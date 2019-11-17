@@ -146,8 +146,55 @@ usersRouter.post('/update-profile', (request, response) => {
             });
         }
     })
+
 })
 
+
+ /* FRIENDS PAGE */
+
+usersRouter.get('/friends-page',(request,response)=>{
+    const { currentUser } = request.session;
+
+    usersDAO.getFriendsByEmail(currentUser.email,
+        (err,friends) => {
+        if(err) {
+            response.status(400).json({
+                status: 400,
+                reason: err.message
+            });
+        }
+        else {
+            usersDAO.getRequestsByEmail(currentUser.email,
+                (err,requests) => {
+                if(err) {
+                    response.status(400).json({
+                        status: 400,
+                        reason: err.message
+                    });
+                }
+                else response.render('friends-page',{currentUser, requests, friends});
+            })
+            
+        }
+    })
+})
+
+
+usersRouter.post('/search', (request, response) => {
+
+    const { currentUser } = request.session;
+
+    usersDAO.getUsersByName(request.body.name,currentUser.email,
+        (err,users)=>{
+            if(err){
+                response.status(400).json({
+                    status: 400,
+                    reason: err.message
+                });
+            }
+            else response.render('search',{currentUser,users,name:request.body.name});
+        })
+})
 module.exports = usersRouter;
 
 //TODO: Realizar el resto de rutas

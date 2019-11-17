@@ -21,4 +21,8 @@ app.get('/', (request, response) => {
     response.redirect('/users/login');
 });
 
-//TODO: Página 404: realizar.
+// TODO: Cargar imagen de fondo en el css ¿Rutas?
+app.use((request, response, next) =>{
+    response.status(404);
+    response.render("404", { url: request.url });
+});   

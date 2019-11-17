@@ -20,9 +20,10 @@ class usersDAO {
             FIND_BY_EMAIL: 'SELECT id, email FROM users WHERE email = ?',
             FIND_BY_ID: 'SELECT * FROM users WHERE id = ?',
             ADD_USER: 'INSERT INTO users VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-            GET_FRIENDS: 'SELECT * FROM friendships WHERE username_1 = ?',
+            GET_FRIENDS: 'SELECT username, id, profile_img FROM friendships JOIN users ON users.email = friendships.username_2 WHERE username_1 = ?',
+            GET_REQUESTS: 'SELECT username, id, profile_img FROM friend_requests JOIN users ON users.email = friend_requests.username_from WHERE username_from = ?',
             UPDATE_USER: 'UPDATE users SET pass=?, username=?, gender=?, birth_date=?, profile_img=? WHERE email=? ',
-            GET_USERS_BY_NAME: 'SELECT id, username, profile_img FROM users WHERE username LIKE \'%?%\''
+            GET_USERS_BY_NAME: 'SELECT id, username, profile_img FROM users WHERE username LIKE ? AND email <> ?'
         }
     }
 
@@ -83,6 +84,11 @@ class usersDAO {
         });
     }
 
+    /**
+     * 
+     * @param {Int} id 
+     * @param {Function} callback 
+     */
     getUserById(id, callback) {
         this.pool.getConnection((err, conn) => {
             if (err) callback(new Error(this.exceptions.connection_error), undefined);
@@ -101,23 +107,21 @@ class usersDAO {
     }
 
     /**
-     * Get a list of friends given an email
+     * Return a list of friends given an email
      * @param {String} email 
      * @param {Function} callback 
      */
     getFriendsByEmail(email, callback) {
         this.pool.getConnection((err, conn) => {
-            if (err) callback(new Error(this.exceptions.connection_error), undefined);
-            else {
-                conn.query(this.queries.GET_FRIENDS, [email],
-                    (err, friends) => {
-                        conn.release();
-                        if (err) callback(new Error(this.queries.query_error), undefined);
-                        else callback(null, friends);
-                    }
-                )
+            if (err) callback(new Error(this.exceptions.connection_error),undefined);
+            else{
+                conn.query(this.queries.GET_FRIENDS, [email,email],
+                    (err, rows) => {
+                        if(err) callback(new Error(this.exceptions.query_error), undefined);
+                        else callback(undefined, rows);
+                })
             }
-        });
+        })
     }
 
     /**
@@ -125,13 +129,13 @@ class usersDAO {
      * @param {String} name 
      * @param {Function} callback 
      */
-    getUsersByName(name, callback) {
-        this.this.pool.getConnection((err, conn) => {
+    getUsersByName(name, email, callback) {
+        this.pool.getConnection((err, conn) => {
             if (err) callback(new Error(this.exceptions.connection_error), undefined);
             else {
-                conn.query(GET_USERS_BY_NAME, [name],
+                conn.query(this.queries.GET_USERS_BY_NAME, ['%' + name + '%', email],
                     (err, rows) => {
-                        if (err) callback(new Error(this.exceptions.query_error), undefined);
+                        if (err) callback(new Error(err.message), undefined);
                         else callback(undefined, rows);
                     }
                 )
@@ -139,6 +143,11 @@ class usersDAO {
         })
     }
 
+    /**
+     * Update the user given an email
+     * @param {*} user 
+     * @param {*} callback 
+     */
     updateUser(user, callback) {
         this.pool.getConnection((err, conn) => {
             if (err) callback(new Error(this.exceptions.connection_error), undefined);
@@ -151,6 +160,26 @@ class usersDAO {
                     })
             }
         })
+    }
+
+    /**
+     * Get a list of friends requests given an email
+     * @param {String} email 
+     * @param {Function} callback 
+     */
+    getRequestsByEmail(email, callback) {
+        this.pool.getConnection((err, conn) => {
+            if (err) callback(new Error(this.exceptions.connection_error), undefined);
+            else {
+                conn.query(this.queries.GET_REQUESTS, [email],
+                    (err, rows) => {
+                        conn.release();
+                        if (err) callback(new Error(this.exceptions.query_error), undefined);
+                        else callback(null, rows);
+                    }
+                )
+            }
+        });
     }
 }
 

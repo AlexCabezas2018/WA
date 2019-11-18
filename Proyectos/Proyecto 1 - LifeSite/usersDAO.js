@@ -21,9 +21,10 @@ class usersDAO {
             FIND_BY_ID: 'SELECT * FROM users WHERE id = ?',
             ADD_USER: 'INSERT INTO users VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
             GET_FRIENDS: 'SELECT username, id, profile_img FROM friendships JOIN users ON users.email = friendships.username_2 WHERE username_1 = ?',
-            GET_REQUESTS: 'SELECT username, id, profile_img FROM friend_requests JOIN users ON users.email = friend_requests.username_from WHERE username_from = ?',
+            GET_REQUESTS: 'SELECT username, id, profile_img FROM friend_requests JOIN users ON users.email = friend_requests.username_from WHERE username_to = ?',
             UPDATE_USER: 'UPDATE users SET pass=?, username=?, gender=?, birth_date=?, profile_img=? WHERE email=? ',
-            GET_USERS_BY_NAME: 'SELECT id, username, profile_img FROM users WHERE username LIKE ? AND email <> ?'
+            GET_USERS_BY_NAME: 'SELECT id, username, profile_img FROM users WHERE username LIKE ? AND email <> ?',
+            ADD_REQUEST: 'INSERT INTO friend_requests VALUES (?,?)'
         }
     }
 
@@ -180,6 +181,18 @@ class usersDAO {
                 )
             }
         });
+    }
+
+
+    addRequest(id_from, id_to, callback){
+        this.pool.getConnection((err,conn)=>{
+            if (err) callback(new Error(this.exceptions.connection_error),undefined);
+            else conn.query(this.queries.ADD_REQUEST, [id_from,id_to],
+                (err,result)=>{
+                    if(err) callback(new Error(err.message),undefined);
+                    else callback(undefined,true);
+            })
+        })
     }
 }
 

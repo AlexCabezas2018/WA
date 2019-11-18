@@ -184,6 +184,7 @@ usersRouter.get('/friends-page', (request, response) => {
         })
 })
 
+/* SEARCH FRIENDS*/
 
 usersRouter.post('/search', (request, response) => {
 
@@ -199,6 +200,49 @@ usersRouter.post('/search', (request, response) => {
             }
             else response.render('search', { currentUser, users, name: request.body.name });
         })
+})
+
+
+/* SEND REQUEST */
+
+
+//TODO Lógica: Buscar por nombre debería solo mostrar usuarios que no son amigos?
+usersRouter.get('/add-request/:id', (request, response)=>{
+    
+
+    const { currentUser } = request.session;
+    console.log("dame amista");
+
+    //search user 
+    usersDAO.getUserById(request.params.id, 
+        (err,user)=>{
+            if(err){
+                response.status(400).json({
+                    status: 400,
+                    reason: err.message
+                });
+            }
+        else { //add request
+            usersDAO.addRequest(currentUser.email,user.email, 
+                (err, correctInsert)=>{
+                    if(err){
+                        response.status(400).json({
+                            status: 400,
+                            reason: err.message
+                        });
+                    }
+                    
+                    else {
+                        if (correctInsert) response.redirect(`../profile/${user.id}`);
+                        else response.status(400).json({
+                            status: 400,
+                            reason: err.message
+                        }); 
+                    }
+                }
+            )
+        }
+    })
 })
 module.exports = usersRouter;
 

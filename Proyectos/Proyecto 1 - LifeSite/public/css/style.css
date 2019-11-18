@@ -364,11 +364,13 @@ div.friends-list a:hover{
     margin-right: 1%;
     min-width: 18%;
     text-align: center;
+    text-decoration: none;
 }
 
 .request-button:hover {
     background-color: rgb(216, 238, 238);
 }
+
 
 /*Pagina de preguntas aleatorias*/
 .question {

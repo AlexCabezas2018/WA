@@ -13,11 +13,18 @@ const usersDAO = new UsersDAO();
 //TODO: Cuando inicio sesion y veo mi perfil, al desconectarme y voler a atrás, me sigue dejando.
 
 usersRouter.use(bodyParser.urlencoded({ extended: false }));
+usersRouter.use(express.static(path.join(__dirname, 'public')));
 usersRouter.use(session({
     saveUninitialized: false,
     secret: 'foobar34',
     resave: false,
 }));
+/*usersRouter.use(checkIfLogged);
+
+function checkIfLogged(request, response, next) {
+    if (request.session.currentUser == undefined) response.redirect('login');
+    else next();
+}*/
 
 usersRouter.get('/login', (request, response) => {
     if (request.session.currentUser == undefined) { //New user
@@ -146,37 +153,35 @@ usersRouter.post('/update-profile', (request, response) => {
             });
         }
     })
-
 })
 
 
- /* FRIENDS PAGE */
+/* FRIENDS PAGE */
 
-usersRouter.get('/friends-page',(request,response)=>{
+usersRouter.get('/friends-page', (request, response) => {
     const { currentUser } = request.session;
 
     usersDAO.getFriendsByEmail(currentUser.email,
-        (err,friends) => {
-        if(err) {
-            response.status(400).json({
-                status: 400,
-                reason: err.message
-            });
-        }
-        else {
-            usersDAO.getRequestsByEmail(currentUser.email,
-                (err,requests) => {
-                if(err) {
-                    response.status(400).json({
-                        status: 400,
-                        reason: err.message
-                    });
-                }
-                else response.render('friends-page',{currentUser, requests, friends});
-            })
-            
-        }
-    })
+        (err, friends) => {
+            if (err) {
+                response.status(400).json({
+                    status: 400,
+                    reason: err.message
+                });
+            }
+            else {
+                usersDAO.getRequestsByEmail(currentUser.email,
+                    (err, requests) => {
+                        if (err) {
+                            response.status(400).json({
+                                status: 400,
+                                reason: err.message
+                            });
+                        }
+                        else response.render('friends-page', { currentUser, requests, friends });
+                    })
+            }
+        })
 })
 
 
@@ -184,15 +189,15 @@ usersRouter.post('/search', (request, response) => {
 
     const { currentUser } = request.session;
 
-    usersDAO.getUsersByName(request.body.name,currentUser.email,
-        (err,users)=>{
-            if(err){
+    usersDAO.getUsersByName(request.body.name, currentUser.email,
+        (err, users) => {
+            if (err) {
                 response.status(400).json({
                     status: 400,
                     reason: err.message
                 });
             }
-            else response.render('search',{currentUser,users,name:request.body.name});
+            else response.render('search', { currentUser, users, name: request.body.name });
         })
 })
 module.exports = usersRouter;

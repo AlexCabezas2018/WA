@@ -3,9 +3,7 @@
 const Express = require('express');
 const userRouter = require('./users');
 const path = require('path');
-
 const app = Express();
-
 
 // TODO Middlewares
 app.use('/users', userRouter); // Applying usersRouter to the main route
@@ -22,7 +20,7 @@ app.get('/', (request, response) => {
 });
 
 // TODO: Cargar imagen de fondo en el css ¿Rutas?
-app.use((request, response, next) =>{
+app.use((request, response, next) => {
     response.status(404);
     response.render("404", { url: request.url });
-});   
+});

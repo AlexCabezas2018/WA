@@ -159,21 +159,64 @@ usersRouter.get('/friends-page', (request, response , next) => {
 /* SEARCH FRIENDS*/
 
 usersRouter.post('/search', (request, response, next) => {
-
     const { currentUser } = request.session;
 
+    //get all users 
     usersDAO.getUsersByName(request.body.name, currentUser.email,
         (err, users) => {
             if (err) next(err);
-            else response.render('search', { currentUser, users, name: request.body.name });
-        })
+            else { //get friends
+                usersDAO.getFriendsByEmail(currentUser.email,
+                    (err,friends)=>{
+                        if(err) next(err);
+                        else{ 
+                            //get my requests
+                            usersDAO.getMyRequestsByEmail(currentUser.email, (err,myRequests)=>{
+                                if(err) next(err);
+                                else{
+                                    //get other requests
+                                    usersDAO.getRequestsByEmail(currentUser.email, (err, usersRequests)=>{
+                                        if(err) next(err);
+                                        else{
+                                            users.map(user => {
+                                                //update users with friends 
+                                                user.addRequest = true;
+                                                friends.map(friend => {
+                                                    if(friend.id == user.id) {
+                                                        user.addRequest=false;
+                                                    }
+                                                })
+                                                //update users with my requests
+                                                myRequests.map(req => {
+                                                    if(req.username_to == user.email) {
+                                                        user.addRequest=false;
+                                                    }
+                                                })
+                                                //update users with other requests
+                                                usersRequests.map(req =>{
+                                                    if(req.email == user.email) {
+                                                        user.addRequest=false;
+                                                    }
+                                                })
+                                            })
+                                            response.render('search', { currentUser, users, name: request.body.name });
+                                        }
+                                    })
+                                }
+                            })
+                        }
+                    }
+                )
+            }
+        }
+    )
+
+   
 })
 
 
 /* SEND REQUEST */
 
-
-//TODO Lógica: Buscar por nombre debería solo mostrar usuarios que no son amigos?
 usersRouter.get('/add-request/:id', (request, response, next) => {
     const { currentUser } = request.session;
 

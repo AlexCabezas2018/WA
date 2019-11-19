@@ -147,9 +147,6 @@ div.links a:hover {
     width:97%;
 }
 
-#search-bar-input{
-    width:63%;
-}
 
 /*Pantalla Perfil usuario*/
 
@@ -214,7 +211,8 @@ p {
 .friend-requests{
     display: flex;
     flex-direction: column;
-    width: 40%;
+    width: 80%;
+    align-items: center;
 }
 
 .friend{
@@ -225,6 +223,7 @@ p {
     padding: 1%;
     color: white;
     margin-bottom: 1%;
+    width:50%;
 }
 
 .friend-profile{
@@ -233,6 +232,15 @@ p {
     align-items: center;
 
 }
+
+div.friend-profile a{
+    color:white;
+    text-decoration: none;
+}
+div.friend-profile a:hover{
+    color:blue;
+}
+
 .response {
     display:flex;
     justify-content: flex-end;
@@ -245,8 +253,9 @@ p {
     align-items: center;
     background-color: rgb(189, 187, 187);
     border-radius: 30px;
-    width: 40%;
+    width: 50%;
     padding: 1%;
+    overflow: hidden;
 }
 
 .friends-list{
@@ -255,15 +264,26 @@ p {
     align-items: center;
     width: 100%;
 }
-
-div.friends-list p {
-    display: flex;
+div.friends-list a{
+    text-decoration: none;
+    color: white;
     align-items: center;
 }
 
-#search-bar-input{
-    height: 30px;
+div.friends-list a:hover{
+    color:blue;
+}
+
+#search-bar-input {
+    height: 40px;
     font-size: 18px;
+    min-width: 90%;
+    margin-right: 5%;
+}
+
+#search-form{
+    min-width: 50%;
+    display: flex;
 }
 
 .search-button {
@@ -286,6 +306,7 @@ div.friends-list p {
     cursor: pointer;
     margin-left: 1%;
     border: 1px solid white;
+    text-align: center;
 }
 
 #accept-friend-button {
@@ -343,11 +364,13 @@ div.friends-list p {
     margin-right: 1%;
     min-width: 18%;
     text-align: center;
+    text-decoration: none;
 }
 
 .request-button:hover {
     background-color: rgb(216, 238, 238);
 }
+
 
 /*Pagina de preguntas aleatorias*/
 .question {

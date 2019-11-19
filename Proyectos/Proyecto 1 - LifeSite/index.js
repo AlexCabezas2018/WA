@@ -24,3 +24,12 @@ app.use((request, response, next) => {
     response.status(404);
     response.render("404", { url: request.url });
 });
+
+//TODO: Implementar 500 ejs y cambiar en users.js para cambiar response.status(x) por next
+app.use(function(err, request, response, next) { // Código 500: Internal server error   
+    response.status(500);
+    response.render("500", {
+        mensaje: err.message,
+        pila: err.stack
+    });
+});

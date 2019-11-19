@@ -39,13 +39,12 @@ usersRouter.get('/login', (request, response) => {
     }
 });
 
-usersRouter.post('/login', (request, response) => {
+usersRouter.post('/login', (request, response, next) => {
     usersDAO.checkCredentials(request.body.email,
         request.body.password,
         (err, usr) => {
             if (err) {
-                /*TODO: Internal Server Error: Página*/
-                response.status(500).write(`Internal server Error: ${err.message}`);
+                next(err)
             }
             else {
                 if (usr) {
@@ -74,7 +73,7 @@ usersRouter.get('/new-user', (request, response) => {
     response.render('new-user');
 });
 
-usersRouter.post('/new-user', (request, response) => {
+usersRouter.post('/new-user', (request, response, next) => {
     const usr = {
         email: request.body.email,
         pass: request.body.pass,
@@ -86,33 +85,24 @@ usersRouter.post('/new-user', (request, response) => {
 
     usersDAO.createUser(usr, (err, usrId) => {
         if (err) {
-            response.status(400).json({
-                status: 400,
-                reason: err.message
-            });
+            next(err);
         }
         else response.redirect(`login`);
     });
 })
 
 /* PROFILE*/
-usersRouter.get('/profile/:id', (request, response) => {
+usersRouter.get('/profile/:id', (request, response, next) => {
     if (request.session.currentUser == undefined) {
         response.status(403).redirect('../login');
     } else {
         usersDAO.getUserById(request.params.id,
             (err, usr) => {
                 if (err) {
-                    response.status(400).json({
-                        status: 400,
-                        reason: err.message
-                    });
+                    next(err);
                 }
                 else {
-                    if (!usr) response.status(400).json({
-                        status: 400,
-                        reason: 'El usuario no existe'
-                    });
+                    if (!usr) next(err);
                     else response.status(200).render('user-profile', { user: usr, sessionId: request.session.currentUser.id });
                 }
             }
@@ -127,7 +117,7 @@ usersRouter.get('/update-profile', (request, response) => {
     else response.status(200).render('update-profile', { currentId: request.session.currentUser.id });
 });
 
-usersRouter.post('/update-profile', (request, response) => {
+usersRouter.post('/update-profile', (request, response, next) => {
     const { currentUser } = request.session;
     const usr = {
         pass: (request.body.pass == '') ? currentUser.pass : request.body.pass,
@@ -139,18 +129,10 @@ usersRouter.post('/update-profile', (request, response) => {
     }
 
     usersDAO.updateUser(usr, (err, correctUpdate) => {
-        if (err) {
-            response.status(400).json({
-                status: 400,
-                reason: err.message
-            });
-        }
+        if (err) next(err);
         else {
             if (correctUpdate) response.redirect(`profile/${request.session.currentUser.id}`);
-            else response.status(400).json({
-                status: 400,
-                reason: err.message
-            });
+            else next(err);
         }
     })
 })
@@ -158,26 +140,16 @@ usersRouter.post('/update-profile', (request, response) => {
 
 /* FRIENDS PAGE */
 
-usersRouter.get('/friends-page', (request, response) => {
+usersRouter.get('/friends-page', (request, response , next) => {
     const { currentUser } = request.session;
 
     usersDAO.getFriendsByEmail(currentUser.email,
         (err, friends) => {
-            if (err) {
-                response.status(400).json({
-                    status: 400,
-                    reason: err.message
-                });
-            }
+            if (err) next(err);
             else {
                 usersDAO.getRequestsByEmail(currentUser.email,
                     (err, requests) => {
-                        if (err) {
-                            response.status(400).json({
-                                status: 400,
-                                reason: err.message
-                            });
-                        }
+                        if (err) next(err);
                         else response.render('friends-page', { currentUser, requests, friends });
                     })
             }
@@ -186,18 +158,13 @@ usersRouter.get('/friends-page', (request, response) => {
 
 /* SEARCH FRIENDS*/
 
-usersRouter.post('/search', (request, response) => {
+usersRouter.post('/search', (request, response, next) => {
 
     const { currentUser } = request.session;
 
     usersDAO.getUsersByName(request.body.name, currentUser.email,
         (err, users) => {
-            if (err) {
-                response.status(400).json({
-                    status: 400,
-                    reason: err.message
-                });
-            }
+            if (err) next(err);
             else response.render('search', { currentUser, users, name: request.body.name });
         })
 })
@@ -207,37 +174,21 @@ usersRouter.post('/search', (request, response) => {
 
 
 //TODO Lógica: Buscar por nombre debería solo mostrar usuarios que no son amigos?
-usersRouter.get('/add-request/:id', (request, response)=>{
-    
-
+usersRouter.get('/add-request/:id', (request, response, next) => {
     const { currentUser } = request.session;
-    console.log("dame amista");
 
     //search user 
     usersDAO.getUserById(request.params.id, 
-        (err,user)=>{
-            if(err){
-                response.status(400).json({
-                    status: 400,
-                    reason: err.message
-                });
-            }
+        (err,user) => {
+            if(err) next(err);
         else { //add request
-            usersDAO.addRequest(currentUser.email,user.email, 
-                (err, correctInsert)=>{
-                    if(err){
-                        response.status(400).json({
-                            status: 400,
-                            reason: err.message
-                        });
-                    }
+            usersDAO.addRequest(currentUser.email, user.email, 
+                (err, correctInsert) => {
+                    if(err) next(err);
                     
                     else {
                         if (correctInsert) response.redirect(`../profile/${user.id}`);
-                        else response.status(400).json({
-                            status: 400,
-                            reason: err.message
-                        }); 
+                        else next(err); 
                     }
                 }
             )

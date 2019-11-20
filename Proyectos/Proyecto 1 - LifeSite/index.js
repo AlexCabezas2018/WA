@@ -19,17 +19,14 @@ app.get('/', (request, response) => {
     response.redirect('/users/login');
 });
 
-// TODO: Cargar imagen de fondo en el css ¿Rutas?
-app.use((request, response, next) => {
+app.use((request, response, next) => { // 400: Not Found
     response.status(404);
     response.render("404", { url: request.url });
 });
 
-//TODO: Implementar 500 ejs y cambiar en users.js para cambiar response.status(x) por next
-app.use(function(err, request, response, next) { // Código 500: Internal server error   
+app.use(function(err, request, response, next) { //  500: Internal server error   
     response.status(500);
     response.render("500", {
-        mensaje: err.message,
-        pila: err.stack
+        message: err.message,
     });
 });

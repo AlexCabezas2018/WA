@@ -336,6 +336,16 @@ div.friends-list a:hover{
     align-items: center;
 }
 
+div.user-search a{
+    text-decoration: none;
+    font-size: 18px;
+    color: white;
+}
+
+div.user-search a:hover{
+    color: blue;
+}
+
 .user-info-search {
     display: flex;
     align-items: center;

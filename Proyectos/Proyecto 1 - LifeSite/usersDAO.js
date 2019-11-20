@@ -4,7 +4,7 @@ const mysqlOptions = {
     hostname: 'localhost',
     user: 'root',
     password: '',
-    database: "LIfeSite"
+    database: "lifesite"
 };
 
 class usersDAO {
@@ -25,7 +25,9 @@ class usersDAO {
             GET_MY_REQUESTS: 'SELECT username_to FROM friend_requests  WHERE username_from = ?',
             UPDATE_USER: 'UPDATE users SET pass=?, username=?, gender=?, birth_date=?, profile_img=? WHERE email=? ',
             GET_USERS_BY_NAME: 'SELECT id, username, profile_img, email FROM users WHERE username LIKE ? AND email <> ?',
-            ADD_REQUEST: 'INSERT INTO friend_requests VALUES (?,?)'
+            ADD_REQUEST: 'INSERT INTO friend_requests VALUES (?,?)',
+            DELETE_REQUEST: 'DELETE FROM friend_requests WHERE username_to = ? AND username_from = ?',
+            INSERT_FRIEND: 'INSERT INTO friendships VALUES (?,?)'
         }
     }
 
@@ -205,7 +207,6 @@ class usersDAO {
         });
     }
 
-
     addRequest(id_from, id_to, callback){
         this.pool.getConnection((err,conn)=>{
             if (err) callback(new Error(this.exceptions.connection_error),undefined);
@@ -216,6 +217,33 @@ class usersDAO {
             })
         })
     }
+
+    deleteRequest(email_from, email_to, callback){
+        this.pool.getConnection((err, conn) => {
+            if(err) callback(new Error(this.exceptions.connection_error), undefined);
+            else{
+                conn.query(this.queries.DELETE_REQUEST,[email_from, email_to], (err, result) => {
+                    if(err) callback(new Error(this.exceptions.query_error),undefined);
+                    else callback(undefined, true);
+                })
+            }
+        })
+    }
+
+    addFriend(email_1, email_2, callback) {
+        this.pool.getConnection((err, conn) => {
+            if(err) callback(new Error(this.exceptions.connection_error), undefined);
+            else{
+                conn.query(this.queries.INSERT_FRIEND, [email_1, email_2], (err, result) => {
+                    if(err) callback(new Error(this.exceptions.query_error),undefined);
+                    else callback(undefined, true);
+                })
+            }
+        })
+    }
+
 }
+
+
 
 module.exports = usersDAO;

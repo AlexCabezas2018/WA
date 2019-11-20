@@ -238,6 +238,55 @@ usersRouter.get('/add-request/:id', (request, response, next) => {
         }
     })
 })
+
+
+
+/* ACCEPT AND REJECT REQUEST */
+
+usersRouter.get('/accept-request/:id', (request, response, next) => {
+    const { currentUser } = request.session;
+
+    console.log()
+    usersDAO.getUserById(request.params.id, (err, user) => {
+        if(err) next(err);
+        else{
+            usersDAO.deleteRequest(currentUser.email, user.email, 
+             (err, correctDelete) => {
+                if(err) next(err);
+                else{
+                    if(!correctDelete) next(err);
+                    else {
+                        usersDAO.addFriend(currentUser.email, user.email, (err, correctInsert) => {
+                            if(!correctInsert) next(err);
+                            else response.redirect('../friends-page');
+                        })
+                    }
+                }
+            })
+        }
+    })
+})
+
+usersRouter.get('/reject-request/:id', (request, response, next) => {
+    const { currentUser } = request.session;
+
+    usersDAO.getUserById(request.params.id, (err, user) => {
+        if(err) next(err);
+        else{
+            usersDAO.deleteRequest(currentUser.email, user.email, 
+             (err, correctDelete) => {
+                if(err) next(err);
+                else{
+                    if(correctDelete) response.redirect('../friends-page');
+                    else next(err);
+                }
+            })
+        }
+    })
+    
+})
+
+
 module.exports = usersRouter;
 
 //TODO: Realizar el resto de rutas

@@ -19,12 +19,6 @@ usersRouter.use(session({
     secret: 'foobar34',
     resave: false,
 }));
-/*usersRouter.use(checkIfLogged);
-
-function checkIfLogged(request, response, next) {
-    if (request.session.currentUser == undefined) response.redirect('login');
-    else next();
-}*/
 
 usersRouter.get('/login', (request, response) => {
     if (request.session.currentUser == undefined) { //New user
@@ -160,86 +154,66 @@ usersRouter.get('/friends-page', (request, response , next) => {
 
 usersRouter.post('/search', (request, response, next) => {
     const { currentUser } = request.session;
-
     //get all users 
     usersDAO.getUsersByName(request.body.name, currentUser.email,
-        (err, users) => {
-            if (err) next(err);
-            else { //get friends
-                usersDAO.getFriendsByEmail(currentUser.email,
-                    (err,friends)=>{
-                        if(err) next(err);
-                        else{ 
-                            //get my requests
-                            usersDAO.getMyRequestsByEmail(currentUser.email, (err,myRequests)=>{
-                                if(err) next(err);
-                                else{
-                                    //get other requests
-                                    usersDAO.getRequestsByEmail(currentUser.email, (err, usersRequests)=>{
-                                        if(err) next(err);
-                                        else{
-                                            users.map(user => {
-                                                //update users with friends 
-                                                user.addRequest = true;
-                                                friends.map(friend => {
-                                                    if(friend.id == user.id) {
-                                                        user.addRequest=false;
-                                                    }
-                                                })
-                                                //update users with my requests
-                                                myRequests.map(req => {
-                                                    if(req.username_to == user.email) {
-                                                        user.addRequest=false;
-                                                    }
-                                                })
-                                                //update users with other requests
-                                                usersRequests.map(req =>{
-                                                    if(req.email == user.email) {
-                                                        user.addRequest=false;
-                                                    }
-                                                })
-                                            })
-                                            response.render('search', { currentUser, users, name: request.body.name });
-                                        }
-                                    })
-                                }
-                            })
-                        }
+    (err, users) => {
+        if (err) next(err);
+        else { //get friends
+            usersDAO.getFriendsByEmail(currentUser.email,
+            (err,friends) => {
+                if(err) next(err);
+                    else { 
+                        //get my requests
+                        usersDAO.getMyRequestsByEmail(currentUser.email,
+                        (err,myRequests) => {
+                            if(err) next(err);
+                            else {
+                                //get other requests
+                                usersDAO.getRequestsByEmail(currentUser.email,
+                                (err, usersRequests) => {
+                                    if(err) next(err);
+                                    else {
+                                        users.map(user => {
+                                            //update users with friends 
+                                            user.addRequest = true;
+                                            friends.map(friend => { if(friend.id == user.id) user.addRequest = false;})
+                                            //update users with my requests
+                                            myRequests.map(req => { if(req.username_to == user.email) user.addRequest = false; })
+                                            //update users with other requests
+                                            usersRequests.map(req => { if(req.email == user.email) user.addRequest = false; })
+                                        });
+                                        response.render('search', { currentUser, users, name: request.body.name });
+                                    }
+                                });
+                            }
+                        });
                     }
-                )
-            }
+            });
         }
-    )
-
-   
-})
+    }); 
+});
 
 
 /* SEND REQUEST */
 
 usersRouter.get('/add-request/:id', (request, response, next) => {
     const { currentUser } = request.session;
-
     //search user 
     usersDAO.getUserById(request.params.id, 
         (err,user) => {
             if(err) next(err);
-        else { //add request
-            usersDAO.addRequest(currentUser.email, user.email, 
-                (err, correctInsert) => {
-                    if(err) next(err);
-                    
-                    else {
-                        if (correctInsert) response.redirect(`../profile/${user.id}`);
-                        else next(err); 
-                    }
-                }
-            )
-        }
-    })
-})
-
-
+            else { //add request
+                usersDAO.addRequest(currentUser.email, user.email, 
+                    (err, correctInsert) => {
+                        if(err) next(err);
+                        else {
+                            if (correctInsert) response.redirect(`../profile/${user.id}`);
+                            else next(err); 
+                        }
+                });
+            }
+        });
+});
 
 /* ACCEPT AND REJECT REQUEST */
 

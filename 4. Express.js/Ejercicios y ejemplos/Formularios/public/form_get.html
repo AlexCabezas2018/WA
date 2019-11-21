@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/form_get.css">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Formulario</title>
+</head>
+<body>
+        <form method="GET"action="procesar_get">
+                <div>
+                    <label for="formNombre">Nombre:</label>
+                        <input type="text"name="nombre"id="formNombre">
+                </div>
+                <div>
+                    <label for="formEdad">Edad:</label>
+                        <input type="text"name="edad"id="formEdad">
+                </div>
+                <div>
+                    <input type="radio"name="sexo"value="H"id="formHombre">
+                        <label for="formHombre">Hombre</label>
+                            <input type="radio"name="sexo"value="M"id="formMujer">
+                                <label for="formMujer">Mujer</label>
+                </div>
+                <div>
+                    <input type="checkbox"name="fumador"value="ON"id="formFumador">
+                        <label for="formFumador">Fumador/a</label>
+                </div>
+                <div>
+                    <input type="submit"value="Enviar">
+                </div>
+            </form>
+    
+</body>
+</html>

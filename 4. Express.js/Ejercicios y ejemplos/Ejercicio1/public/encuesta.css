@@ -1,0 +1,18 @@
+*{
+    margin:0;
+    padding: 0;
+}
+
+h1{
+    color:purple;
+    text-align: center;
+    margin-top: 10%;
+}
+
+input{
+    margin-left: 10%;
+}
+
+tr,td,th{
+    border:2px solid black;
+}

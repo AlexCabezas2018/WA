@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link href="https://fonts.googleapis.com/css?family=Concert+One&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Cabin&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="tasksPrint.css" media="print" />
+    <link rel="stylesheet" href="tasksScreen.css" media="screen" />
+    <!--<link rel="icon" href="img/favicon.ico" /> -->
+    <title>Gestor de tareas</title>
+</head>
+
+<body>
+    <header>
+        <h1>TAREAS</h1>
+        <div class="user">
+            <img src="contact-img.png" alt="contact-image" />
+            <div class="user-info">
+                <p>usuario@gmail.com</p>
+                <a href="">DESCONECTAR</a>
+            </div>
+        </div>
+    </header>
+    <main>
+        <div class="tasks-container">
+            <% taskList.forEach(task => { %>
+            <div class="task" <% if(task.done) {%>id="done"<%}%> >
+                <h2>
+                    <%=task.text %> 
+                    <% task.tags.forEach(tag => { %>
+                        <span class="tag"><%=tag%></span>
+                    <% }) %>
+                </h2>
+                <% if(task.done) %><a href="finish/<%=task.id%>" class="done-task-button">Marcar finalizada</a>
+            </div>
+            <%}) %>
+
+            <form class="form-div" method="POST" action ="addTask">
+                <input type="text" id="newtask" name="taskText" placeholder="Introduce tarea..." />
+                <input type="submit" id="add-task-button" value="AÑADIR">
+            </form>
+            <a id="remove-task-btn" href="deletedCompleted">ELIMINAR TAREAS COMPLETADAS</a>
+        </div>
+    </main>
+</body>
+
+</html>

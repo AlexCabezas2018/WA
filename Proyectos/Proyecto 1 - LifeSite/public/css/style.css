@@ -4,11 +4,7 @@
     font-family: 'PT Sans', sans-serif;
 }
 
-body {
-    background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(226,226,226,1) 43%) no-repeat fixed;
-    background-size: 100% 100%;
 
-}
 header {
     justify-content: space-between;
     padding: 1% 2%;
@@ -338,6 +334,16 @@ div.friends-list a:hover{
     border-radius: 30px;
     margin-bottom: 2%;
     align-items: center;
+}
+
+div.user-search a{
+    text-decoration: none;
+    font-size: 18px;
+    color: white;
+}
+
+div.user-search a:hover{
+    color: blue;
 }
 
 .user-info-search {

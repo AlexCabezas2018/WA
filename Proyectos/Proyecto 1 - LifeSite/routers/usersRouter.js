@@ -1,14 +1,15 @@
 "use strict";
 
+/* NPM REQUIRES */
 const express = require('express');
 const path = require('path');
-const UsersDAO = require('./usersDAO');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 
+/* CONTROLLERS */
+const usersController = require('../controllers/usersController');
+
 const usersRouter = express.Router();
-const absolutePath = path.join(__dirname, 'public');
-const usersDAO = new UsersDAO();
 
 //TODO: Cuando inicio sesion y veo mi perfil, al desconectarme y voler a atrás, me sigue dejando.
 
@@ -20,45 +21,12 @@ usersRouter.use(session({
     resave: false,
 }));
 
-usersRouter.get('/login', (request, response) => {
-    if (request.session.currentUser == undefined) { //New user
-        console.log('[INFO] New user entered!')
-        response.status(200);
-        response.render('logIn');
-    }
-    else {
-        console.log('[INFO] User reconnection');
-        response.status(200);
-        response.redirect(`profile/${request.session.currentUser.id}`);
-    }
-});
+/* LOGIN */
+usersRouter.get('/login', usersController.handleLogin);
+usersRouter.post('/login', usersController.handleLoginPost);
 
-usersRouter.post('/login', (request, response, next) => {
-    usersDAO.checkCredentials(request.body.email,
-        request.body.password,
-        (err, usr) => {
-            if (err) {
-                next(err)
-            }
-            else {
-                if (usr) {
-                    request.session.currentUser = usr;
-                    console.log(`[INFO] User with id ${usr.id} logged!`);
-                    response.status(200).redirect(`profile/${usr.id}`);
-                }
-                else response.status(400).json({
-                    status: 400,
-                    reason: 'Usuario o contraseña no válidos'
-                }); //TODO: Avisar de error y recargar la página.
-            }
-        })
-});
-
-usersRouter.get('/logout', (request, response) => {
-    console.log(`[INFO]: User ${request.session.currentUser.id} disconnected!`);
-    request.session.currentUser = undefined;
-    response.status(200).redirect('login');
-});
+/* LOGOUT */
+usersRouter.get('/logout', usersController.handleLogout);
 
 /* NEW USER*/
 usersRouter.get('/new-user', (request, response) => {

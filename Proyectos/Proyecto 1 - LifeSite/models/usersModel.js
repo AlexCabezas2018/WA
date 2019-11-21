@@ -7,7 +7,7 @@ const mysqlOptions = {
     database: "lifesite"
 };
 
-class usersDAO {
+class usersModel {
     constructor() {
         this.pool = mysql.createPool(mysqlOptions);
         this.exceptions = {
@@ -245,5 +245,6 @@ class usersDAO {
 }
 
 
-
-module.exports = usersDAO;
+module.exports = {
+    usersModel
+};

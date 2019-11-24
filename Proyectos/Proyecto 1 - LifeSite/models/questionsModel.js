@@ -16,7 +16,10 @@ class QuestionsModel {
         }
         this.queries = {
             RANDOM_QUESTIONS: "SELECT * FROM questions ORDER BY RAND() LIMIT 5",
-            INSERT_QUESTION: "INSERT INTO questions VALUES (null, ?)"
+            INSERT_QUESTION: "INSERT INTO questions VALUES (null, ?)",
+            FIND_QUESTION_BY_ID: "SELECT * FROM questions WHERE id = ?",
+            FIND_ANSWERS_BY_QUESTION: "SELECT * FROM answers WHERE id_question = ?",
+            INSERT_USER_ANSWER: "INSERT INTO user_answers VALUES (?,?)"
         }
     }
 
@@ -74,7 +77,62 @@ class QuestionsModel {
         })
     }
 
+    /**
+     * Returns a question given an Id
+     * @param {int} id 
+     * @param {Function} callback 
+     */
+    getQuestionById(id,callback){
+        this.pool.getConnection((err, conn) => {
+            if (err) callback(new Error(this.exceptions.connection_error), undefined);
+            else{
+                conn.release();
+                conn.query(this.queries.FIND_QUESTION_BY_ID, [id], 
+                    (err, question) => {
+                        if(err) callback(new Error(this.exceptions.query_error), undefined);
+                        else callback (undefined, question[0]);
+                })
+            }
+        })
+    }
 
+    /**
+     * Get answers given a question
+     * @param {Int} id_question 
+     * @param {Function} callback 
+     */
+    getAnswerByQuestion(id_question, callback) {
+        this.pool.getConnection((err, conn) => {
+            if (err) callback(new Error(this.exceptions.connection_error), undefined);
+            else{
+                conn.release();
+                conn.query(this.queries.FIND_ANSWERS_BY_QUESTION, [id_question], 
+                    (err, answers) => {
+                        if(err) callback(new Error(this.exceptions.query_error), undefined);
+                        else callback(undefined, answers);
+                })
+            }
+        })
+    }
+
+    /**
+     * Insert an answer from user given an email and answer
+     * @param {*} email 
+     * @param {*} id_answer 
+     */
+    addAnswer(email, id_answer, callback){
+        this.pool.getConnection((err, conn) => {
+            if(err) callback(new Error(this.exceptions.connection_error), undefined);
+            else{
+                conn.release();
+                conn.query(this.queries.INSERT_USER_ANSWER,[email,id_answer], 
+                    (err, result)=> {
+                        if(err) callback(new Error(this.exceptions.query_error), undefined);
+                        else callback(undefined, true);
+                })
+            }
+        })
+    }
 }
 
 module.exports = QuestionsModel;

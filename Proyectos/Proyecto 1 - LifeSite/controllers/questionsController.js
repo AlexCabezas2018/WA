@@ -60,14 +60,52 @@ function handleAddQuestionPost(request, response, next) {
 }
 
 /**
- * Handles the Answer question view GET petition
+ * Handles the Show question view GET petition
+ * @param {*} request 
+ * @param {*} response 
+ * @param {*} next 
+ */
+function handleShowQuestion(request, response, next) {
+    questionModel.getQuestionById(request.params.id, 
+        (err, question) => {
+            if(err) next(err);
+            else response.render('question-show', {question});
+    })
+}
+
+/**
+ * Handles the answer question GET PETITION
  * @param {*} request 
  * @param {*} response 
  * @param {*} next 
  */
 function handleAnswerQuestion(request, response, next) {
-    //TODO: Cargar ppregunta y modificar ejs para pintarla
-    response.render('question-answer');
+    //TODO: Mantener pregunta en la sesion
+    const question ={
+        id:1,
+        question_body:"¿De que color es el caballo blanco de Santiago?"
+    };
+
+    questionModel.getAnswerByQuestion(request.params.id, 
+        (err, answers)=> {
+            if(err) next(err);
+            else response.render('question-view', {answers,question});
+    })
+}
+
+/**
+ * Handles the answer question POST PETITION
+ * @param {*} request 
+ * @param {*} response 
+ * @param {*} next 
+ */
+function handleAnswerQuestionPost(request, response, next){
+    //TODO: Añadir respuesta en la BD y alamcenar pregunta en la sesion
+    /*questionModel.addAnswer(currentUser.id,id_answer, 
+        (err, answer)=>{
+            if(err) next(err);
+            else response.render('question-show', {question});
+    })*/
 }
 
 module.exports = {
@@ -75,5 +113,7 @@ module.exports = {
     handleRandomQuestions,
     handleAddQuestion,
     handleAddQuestionPost,
-    handleAnswerQuestion
+    handleShowQuestion,
+    handleAnswerQuestion,
+    handleAnswerQuestionPost
 }; 

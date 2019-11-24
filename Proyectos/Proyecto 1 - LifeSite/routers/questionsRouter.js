@@ -22,7 +22,11 @@ questionsRouter.get('/random-questions', questionsController.handleRandomQuestio
 questionsRouter.get('/add-question', questionsController.handleAddQuestion);
 questionsRouter.post('/add-question', questionsController.handleAddQuestionPost);
 
+/* SHOW QUESTION */
+questionsRouter.get('/show-question/:id', questionsController.handleShowQuestion);
+
 /* ANSWER QUESTION */
 questionsRouter.get('/answer-question/:id', questionsController.handleAnswerQuestion);
+questionsRouter.post('/answer-question/', questionsController.handleAnswerQuestionPost);
 
 module.exports = questionsRouter;

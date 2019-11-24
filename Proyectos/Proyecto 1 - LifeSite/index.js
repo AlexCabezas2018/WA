@@ -8,6 +8,7 @@ const app = Express();
 
 // TODO Middlewares
 app.use('/users', userRouter); // Applying usersRouter to the main route
+app.use('/questions', questionsRouter); // Applying usersRouter to the main route
 app.use(Express.static(path.join(__dirname, 'public')));
 
 //Load templates

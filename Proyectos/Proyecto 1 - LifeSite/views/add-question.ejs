@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Añade tu pregunta</title>
+</head>
+<body>
+    <header>
+        <img src="img/logo.png" alt="logo">
+        <div class="links">
+            <a href="">Perfil</a>
+            <a href="../users/friends-page">Amigos</a>
+            <a href="../questions">Preguntas</a>
+            <a href="../users/logout">Desconectar</a>
+            <div class="user-header">
+                <img src="img/contact-img.png" alt="imagen de usuario" id="header-img">
+                <span>50 pts</span>
+            </div>
+        </div>
+    </header>
+    <div class="container">
+        <h2>Añade tu pregunta</h2>
+        <form id="add-question-form" method="POST" action="add-question">
+            <input class ="add-option" type="text" name="question" placeholder="Pregunta " required>
+            <input class ="add-option" type="text" name ="option_1" placeholder="Opcion 2 " required>
+            <input class ="add-option" type="text" name ="option_2" placeholder="Opcion 3 " required>
+            <input class ="add-option" type="text" name ="option_3" placeholder="Opcion 4 " required>
+            <input class ="add-option" type="text" name ="option_4" placeholder="Opcion 5 " required>
+            <input id ="send-question" type="submit" value="Enviar Pregunta">
+        </form>
+    </div>
+</body>
+</html>

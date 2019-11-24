@@ -1,3 +1,7 @@
+// Practica 4
+// Alejandro Cabezas Garríguez
+// Manuel Monforte Escobar
+
 "use strict";
 
 const correo = "usuario@ucm.es";
@@ -8,7 +12,6 @@ const utils = require("./utils");
 const path = require("path");
 const mysql = require("mysql");
 const express = require("express");
-const fs = require("fs");
 
 // Crear un servidor Express.js
 const app = express();
@@ -26,7 +29,7 @@ const daoTasks = new DAOTasks(pool);
 
 app.get("/tasks", (request, response) => {
     daoTasks.getAllTasks(correo, (err, list) => {
-        if(err) {
+        if (err) {
             console.log(err.message);
             response.status(500).end();
         }
@@ -35,11 +38,11 @@ app.get("/tasks", (request, response) => {
 });
 
 app.post("/addTask", (request, response) => {
-    const {text, tags} = utils.createTask(request.body.taskText);
+    const { text, tags } = utils.createTask(request.body.taskText);
     const task = { text, tags, user: correo, done: 0 }
 
     daoTasks.insertTask(correo, task, err => {
-        if(err) {
+        if (err) {
             console.log(err.message);
             response.status(500).end();
         }
@@ -51,7 +54,7 @@ app.post("/addTask", (request, response) => {
 
 app.get("/finish/:id", (request, response) => {
     daoTasks.markTaskDone(request.params.id, (err) => {
-        if(err) {
+        if (err) {
             console.log(err.message);
             response.status(500).end();
         }
@@ -63,7 +66,7 @@ app.get("/finish/:id", (request, response) => {
 
 app.get("/deletedCompleted", (request, response) => {
     daoTasks.deletedCompleted(correo, (err) => {
-        if(err) {
+        if (err) {
             console.log(err.message);
             response.status(500).end();
         }
@@ -74,12 +77,12 @@ app.get("/deletedCompleted", (request, response) => {
 });
 
 // Arrancar el servidor
-app.listen(config.port, function(err) {
-   if (err) {
-       console.log("ERROR al iniciar el servidor");
-   }
-   else {
-       console.log(`Servidor arrancado en el puerto ${config.port}`);
-   }
+app.listen(config.port, function (err) {
+    if (err) {
+        console.log("ERROR al iniciar el servidor");
+    }
+    else {
+        console.log(`Servidor arrancado en el puerto ${config.port}`);
+    }
 });
 

@@ -29,7 +29,9 @@
         <h2>Preguntas seleccionadas aleatoriamente</h2>
         <% questions.forEach(question => { %>
             <div class="question">
-                <h3 id='random-question-text'><%=question.question_body%></h3>
+                <h3 id='random-question-text'>
+                    <a href="answer-question/<%=question.id%>"><%=question.question_body%></a>
+                </h3>
             </div>
         <%});%>
 

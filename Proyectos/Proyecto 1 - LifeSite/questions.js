@@ -7,7 +7,6 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 
 const questionsRouter = express.Router();
-const absolutePath = path.join(__dirname, 'public');
 const questionsDAO = new QuestionsDAO();
 
 questionsRouter.use(bodyParser.urlencoded({ extended: false }));
@@ -33,7 +32,6 @@ questionsRouter.post('/add-question', (request, response, next) => {
     const question = request.body.question;
     const options = [request.body.option_1,request.body.option_2,
                      request.body.option_3,request.body.option_4];
-
     questionsDAO.addQuestion(question, options, (err, correctInsert) => {
         if(err) next(err);
         else {
@@ -41,6 +39,11 @@ questionsRouter.post('/add-question', (request, response, next) => {
             else response.redirect('random-questions');
         }
     })
+})
+
+//TODO: Cargar ppregunta y modificar ejs para pintarla
+questionsRouter.get('/answer-question/:id', (request, response, next) => {
+    response.render('question-answer');
 })
 
 module.exports = questionsRouter; 

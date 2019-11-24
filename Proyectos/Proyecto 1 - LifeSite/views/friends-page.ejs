@@ -7,19 +7,19 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Amigos y solicitudes de amistad</title>
     <link href="https://fonts.googleapis.com/css?family=PT+Sans&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 
 <body>
     <header>
-        <img src="../../img/logo.png" alt="logo">
+        <img src="/img/logo.png" alt="logo">
         <div class="links">
             <a href="profile/<%=currentUser.id%>">Perfil</a>
             <a href="">Amigos</a>
             <a href="">Preguntas</a>
             <a href="logout">Desconectar</a>
             <div class="user-header">
-                <img src="../../img/contact-img.png" alt="imagen de usuario" id="header-img">
+                <img src="/img/contact-img.png" alt="imagen de usuario" id="header-img">
                 <span><%= currentUser.puntuation %> pts</span>
             </div>
         </div>
@@ -31,16 +31,18 @@
         <div class="friends-list">
 
             <% requests.forEach(elem => {%>
-                <div class="friend">
-                    <div class="friend-profile">
-                        <img src="../../img/contact-img.png" alt="imagen de perfil" id="header-img">
-                        <a href="profile/<%=elem.id%>"><%=elem.username%></a>
-                    </div>
-                    <div class="response">
-                        <a href="accept-request/<%=elem.id%>" class="accept-reject-button" id='accept-friend-button'>Aceptar</a>
-                        <a href="reject-request/<%=elem.id%>" class="accept-reject-button" id='reject-friend-button'>Rechazar</a>
-                    </div>
+            <div class="friend">
+                <div class="friend-profile">
+                    <img src="/img/contact-img.png" alt="imagen de perfil" id="header-img">
+                    <a href="profile/<%=elem.id%>"><%=elem.username%></a>
                 </div>
+                <div class="response">
+                    <a href="accept-request/<%=elem.id%>" class="accept-reject-button"
+                        id='accept-friend-button'>Aceptar</a>
+                    <a href="reject-request/<%=elem.id%>" class="accept-reject-button"
+                        id='reject-friend-button'>Rechazar</a>
+                </div>
+            </div>
             <%});%>
         </div>
         <h2>Búsqueda de amigos</h2>
@@ -54,15 +56,15 @@
         <h2>Mis amigos</h2>
         <div class="friends-list">
             <% friends.forEach(friend => { %>
-                <div class="friend">
-                    <div class="friend-profile">
-                        <img src="../../img/contact-img.png" alt="imagen de perfil" id="header-img">
-                        <a href="profile/<%=friend.id%>"><%=friend.username%></a>
-                    </div>
+            <div class="friend">
+                <div class="friend-profile">
+                    <img src="/img/contact-img.png" alt="imagen de perfil" id="header-img">
+                    <a href="profile/<%=friend.id%>"><%=friend.username%></a>
                 </div>
+            </div>
             <% }); %>
         </div>
-        
+
     </div>
 </body>
 

@@ -532,3 +532,15 @@ div.container-text span {
     color:black;
 }
 
+/* Mensajes de flash */
+.flash {
+    margin: 5% auto;
+    width: 30%;
+    text-align: center;
+    font-size: 2em;
+    padding: 1%;
+    background-color: #ffd557;
+    border-radius: 15px;
+    border: 3px solid rgb(212, 177, 72);
+}
+

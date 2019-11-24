@@ -20,6 +20,19 @@ usersRouter.use(session({
     secret: 'foobar34',
     resave: false,
 }));
+usersRouter.use((request, response, next) => {
+    response.setFlash = msg => {
+        request.session.flashMsg = msg;
+    }
+
+    response.locals.getAndClearFlash = () => {
+        let msg = request.session.flashMsg;
+        delete request.session.flashMsg;
+        return msg;
+    };
+
+    next();
+})
 
 /* LOGIN */
 usersRouter.get('/login', usersController.handleLogin);
@@ -29,205 +42,29 @@ usersRouter.post('/login', usersController.handleLoginPost);
 usersRouter.get('/logout', usersController.handleLogout);
 
 /* NEW USER*/
-usersRouter.get('/new-user', (request, response) => {
-    request.session.currentUser = undefined;
-    response.status(200);
-    response.render('new-user');
-});
-
-usersRouter.post('/new-user', (request, response, next) => {
-    const usr = {
-        email: request.body.email,
-        pass: request.body.pass,
-        name: request.body.name,
-        gender: request.body.gender,
-        birth_date: request.body.birth_date,
-        profile_img: (request.body.profile_img == '') ? null : request.body.profile_img //TODO: No estamos insertando imágenes, tenemos que aprender a hacerlo
-    }
-
-    usersDAO.createUser(usr, (err, usrId) => {
-        if (err) {
-            next(err);
-        }
-        else response.redirect(`login`);
-    });
-})
+usersRouter.get('/new-user', usersController.handleNewUser);
+usersRouter.post('/new-user', usersController.handleNewUserPost);
 
 /* PROFILE*/
-usersRouter.get('/profile/:id', (request, response, next) => {
-    if (request.session.currentUser == undefined) {
-        response.status(403).redirect('../login');
-    } else {
-        usersDAO.getUserById(request.params.id,
-            (err, usr) => {
-                if (err) {
-                    next(err);
-                }
-                else {
-                    if (!usr) next(err);
-                    else response.status(200).render('user-profile', { user: usr, sessionId: request.session.currentUser.id });
-                }
-            }
-        );
-    }
-});
+usersRouter.get('/profile/:id', usersController.handleProfile);
 
 /* UPDATE PROFILE */
-usersRouter.get('/update-profile', (request, response) => {
-    response.status(200);
-    if (request.session.currentUser == undefined) response.status(403).redirect('login');
-    else response.status(200).render('update-profile', { currentId: request.session.currentUser.id });
-});
-
-usersRouter.post('/update-profile', (request, response, next) => {
-    const { currentUser } = request.session;
-    const usr = {
-        pass: (request.body.pass == '') ? currentUser.pass : request.body.pass,
-        name: (request.body.name == '') ? currentUser.username : request.body.name,
-        gender: (request.body.gender == '') ? currentUser.gender : request.body.gender,
-        birth_date: (request.body.birth_date == '') ? currentUser.birth_date.split('T')[0] : request.body.birth_date,
-        profile_img: request.body.profile_img, //TODO: Poder mantener la foto de perfil si no quiere modificarla.
-        email: currentUser.email
-    }
-
-    usersDAO.updateUser(usr, (err, correctUpdate) => {
-        if (err) next(err);
-        else {
-            if (correctUpdate) response.redirect(`profile/${request.session.currentUser.id}`);
-            else next(err);
-        }
-    })
-})
-
+usersRouter.get('/update-profile', usersController.handleUpdateProfile);
+usersRouter.post('/update-profile', usersController.handleUpdateProfilePost);
 
 /* FRIENDS PAGE */
-
-usersRouter.get('/friends-page', (request, response , next) => {
-    const { currentUser } = request.session;
-
-    usersDAO.getFriendsByEmail(currentUser.email,
-        (err, friends) => {
-            if (err) next(err);
-            else {
-                usersDAO.getRequestsByEmail(currentUser.email,
-                    (err, requests) => {
-                        if (err) next(err);
-                        else response.render('friends-page', { currentUser, requests, friends });
-                    })
-            }
-        })
-})
+usersRouter.get('/friends-page', usersController.handleFriendsPage);
 
 /* SEARCH FRIENDS*/
-
-usersRouter.post('/search', (request, response, next) => {
-    const { currentUser } = request.session;
-    //get all users 
-    usersDAO.getUsersByName(request.body.name, currentUser.email,
-    (err, users) => {
-        if (err) next(err);
-        else { //get friends
-            usersDAO.getFriendsByEmail(currentUser.email,
-            (err,friends) => {
-                if(err) next(err);
-                    else { 
-                        //get my requests
-                        usersDAO.getMyRequestsByEmail(currentUser.email,
-                        (err,myRequests) => {
-                            if(err) next(err);
-                            else {
-                                //get other requests
-                                usersDAO.getRequestsByEmail(currentUser.email,
-                                (err, usersRequests) => {
-                                    if(err) next(err);
-                                    else {
-                                        users.map(user => {
-                                            //update users with friends 
-                                            user.addRequest = true;
-                                            friends.map(friend => { if(friend.id == user.id) user.addRequest = false;})
-                                            //update users with my requests
-                                            myRequests.map(req => { if(req.username_to == user.email) user.addRequest = false; })
-                                            //update users with other requests
-                                            usersRequests.map(req => { if(req.email == user.email) user.addRequest = false; })
-                                        });
-                                        response.render('search', { currentUser, users, name: request.body.name });
-                                    }
-                                });
-                            }
-                        });
-                    }
-            });
-        }
-    }); 
-});
+usersRouter.post('/search', usersController.handleSearch);
 
 
 /* SEND REQUEST */
+usersRouter.get('/add-request/:id', usersController.handleAddRequest);
 
-usersRouter.get('/add-request/:id', (request, response, next) => {
-    const { currentUser } = request.session;
-    //search user 
-    usersDAO.getUserById(request.params.id, 
-        (err,user) => {
-            if(err) next(err);
-            else { //add request
-                usersDAO.addRequest(currentUser.email, user.email, 
-                    (err, correctInsert) => {
-                        if(err) next(err);
-                        else {
-                            if (correctInsert) response.redirect(`../profile/${user.id}`);
-                            else next(err); 
-                        }
-                });
-            }
-        });
-});
-
-/* ACCEPT AND REJECT REQUEST */
-
-usersRouter.get('/accept-request/:id', (request, response, next) => {
-    const { currentUser } = request.session;
-
-    console.log()
-    usersDAO.getUserById(request.params.id, (err, user) => {
-        if(err) next(err);
-        else{
-            usersDAO.deleteRequest(currentUser.email, user.email, 
-             (err, correctDelete) => {
-                if(err) next(err);
-                else{
-                    if(!correctDelete) next(err);
-                    else {
-                        usersDAO.addFriend(currentUser.email, user.email, (err, correctInsert) => {
-                            if(!correctInsert) next(err);
-                            else response.redirect('../friends-page');
-                        })
-                    }
-                }
-            })
-        }
-    })
-})
-
-usersRouter.get('/reject-request/:id', (request, response, next) => {
-    const { currentUser } = request.session;
-
-    usersDAO.getUserById(request.params.id, (err, user) => {
-        if(err) next(err);
-        else{
-            usersDAO.deleteRequest(currentUser.email, user.email, 
-             (err, correctDelete) => {
-                if(err) next(err);
-                else{
-                    if(correctDelete) response.redirect('../friends-page');
-                    else next(err);
-                }
-            })
-        }
-    })
-    
-})
-
+/* ACCEPT AND REJECT FRIEND REQUEST */
+usersRouter.get('/accept-request/:id', usersController.handleAcceptRequest);
+usersRouter.get('/reject-request/:id', usersController.handleRejectRequest);
 
 module.exports = usersRouter;
 

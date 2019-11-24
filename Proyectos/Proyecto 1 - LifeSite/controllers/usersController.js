@@ -8,7 +8,7 @@ const usersDAOModel = new usersModel();
  * @param {*} response 
  */
 function handleLogin(request, response) {
-    if (request.session.currentUser == undefined) { 
+    if (request.session.currentUser == undefined) {
         console.log('[INFO] New user entered!')
         response.status(200);
         response.render('logIn');
@@ -27,7 +27,7 @@ function handleLogin(request, response) {
  * @param {*} next 
  */
 function handleLoginPost(request, response, next) {
-    usersModel.checkCredentials(request.body.email,
+    usersDAOModel.checkCredentials(request.body.email,
         request.body.password,
         (err, usr) => {
             if (err) {
@@ -39,10 +39,10 @@ function handleLoginPost(request, response, next) {
                     console.log(`[INFO] User with id ${usr.id} logged!`);
                     response.status(200).redirect(`profile/${usr.id}`);
                 }
-                else response.status(400).json({
-                    status: 400,
-                    reason: 'Usuario o contraseña no válidos'
-                }); //TODO: Avisar de error y recargar la página.
+                else {
+                    response.setFlash('Usuario o contraseña inválidos');
+                    response.redirect('login');
+                }
             }
         }
     );
@@ -54,17 +54,271 @@ function handleLoginPost(request, response, next) {
  * @param {*} response 
  */
 function handleLogout(request, response) {
+    console.log(`[INFO]: User ${request.session.currentUser.id} disconnected!`);
+    request.session.currentUser = undefined;
+    response.status(200).redirect('login');
+}
+
+/**
+ * Handles the new user GET petition
+ * @param {*} request 
+ * @param {*} response 
+ */
+function handleNewUser(request, response) {
     request.session.currentUser = undefined;
     response.status(200);
     response.render('new-user');
 }
 
-function handleNewUser(request, response) {
-    
+/**
+ * Handles the new user POST petition
+ * @param {*} request 
+ * @param {*} response 
+ * @param {*} next 
+ */
+function handleNewUserPost(request, response, next) {
+    const usr = {
+        email: request.body.email,
+        pass: request.body.pass,
+        name: request.body.name,
+        gender: request.body.gender,
+        birth_date: request.body.birth_date,
+        profile_img: (request.body.profile_img == '') ? null : request.body.profile_img //TODO: No estamos insertando imágenes, tenemos que aprender a hacerlo
+    }
+
+    usersDAOModel.createUser(usr, (err, usrId) => {
+        if (err) {
+            next(err);
+        }
+        else response.redirect(`login`);
+    });
+}
+
+/**
+ * Handles the profile GET petition
+ * @param {*} request 
+ * @param {*} response 
+ * @param {*} next 
+ */
+function handleProfile(request, response, next) {
+    if (request.session.currentUser == undefined) {
+        response.status(403).redirect('../login');
+    } else {
+        usersDAOModel.getUserById(request.params.id,
+            (err, usr) => {
+                if (err) {
+                    next(err);
+                }
+                else {
+                    if (!usr) next(err);
+                    else response
+                        .status(200)
+                        .render('user-profile',
+                            { user: usr, sessionId: request.session.currentUser.id });
+                }
+            }
+        );
+    }
+}
+
+/**
+ * Handles the update profile view GET petition
+ * @param {*} request 
+ * @param {*} response 
+ */
+function handleUpdateProfile(request, response) {
+    if (request.session.currentUser == undefined) response.status(403).redirect('login');
+    else response.status(200).render('update-profile', { currentId: request.session.currentUser.id });
+}
+
+/**
+ * Handles the update profile new POST petition
+ * @param {*} request 
+ * @param {*} response 
+ * @param {*} next 
+ */
+function handleUpdateProfilePost(request, response, next) {
+    const { currentUser } = request.session;
+    const usr = {
+        pass: (request.body.pass == '') ? currentUser.pass : request.body.pass,
+        name: (request.body.name == '') ? currentUser.username : request.body.name,
+        gender: (request.body.gender == '') ? currentUser.gender : request.body.gender,
+        birth_date: (request.body.birth_date == '') ? currentUser.birth_date.split('T')[0] : request.body.birth_date,
+        profile_img: request.body.profile_img, //TODO: Poder mantener la foto de perfil si no quiere modificarla.
+        email: currentUser.email
+    }
+
+    usersDAOModel.updateUser(usr, (err, correctUpdate) => {
+        if (err) next(err);
+        else {
+            if (correctUpdate) response.redirect(`profile/${request.session.currentUser.id}`);
+            else next(err);
+        }
+    });
+}
+
+/**
+ * Handles the friends page view GET petition
+ * @param {*} request 
+ * @param {*} response 
+ * @param {*} next 
+ */
+function handleFriendsPage(request, response, next) {
+    const { currentUser } = request.session;
+
+    usersDAOModel.getFriendsByEmail(currentUser.email,
+        (err, friends) => {
+            if (err) next(err);
+            else {
+                usersDAOModel.getRequestsByEmail(currentUser.email,
+                    (err, requests) => {
+                        if (err) next(err);
+                        else response.render('friends-page', { currentUser, requests, friends });
+                    });
+            }
+        });
+}
+
+/**
+ * Handles the search view POST petition
+ * @param {*} request 
+ * @param {*} response 
+ * @param {*} next 
+ */
+function handleSearch(request, response, next) {
+    const { currentUser } = request.session;
+    //get all users 
+    usersDAOModel.getUsersByName(request.body.name, currentUser.email,
+        (err, users) => {
+            if (err) next(err);
+            else { //get friends
+                usersDAOModel.getFriendsByEmail(currentUser.email,
+                    (err, friends) => {
+                        if (err) next(err);
+                        else {
+                            //get my requests
+                            usersDAOModel.getMyRequestsByEmail(currentUser.email,
+                                (err, myRequests) => {
+                                    if (err) next(err);
+                                    else {
+                                        //get other requests
+                                        usersDAOModel.getRequestsByEmail(currentUser.email,
+                                            (err, usersRequests) => {
+                                                if (err) next(err);
+                                                else {
+                                                    users.map(user => {
+                                                        //update users with friends 
+                                                        user.addRequest = true;
+                                                        friends.map(friend => { if (friend.id == user.id) user.addRequest = false; })
+                                                        //update users with my requests
+                                                        myRequests.map(req => { if (req.username_to == user.email) user.addRequest = false; })
+                                                        //update users with other requests
+                                                        usersRequests.map(req => { if (req.email == user.email) user.addRequest = false; })
+                                                    });
+                                                    response.render('search', { currentUser, users, name: request.body.name });
+                                                }
+                                            });
+                                    }
+                                });
+                        }
+                    });
+            }
+        });
+}
+
+/**
+ * Handles the Add request GET petition
+ * @param {*} request 
+ * @param {*} response 
+ * @param {*} next 
+ */
+function handleAddRequest(request, response, next) {
+    const { currentUser } = request.session;
+    //search user 
+    usersDAOModel.getUserById(request.params.id,
+        (err, user) => {
+            if (err) next(err);
+            else { //add request
+                usersDAOModel.addRequest(currentUser.email, user.email,
+                    (err, correctInsert) => {
+                        if (err) next(err);
+                        else {
+                            if (correctInsert) response.redirect('../friends-page');
+                            else {
+                                console.log(err.message);
+                                next(err);
+                            }
+                        }
+                    });
+            }
+        });
+}
+
+/**
+ * Handles the Accept request GET petition
+ * @param {*} request 
+ * @param {*} response 
+ * @param {*} next 
+ */
+function handleAcceptRequest(request, response, next) {
+    const { currentUser } = request.session;
+
+    usersDAOModel.getUserById(request.params.id, (err, user) => {
+        if (err) next(err);
+        else {
+            usersDAOModel.deleteRequest(currentUser.email, user.email,
+                (err, correctDelete) => {
+                    if (err) next(err);
+                    else {
+                        if (!correctDelete) next(err);
+                        else {
+                            usersDAOModel.addFriend(currentUser.email, user.email, (err, correctInsert) => {
+                                if (!correctInsert) next(err);
+                                else response.redirect('../friends-page');
+                            });
+                        }
+                    }
+                });
+        }
+    });
+}
+
+/**
+ * Handles the Reject request GET petition
+ * @param {*} request 
+ * @param {*} response 
+ * @param {*} next 
+ */
+function handleRejectRequest(request, response, next) {
+    const { currentUser } = request.session;
+
+    usersDAOModel.getUserById(request.params.id, (err, user) => {
+        if (err) next(err);
+        else {
+            usersDAOModel.deleteRequest(currentUser.email, user.email,
+                (err, correctDelete) => {
+                    if (err) next(err);
+                    else {
+                        if (correctDelete) response.redirect('../friends-page');
+                        else next(err);
+                    }
+                })
+        }
+    })
 }
 
 module.exports = {
     handleLogin,
     handleLoginPost,
-    handleLogout
+    handleLogout,
+    handleNewUser,
+    handleNewUserPost,
+    handleProfile,
+    handleUpdateProfile,
+    handleUpdateProfilePost,
+    handleFriendsPage,
+    handleSearch,
+    handleAddRequest,
+    handleAcceptRequest,
+    handleRejectRequest
 }

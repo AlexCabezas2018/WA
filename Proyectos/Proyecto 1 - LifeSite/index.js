@@ -1,8 +1,9 @@
 "use strict";
 
 const Express = require('express');
-const userRouter = require('./users');
+const userRouter = require('./routers/usersRouter');
 const path = require('path');
+
 const app = Express();
 
 // TODO Middlewares
@@ -24,7 +25,7 @@ app.use((request, response, next) => { // 400: Not Found
     response.render("404", { url: request.url });
 });
 
-app.use(function(err, request, response, next) { //  500: Internal server error   
+app.use(function (err, request, response, next) { //  500: Internal server error   
     response.status(500);
     response.render("500", {
         message: err.message,

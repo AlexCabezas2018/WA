@@ -117,13 +117,13 @@ class usersModel {
      */
     getFriendsByEmail(email, callback) {
         this.pool.getConnection((err, conn) => {
-            if (err) callback(new Error(this.exceptions.connection_error),undefined);
-            else{
-                conn.query(this.queries.GET_FRIENDS, [email,email],
+            if (err) callback(new Error(this.exceptions.connection_error), undefined);
+            else {
+                conn.query(this.queries.GET_FRIENDS, [email, email],
                     (err, rows) => {
-                        if(err) callback(new Error(this.exceptions.query_error), undefined);
+                        if (err) callback(new Error(this.exceptions.query_error), undefined);
                         else callback(undefined, rows);
-                })
+                    })
             }
         })
     }
@@ -207,23 +207,23 @@ class usersModel {
         });
     }
 
-    addRequest(id_from, id_to, callback){
-        this.pool.getConnection((err,conn)=>{
-            if (err) callback(new Error(this.exceptions.connection_error),undefined);
-            else conn.query(this.queries.ADD_REQUEST, [id_from,id_to],
-                (err,result)=>{
-                    if(err) callback(new Error(err.message),undefined);
-                    else callback(undefined,true);
-            })
+    addRequest(id_from, id_to, callback) {
+        this.pool.getConnection((err, conn) => {
+            if (err) callback(new Error(this.exceptions.connection_error), undefined);
+            else conn.query(this.queries.ADD_REQUEST, [id_from, id_to],
+                (err, result) => {
+                    if (err) callback(new Error(err.message), undefined);
+                    else callback(undefined, true);
+                })
         })
     }
 
-    deleteRequest(email_from, email_to, callback){
+    deleteRequest(email_from, email_to, callback) {
         this.pool.getConnection((err, conn) => {
-            if(err) callback(new Error(this.exceptions.connection_error), undefined);
-            else{
-                conn.query(this.queries.DELETE_REQUEST,[email_from, email_to], (err, result) => {
-                    if(err) callback(new Error(this.exceptions.query_error),undefined);
+            if (err) callback(new Error(this.exceptions.connection_error), undefined);
+            else {
+                conn.query(this.queries.DELETE_REQUEST, [email_from, email_to], (err, result) => {
+                    if (err) callback(new Error(this.exceptions.query_error), undefined);
                     else callback(undefined, true);
                 })
             }
@@ -232,10 +232,10 @@ class usersModel {
 
     addFriend(email_1, email_2, callback) {
         this.pool.getConnection((err, conn) => {
-            if(err) callback(new Error(this.exceptions.connection_error), undefined);
-            else{
+            if (err) callback(new Error(this.exceptions.connection_error), undefined);
+            else {
                 conn.query(this.queries.INSERT_FRIEND, [email_1, email_2], (err, result) => {
-                    if(err) callback(new Error(this.exceptions.query_error),undefined);
+                    if (err) callback(new Error(this.exceptions.query_error), undefined);
                     else callback(undefined, true);
                 })
             }
@@ -245,6 +245,4 @@ class usersModel {
 }
 
 
-module.exports = {
-    usersModel
-};
+module.exports = usersModel;

@@ -33,7 +33,7 @@ app.get("/tasks", (request, response) => {
             console.log(err.message);
             response.status(500).end();
         }
-        else response.status(200).render('tasks', { taskList: list });
+        else response.status(200).render('tasks', { taskList: list, user: correo });
     })
 });
 

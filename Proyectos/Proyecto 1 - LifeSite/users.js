@@ -260,7 +260,6 @@ usersRouter.get('/reject-request/:id', (request, response, next) => {
     
 })
 
-
 module.exports = usersRouter;
 
 //TODO: Realizar el resto de rutas

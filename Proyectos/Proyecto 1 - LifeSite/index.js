@@ -2,11 +2,13 @@
 
 const Express = require('express');
 const userRouter = require('./users');
+const questionsRouter = require('./questions');
 const path = require('path');
 const app = Express();
 
 // TODO Middlewares
 app.use('/users', userRouter); // Applying usersRouter to the main route
+app.use('/questions', questionsRouter); // Applying usersRouter to the main route
 app.use(Express.static(path.join(__dirname, 'public')));
 
 //Load templates
@@ -19,10 +21,14 @@ app.get('/', (request, response) => {
     response.redirect('/users/login');
 });
 
+app.get('/questions', (request, response) => {
+    response.redirect('/questions/random-questions');
+});
+
 app.use((request, response, next) => { // 400: Not Found
     response.status(404);
     response.render("404", { url: request.url });
-});
+}); 
 
 app.use(function(err, request, response, next) { //  500: Internal server error   
     response.status(500);

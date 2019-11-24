@@ -532,3 +532,28 @@ div.container-text span {
     color:black;
 }
 
+/*Pagina anadir pregunta*/
+#add-question-form{
+    display: flex;
+    flex-direction: column;
+    min-width: 60%;
+    background-color: rgba(160, 13, 23, 1);
+    border-radius: 15px;
+    padding: 2%;
+}
+
+.add-option{
+    margin:1% auto;
+    padding:2%;
+    border-radius: 15px;
+    min-width: 60%;
+    overflow: hidden;
+}
+
+#send-question {
+    text-align: center;
+    width: 40%;
+    padding: 2%;
+    margin: 1% auto;
+    border-radius: 15px;
+}

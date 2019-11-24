@@ -401,6 +401,7 @@ div.user-search a:hover{
     padding: 1%;
     border-radius: 10px;
     margin-bottom: 2%;
+    color: black;
 }
 
 #create-question-button:hover {
@@ -552,6 +553,7 @@ div.container-text span {
     background-color: rgba(160, 13, 23, 1);
     border-radius: 15px;
     padding: 2%;
+    margin-bottom: 5%;
 }
 
 .add-option{
@@ -568,4 +570,13 @@ div.container-text span {
     padding: 2%;
     margin: 1% auto;
     border-radius: 15px;
+}
+
+.random-question-body {
+    text-decoration: none;
+    color: white;
+}
+
+.random-question-body:hover {
+    color: blue;
 }

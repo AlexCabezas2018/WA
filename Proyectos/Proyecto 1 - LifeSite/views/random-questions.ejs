@@ -6,20 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Preguntas aleatorias</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="/css/style.css">
     <link href="https://fonts.googleapis.com/css?family=PT+Sans&display=swap" rel="stylesheet">
 </head>
 
 <body>
     <header>
-        <img src="img/logo.png" alt="logo">
+        <img src="/img/logo.png" alt="logo">
         <div class="links">
             <a href="">Perfil</a>
             <a href="../users/friends-page">Amigos</a>
             <a href="">Preguntas</a>
             <a href="../users/logout">Desconectar</a>
             <div class="user-header">
-                <img src="img/contact-img.png" alt="imagen de usuario" id="header-img">
+                <img src="/img/contact-img.png" alt="imagen de usuario" id="header-img">
                 <span>50 pts</span>
             </div>
         </div>
@@ -28,11 +28,11 @@
     <div class="container">
         <h2>Preguntas seleccionadas aleatoriamente</h2>
         <% questions.forEach(question => { %>
-            <div class="question">
-                <h3 id='random-question-text'>
-                    <a href="answer-question/<%=question.id%>"><%=question.question_body%></a>
-                </h3>
-            </div>
+        <div class="question">
+            <h3 id='random-question-text'>
+                <a class='random-question-body' href="answer-question/<%=question.id%>"><%=question.question_body%></a>
+            </h3>
+        </div>
         <%});%>
 
         <h2>Añade tus preguntas</h2>

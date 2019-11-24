@@ -7,7 +7,7 @@ const mysqlOptions = {
     database: "lifesite"
 };
 
-class QuestionsDAO {
+class QuestionsModel {
     constructor() {
         this.pool = mysql.createPool(mysqlOptions);
         this.exceptions = {
@@ -27,13 +27,13 @@ class QuestionsDAO {
     getRandomQuestions(callback) {
         this.pool.getConnection((err, conn) => {
             if (err) callback(new Error(this.exceptions.connection_error), undefined);
-            else{
-                conn.query(this.queries.RANDOM_QUESTIONS, 
-                    (err, rows)=>{
+            else {
+                conn.query(this.queries.RANDOM_QUESTIONS,
+                    (err, rows) => {
                         conn.release();
-                        if(err) callback(new Error(this.exceptions.query_error), undefined);
+                        if (err) callback(new Error(this.exceptions.query_error), undefined);
                         else callback(undefined, rows);
-                })
+                    })
             }
         })
     }
@@ -45,14 +45,14 @@ class QuestionsDAO {
      * @param {Function} callback 
      */
     addQuestion(question, options, callback) {
-        this.pool.getConnection( (err, conn) => {
-            if(err) callback(new Error(this.exceptions.connection_error), undefined);
-            else{
-                conn.query(this.queries.INSERT_QUESTION, [question], 
-                    (err, result) =>{
+        this.pool.getConnection((err, conn) => {
+            if (err) callback(new Error(this.exceptions.connection_error), undefined);
+            else {
+                conn.query(this.queries.INSERT_QUESTION, [question],
+                    (err, result) => {
                         conn.release();
-                        if(err) callback(new Error(this.exceptions.query_error));
-                        else{
+                        if (err) callback(new Error(this.exceptions.query_error));
+                        else {
                             //create query to add answers
                             let questionId = result.insertId;
                             let answer_options = "(null,?,?), ".repeat(options.length - 1) + "(null,?,?)";
@@ -63,8 +63,8 @@ class QuestionsDAO {
                                 return ac;
                             }, []);
                             //execute query
-                            conn.query(INSERT_ANSWER, answer_param, (err, result) =>{
-                                if(err) callback(new Error(err.message), undefined);
+                            conn.query(INSERT_ANSWER, answer_param, (err, result) => {
+                                if (err) callback(new Error(err.message), undefined);
                                 else callback(undefined, true);
                             })
                         }
@@ -77,4 +77,4 @@ class QuestionsDAO {
 
 }
 
-module.exports = QuestionsDAO;
+module.exports = QuestionsModel;

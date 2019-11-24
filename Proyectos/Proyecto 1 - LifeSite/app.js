@@ -4,6 +4,7 @@ const Express = require('express');
 const userRouter = require('./routers/usersRouter');
 const questionsRouter = require('./routers/questionsRouter');
 const path = require('path');
+const config = require('./config');
 
 const app = Express();
 
@@ -35,4 +36,4 @@ app.use(function (err, request, response, next) { //  500: Internal server error
     });
 });
 
-app.listen(3000, (err) => console.log(err ? `[ERROR] ${err.message}` : '[INFO] Listening to port 3000!'));
+app.listen(config.port, (err) => console.log(err ? `[ERROR] ${err.message}` : `[INFO] Listening to port ${config.port}!`));

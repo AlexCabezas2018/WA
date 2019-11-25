@@ -13,21 +13,23 @@
     <header>
         <img src="/img/logo.png" alt="logo">
         <div class="links">
-            <a href="">Perfil</a>
+            <a href="../../users/profile/<%=currentUser.id%>">Perfil</a>
             <a href="../../users/friends-page">Amigos</a>
             <a href="/questions">Preguntas</a>
             <a href="../../users/logout">Desconectar</a>
             <div class="user-header">
                 <img src="/img/contact-img.png" alt="imagen de usuario" id="header-img">
-                <span>50 pts</span>
+                <span><%=currentUser.puntuation%></span>
             </div>
         </div>
 
     </header>
     <div class="container">
         <h2><%=question.question_body%></h2>
-        <h3>No has contestado a esta pregunta</h3>
-        <a href="../answer-question/<%=question.id%>" id='create-question-button'>Contestar pregunta</a>
+        <% if (!reply) { %>
+            <h3>No has contestado a esta pregunta</h3>
+            <a href="../answer-question/<%=question.id%>" id='create-question-button'>Contestar pregunta</a>
+        <%}%>
         <p>Los siguientes amigos han contestado a esta pregunta:</p>
         <div class="stats">
             <div class="answer">

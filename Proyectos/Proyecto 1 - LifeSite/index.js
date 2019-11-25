@@ -4,11 +4,17 @@ const Express = require('express');
 const userRouter = require('./routers/usersRouter');
 const questionsRouter = require('./routers/questionsRouter');
 const path = require('path');
+const session = require('express-session');
 
 const app = Express();
 
 /* MIDDLEWARES */
 app.use(Express.static(path.join(__dirname, 'public')));
+app.use(session({
+    saveUninitialized: false,
+    secret: 'foobar34',
+    resave: false,
+}));
 
 /* ROUTERS */
 app.use('/users', userRouter); // Applying usersRouter to the main route

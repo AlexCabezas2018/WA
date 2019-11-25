@@ -4,7 +4,6 @@
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
-const session = require('express-session');
 
 /* CONTROLLERS */
 const usersController = require('../controllers/usersController');
@@ -15,11 +14,7 @@ const usersRouter = express.Router();
 
 usersRouter.use(bodyParser.urlencoded({ extended: false }));
 usersRouter.use(express.static(path.join(__dirname, 'public')));
-usersRouter.use(session({
-    saveUninitialized: false,
-    secret: 'foobar34',
-    resave: false,
-}));
+
 usersRouter.use((request, response, next) => {
     response.setFlash = msg => {
         request.session.flashMsg = msg;

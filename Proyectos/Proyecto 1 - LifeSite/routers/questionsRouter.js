@@ -4,13 +4,13 @@
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
-const session = require('express-session'); //TODO: Usarlo.
 const questionsController = require('../controllers/questionsController');
 
 const questionsRouter = express.Router();
 
 questionsRouter.use(bodyParser.urlencoded({ extended: false }));
 questionsRouter.use(express.static(path.join(__dirname, 'public')));
+
 
 /* INDEX */
 questionsRouter.get('/', questionsController.handleIndex);

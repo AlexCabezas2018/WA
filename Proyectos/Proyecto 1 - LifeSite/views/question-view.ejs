@@ -14,13 +14,13 @@
     <header>
         <img src="/img/logo.png" alt="logo">
         <div class="links">
-            <a href="">Perfil</a>
+            <a href="../../users/profile/<%=currentUser.id%>">Perfil</a>
             <a href="../../users/friends-page">Amigos</a>
             <a href="../">Preguntas</a>
             <a href="../../users/logout">Desconectar</a>
             <div class="user-header">
                 <img src="/img/contact-img.png" alt="imagen de usuario" id="header-img">
-                <span>50 pts</span>
+                <span><%=currentUser.puntuation%></span>
             </div>
         </div>
     </header>
@@ -32,7 +32,7 @@
             <% });%>
             <div class="option" id='other'>
                 <input type="radio" name="option" value="new"> Otra:
-                <input type="text" name="option">
+                <input type="text" name="answer_body">
             </div>
             <input type="submit" value="Responder" value="submit-button">
         </form>

@@ -5,6 +5,7 @@ const userRouter = require('./routers/usersRouter');
 const questionsRouter = require('./routers/questionsRouter');
 const path = require('path');
 const session = require('express-session');
+const config = require('./config');
 
 const app = Express();
 
@@ -26,19 +27,17 @@ app.set("views", path.join(__dirname, "views"));
 app.set('view engine', 'ejs');
 
 app.get('/', (request, response) => {
-    response.redirect('/users/login');
+    response.status(200).redirect('/users/login');
 });
 
 app.use((request, response, next) => { // 400: Not Found
-    response.status(404);
-    response.render("404", { url: request.url });
+    response.status(404).render("404", { url: request.url });
 });
 
 app.use(function (err, request, response, next) { //  500: Internal server error   
-    response.status(500);
-    response.render("500", {
+    response.status(500).render("500", {
         message: err.message,
     });
 });
 
-app.listen(3000, (err) => console.log(err ? `[ERROR] ${err.message}` : '[INFO] Listening to port 3000!'));
+app.listen(config.port, (err) => console.log(err ? `[ERROR] ${err.message}` : `[INFO] Listening to port ${config.port}!`));

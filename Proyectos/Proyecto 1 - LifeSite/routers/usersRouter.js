@@ -3,7 +3,7 @@
 /* NPM REQUIRES */
 const express = require('express');
 const path = require('path');
-const bodyParser = require('body-parser');
+const middlewares = require('../middlewares');
 
 /* CONTROLLERS */
 const usersController = require('../controllers/usersController');
@@ -12,54 +12,42 @@ const usersRouter = express.Router();
 
 //TODO: Cuando inicio sesion y veo mi perfil, al desconectarme y voler a atrás, me sigue dejando.
 
-usersRouter.use(bodyParser.urlencoded({ extended: false }));
+usersRouter.use(express.urlencoded({ extended: false }));
 usersRouter.use(express.static(path.join(__dirname, 'public')));
 
-usersRouter.use((request, response, next) => {
-    response.setFlash = msg => {
-        request.session.flashMsg = msg;
-    }
-
-    response.locals.getAndClearFlash = () => {
-        let msg = request.session.flashMsg;
-        delete request.session.flashMsg;
-        return msg;
-    };
-
-    next();
-})
+usersRouter.use(middlewares.popUpMessages);
 
 /* LOGIN */
 usersRouter.get('/login', usersController.handleLogin);
 usersRouter.post('/login', usersController.handleLoginPost);
 
 /* LOGOUT */
-usersRouter.get('/logout', usersController.handleLogout);
+usersRouter.get('/logout', middlewares.checkLoginMiddleware, usersController.handleLogout);
 
 /* NEW USER*/
 usersRouter.get('/new-user', usersController.handleNewUser);
 usersRouter.post('/new-user', usersController.handleNewUserPost);
 
 /* PROFILE*/
-usersRouter.get('/profile/:id', usersController.handleProfile);
+usersRouter.get('/profile/:id', middlewares.checkLoginMiddleware, usersController.handleProfile);
 
 /* UPDATE PROFILE */
-usersRouter.get('/update-profile', usersController.handleUpdateProfile);
-usersRouter.post('/update-profile', usersController.handleUpdateProfilePost);
+usersRouter.get('/update-profile', middlewares.checkLoginMiddleware, usersController.handleUpdateProfile);
+usersRouter.post('/update-profile', middlewares.checkLoginMiddleware, usersController.handleUpdateProfilePost);
 
 /* FRIENDS PAGE */
-usersRouter.get('/friends-page', usersController.handleFriendsPage);
+usersRouter.get('/friends-page', middlewares.checkLoginMiddleware, usersController.handleFriendsPage);
 
 /* SEARCH FRIENDS*/
-usersRouter.post('/search', usersController.handleSearch);
+usersRouter.post('/search', middlewares.checkLoginMiddleware, usersController.handleSearch);
 
 
 /* SEND REQUEST */
-usersRouter.get('/add-request/:id', usersController.handleAddRequest);
+usersRouter.get('/add-request/:id', middlewares.checkLoginMiddleware, usersController.handleAddRequest);
 
 /* ACCEPT AND REJECT FRIEND REQUEST */
-usersRouter.get('/accept-request/:id', usersController.handleAcceptRequest);
-usersRouter.get('/reject-request/:id', usersController.handleRejectRequest);
+usersRouter.get('/accept-request/:id', middlewares.checkLoginMiddleware, usersController.handleAcceptRequest);
+usersRouter.get('/reject-request/:id', middlewares.checkLoginMiddleware, usersController.handleRejectRequest);
 
 module.exports = usersRouter;
 

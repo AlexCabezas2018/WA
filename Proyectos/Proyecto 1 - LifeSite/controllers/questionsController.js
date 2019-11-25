@@ -25,7 +25,7 @@ function handleRandomQuestions(request, response, next) {
     questionModel.getRandomQuestions((err, questions) => {
         if (err) next(err);
         else {
-            response.render('random-questions', { questions , currentUser});
+            response.render('random-questions', { questions, currentUser });
         }
     });
 }
@@ -36,8 +36,7 @@ function handleRandomQuestions(request, response, next) {
  * @param {*} response 
  * @param {*} next 
  */
-function handleAddQuestion(request, response, next) {
-    //TODO: Comrpobar que estás loggeado
+function handleAddQuestion(request, response) {
     response.render('add-question');
 }
 
@@ -68,17 +67,16 @@ function handleAddQuestionPost(request, response, next) {
  */
 function handleShowQuestion(request, response, next) {
     const currentUser = request.session.currentUser;
-    const question = request.session.question;
 
-    questionModel.getQuestionById(request.params.id, 
+    questionModel.getQuestionById(request.params.id,
         (err, question) => {
-            if(err) next(err);
+            if (err) next(err);
             else {
-                questionModel.checkQuestionIsAnswer(currentUser.email,question.id, 
-                    (err,answers) => {
+                questionModel.checkQuestionIsAnswer(currentUser.email, question.id,
+                    (err, answers) => {
                         request.session.question = question;
-                        if(answers.length == 0) response.render('question-show', {question,currentUser,reply: false});
-                        else response.render('question-show', {question,currentUser,reply: true});
+                        response.render('question-show',
+                            { question, currentUser, reply: (answers.length == 0) ? false : true });
                     }
                 )
             }
@@ -96,11 +94,11 @@ function handleAnswerQuestion(request, response, next) {
     const question = request.session.question;
     const currentUser = request.session.currentUser;
 
-    questionModel.getAnswerByQuestion(request.params.id, 
-        (err, answers)=> {
-            if(err) next(err);
-            else response.render('question-view', {answers, question, currentUser});
-    })
+    questionModel.getAnswerByQuestion(request.params.id,
+        (err, answers) => {
+            if (err) next(err);
+            else response.render('question-view', { answers, question, currentUser });
+        })
 }
 
 /**
@@ -109,37 +107,38 @@ function handleAnswerQuestion(request, response, next) {
  * @param {*} response 
  * @param {*} next 
  */
-function handleAnswerQuestionPost(request, response, next){
+function handleAnswerQuestionPost(request, response, next) {
     //TODO: refactorizar funcion
+
     const currentUser = request.session.currentUser;
-    const option = (request.body.option == "new")?"new":request.body.option[0];
+    const option = (request.body.option == "new") ? "new" : request.body.option[0];
     const question = request.session.question;
 
-    if(option == "new"){
-        questionModel.addAnswer(question.id, request.body.answer_body, 
+    if (option == "new") {
+        questionModel.addAnswer(question.id, request.body.answer_body,
             (err, id_answer) => {
                 if (err) next(err);
                 else {
-                    questionModel.addUserAnswer(currentUser.email, id_answer, 
-                        (err, correctInsert)=>{
-                            if(err) next(err);
+                    questionModel.addUserAnswer(currentUser.email, id_answer,
+                        (err, correctInsert) => {
+                            if (err) next(err);
                             else {
-                                if(!correctInsert) next(err);
-                                else response.render('question-show', {question, currentUser, reply : true});
+                                if (!correctInsert) next(err);
+                                else response.render('question-show', { question, currentUser, reply: true });
                             }
-                    })
+                        })
                 }
-        })
+            })
     }
-    else{
-        questionModel.addUserAnswer(currentUser.email, option, 
-            (err, correctInsert)=>{
-                if(err) next(err);
+    else {
+        questionModel.addUserAnswer(currentUser.email, option,
+            (err, correctInsert) => {
+                if (err) next(err);
                 else {
-                    if(!correctInsert) next(err);
-                    else response.render('question-show', {question, currentUser, reply : true});
+                    if (!correctInsert) next(err);
+                    else response.render('question-show', { question, currentUser, reply: true });
                 }
-        })
+            })
     }
 }
 

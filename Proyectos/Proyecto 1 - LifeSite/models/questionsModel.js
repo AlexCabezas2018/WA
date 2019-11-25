@@ -15,7 +15,7 @@ class QuestionsModel {
             FIND_ANSWERS_BY_QUESTION: "SELECT * FROM answers WHERE id_question = ?",
             INSERT_USER_ANSWER: "INSERT INTO user_answers VALUES (?,?)",
             GET_ANSWER_BY_USER_AND_QUESTION: "SELECT * FROM user_answers JOIN answers ON user_answers.id_answer = answers.id JOIN questions ON answers.id_question = questions.id WHERE username = ? and id_question = ?",
-            INSERT_ANSWER : "INSERT INTO answers VALUES (null,?,?)"
+            INSERT_ANSWER: "INSERT INTO answers VALUES (null,?,?)"
         }
     }
 
@@ -78,16 +78,16 @@ class QuestionsModel {
      * @param {int} id 
      * @param {Function} callback 
      */
-    getQuestionById(id,callback){
+    getQuestionById(id, callback) {
         this.pool.getConnection((err, conn) => {
             if (err) callback(new Error(this.exceptions.connection_error), undefined);
-            else{
+            else {
                 conn.release();
-                conn.query(this.queries.FIND_QUESTION_BY_ID, [id], 
+                conn.query(this.queries.FIND_QUESTION_BY_ID, [id],
                     (err, question) => {
-                        if(err) callback(new Error(this.exceptions.query_error), undefined);
-                        else callback (undefined, question[0]);
-                })
+                        if (err) callback(new Error(this.exceptions.query_error), undefined);
+                        else callback(undefined, question[0]);
+                    })
             }
         })
     }
@@ -100,13 +100,13 @@ class QuestionsModel {
     getAnswerByQuestion(id_question, callback) {
         this.pool.getConnection((err, conn) => {
             if (err) callback(new Error(this.exceptions.connection_error), undefined);
-            else{
+            else {
                 conn.release();
-                conn.query(this.queries.FIND_ANSWERS_BY_QUESTION, [id_question], 
+                conn.query(this.queries.FIND_ANSWERS_BY_QUESTION, [id_question],
                     (err, answers) => {
-                        if(err) callback(new Error(this.exceptions.query_error), undefined);
+                        if (err) callback(new Error(this.exceptions.query_error), undefined);
                         else callback(undefined, answers);
-                })
+                    })
             }
         })
     }
@@ -116,16 +116,16 @@ class QuestionsModel {
      * @param {*} email 
      * @param {*} id_answer 
      */
-    addUserAnswer(email, id_answer, callback){
+    addUserAnswer(email, id_answer, callback) {
         this.pool.getConnection((err, conn) => {
-            if(err) callback(new Error(this.exceptions.connection_error), undefined);
-            else{
+            if (err) callback(new Error(this.exceptions.connection_error), undefined);
+            else {
                 conn.release();
-                conn.query(this.queries.INSERT_USER_ANSWER,[email,id_answer], 
-                    (err, result)=> {
-                        if(err) callback(new Error(this.exceptions.query_error), undefined);
+                conn.query(this.queries.INSERT_USER_ANSWER, [email, id_answer],
+                    (err, result) => {
+                        if (err) callback(new Error(this.exceptions.query_error), undefined);
                         else callback(undefined, true);
-                })
+                    })
             }
         })
     }
@@ -138,28 +138,28 @@ class QuestionsModel {
      */
     checkQuestionIsAnswer(email, question_id, callback) {
         this.pool.getConnection((err, conn) => {
-            if(err) callback(new Error(this.exceptions.connection_error), undefined);
-            else{
+            if (err) callback(new Error(this.exceptions.connection_error), undefined);
+            else {
                 conn.release();
-                conn.query(this.queries.GET_ANSWER_BY_USER_AND_QUESTION, [email, question_id], 
+                conn.query(this.queries.GET_ANSWER_BY_USER_AND_QUESTION, [email, question_id],
                     (err, rows) => {
-                        if(err) callback(new Error(this.exceptions.query_error), undefined);
-                        else  callback(undefined, rows);
-                })
+                        if (err) callback(new Error(this.exceptions.query_error), undefined);
+                        else callback(undefined, rows);
+                    })
             }
         })
     }
 
     addAnswer(question_id, answer_body, callback) {
         this.pool.getConnection((err, conn) => {
-            if(err) callback(new Error(this.exceptions.connection_error), undefined);
-            else{
+            if (err) callback(new Error(this.exceptions.connection_error), undefined);
+            else {
                 conn.release();
-                conn.query(this.queries.INSERT_ANSWER, [question_id, answer_body], 
+                conn.query(this.queries.INSERT_ANSWER, [question_id, answer_body],
                     (err, result) => {
-                        if(err) callback(new Error(err.message), undefined);
-                        else callback (undefined, result.insertId);
-                })
+                        if (err) callback(new Error(err.message), undefined);
+                        else callback(undefined, result.insertId);
+                    })
             }
         })
     }

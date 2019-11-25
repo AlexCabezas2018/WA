@@ -101,24 +101,20 @@ function handleNewUserPost(request, response, next) {
  * @param {*} next 
  */
 function handleProfile(request, response, next) {
-    if (request.session.currentUser == undefined) {
-        response.status(403).redirect('../login');
-    } else {
-        usersDAOModel.getUserById(request.params.id,
-            (err, usr) => {
-                if (err) {
-                    next(err);
-                }
-                else {
-                    if (!usr) next(err);
-                    else response
-                        .status(200)
-                        .render('user-profile',
-                            { user: usr, sessionId: request.session.currentUser.id });
-                }
+    usersDAOModel.getUserById(request.params.id,
+        (err, usr) => {
+            if (err) {
+                next(err);
             }
-        );
-    }
+            else {
+                if (!usr) next(err);
+                else response
+                    .status(200)
+                    .render('user-profile',
+                        { user: usr, sessionId: request.session.currentUser.id });
+            }
+        }
+    );
 }
 
 /**
@@ -127,8 +123,7 @@ function handleProfile(request, response, next) {
  * @param {*} response 
  */
 function handleUpdateProfile(request, response) {
-    if (request.session.currentUser == undefined) response.status(403).redirect('login');
-    else response.status(200).render('update-profile', { currentId: request.session.currentUser.id });
+    response.status(200).render('update-profile', { currentId: request.session.currentUser.id });
 }
 
 /**

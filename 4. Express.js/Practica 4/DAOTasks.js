@@ -63,20 +63,23 @@ class DAOTasks {
                         conn.release();
                         if(err) callback(new Error(this.exceptions.query_error));
                         else {
-                            let taskId = result.insertId;
-                            let query_tags = "(?,?), ".repeat(task.tags.length - 1) + "(?,?)";
-                            let INSERT_TAGS = "INSERT INTO tag VALUES " + query_tags;
-                            //Creamos un array del estilo: [1, tag1, 1, tag2, 1, tag3, ...]
-                            let tags_param = task.tags.reduce((ac, elem) => {
-                                ac.push(taskId);
-                                ac.push(elem);
-                                return ac;
-                            }, []);
-                            conn.query(INSERT_TAGS, tags_param, 
-                                (err, result) => {
-                                    if(err) callback(new Error(this.exceptions.query_error));
-                                    else callback(null);
-                            });
+                            if(task.tags.length > 0) {
+                                let taskId = result.insertId;
+                                let query_tags = "(?,?), ".repeat(task.tags.length - 1) + "(?,?)";
+                                let INSERT_TAGS = "INSERT INTO tag VALUES " + query_tags;
+                                //Creamos un array del estilo: [1, tag1, 1, tag2, 1, tag3, ...]
+                                let tags_param = task.tags.reduce((ac, elem) => {
+                                    ac.push(taskId);
+                                    ac.push(elem);
+                                    return ac;
+                                }, []);
+                                conn.query(INSERT_TAGS, tags_param, 
+                                    (err, result) => {
+                                        if(err) callback(new Error(this.exceptions.query_error));
+                                        else callback(null);
+                                });
+                            }
+                            else callback(null);
                         }
                 });
             }

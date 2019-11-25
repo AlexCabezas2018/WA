@@ -1,15 +1,9 @@
 const mysql = require('mysql');
-
-const mysqlOptions = {
-    hostname: 'localhost',
-    user: 'root',
-    password: '',
-    database: "lifesite"
-};
+const config = require('../config');
 
 class QuestionsModel {
     constructor() {
-        this.pool = mysql.createPool(mysqlOptions);
+        this.pool = mysql.createPool(config.mySQLConfig);
         this.exceptions = {
             connection_error: "[ERROR] Error de conexion a la base de datos",
             query_error: "[ERROR]Error de acceso a la base de datos",

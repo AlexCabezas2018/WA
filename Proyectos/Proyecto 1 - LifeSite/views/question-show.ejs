@@ -30,44 +30,25 @@
             <h3>No has contestado a esta pregunta</h3>
             <a href="../answer-question/<%=question.id%>" id='create-question-button'>Contestar pregunta</a>
         <%}%>
-        <p>Los siguientes amigos han contestado a esta pregunta:</p>
+        
         <div class="stats">
-            <div class="answer">
-                <div class="user-profile">
-                    <img src="/img/contact-img.png" alt="" class="result-picture">
-                    <p>Paquita</p>
+            <% if(users.length == 0) {%>
+                <p>Ninguno de tus amigos ha contestado a esta pregunta</p>
+            <%}
+               else {%>
+                <p>Los siguientes amigos han contestado a esta pregunta:</p>
+                <% users.forEach(user => { %>
+                    <div class="answer">
+                    <div class="user-profile">
+                        <img src="/img/contact-img.png" alt="" class="result-picture">
+                        <p><%=user.username_2%></p>
+                    </div>
+                    <div class="response">
+                        <a class="guess-button">Adivinar</a>
+                    </div>
                 </div>
-                <div class="response">
-                    <a class="guess-button">Adivinar</a>
-                </div>
-            </div>
-            <div class="answer">
-                <div class="user-profile">
-                    <img src="/img/contact-img.png" alt="" class="result-picture">
-                    <p>José</p>
-                </div>
-                <div class="response">
-                    <a class="guess-button">Adivinar</a>
-                </div>
-            </div>
-            <div class="answer">
-                <div class="user-profile">
-                    <img src="/img/contact-img.png" alt="" class="result-picture">
-                    <p>Tomás</p>
-                </div>
-                <div class="response">
-                    <p id='correct-answer'>Has acertado &#128523</p>
-                </div>
-            </div>
-            <div class="answer">
-                <div class="user-profile">
-                    <img src="/img/contact-img.png" alt="" class="result-picture">
-                    <p>Pepe</p>
-                </div>
-                <div class="response">
-                    <p id='incorrect-answer'>Has fallado &#128534</p>
-                </div>
-            </div>
+                <%}); %>
+            <%}%>
         </div>
     </div>
 </body>

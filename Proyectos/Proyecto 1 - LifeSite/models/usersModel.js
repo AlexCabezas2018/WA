@@ -21,7 +21,7 @@ class usersModel {
             GET_USERS_BY_NAME: 'SELECT id, username, profile_img, email FROM users WHERE username LIKE ? AND email <> ?',
             ADD_REQUEST: 'INSERT INTO friend_requests VALUES (?,?)',
             DELETE_REQUEST: 'DELETE FROM friend_requests WHERE username_to = ? AND username_from = ?',
-            INSERT_FRIEND: 'INSERT INTO friendships VALUES (?,?)'
+            INSERT_FRIEND: 'INSERT INTO friendships VALUES (?,?), (?,?)'
         }
     }
 
@@ -228,7 +228,7 @@ class usersModel {
         this.pool.getConnection((err, conn) => {
             if (err) callback(new Error(this.exceptions.connection_error), undefined);
             else {
-                conn.query(this.queries.INSERT_FRIEND, [email_1, email_2], (err, result) => {
+                conn.query(this.queries.INSERT_FRIEND, [email_1, email_2, email_2, email_1], (err, result) => {
                     if (err) callback(new Error(this.exceptions.query_error), undefined);
                     else callback(undefined, true);
                 })

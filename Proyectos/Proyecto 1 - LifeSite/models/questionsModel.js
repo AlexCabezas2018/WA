@@ -15,7 +15,8 @@ class QuestionsModel {
             FIND_ANSWERS_BY_QUESTION: "SELECT * FROM answers WHERE id_question = ?",
             INSERT_USER_ANSWER: "INSERT INTO user_answers VALUES (?,?)",
             GET_ANSWER_BY_USER_AND_QUESTION: "SELECT * FROM user_answers JOIN answers ON user_answers.id_answer = answers.id JOIN questions ON answers.id_question = questions.id WHERE username = ? and id_question = ?",
-            INSERT_ANSWER: "INSERT INTO answers VALUES (null,?,?)"
+            INSERT_ANSWER: "INSERT INTO answers VALUES (null,?,?)",
+            GET_FRIENDS_ANSWERS: "SELECT email, username_2 FROM users JOIN friendships ON users.email = friendships.username_1 JOIN user_answers ON friendships.username_2 = user_answers.username JOIN answers ON user_answers.id_answer = answers.id WHERE email = ? AND id_question = ?"
         }
     }
 
@@ -150,6 +151,12 @@ class QuestionsModel {
         })
     }
 
+    /**
+     * Add new answer given a question_id
+     * @param {*} question_id 
+     * @param {*} answer_body 
+     * @param {*} callback 
+     */
     addAnswer(question_id, answer_body, callback) {
         this.pool.getConnection((err, conn) => {
             if (err) callback(new Error(this.exceptions.connection_error), undefined);
@@ -164,6 +171,17 @@ class QuestionsModel {
         })
     }
 
+    getFriendsAnswers(email, question_id, callback){
+        this.pool.getConnection((err, conn) => {
+            if(err) callback(new Error(this.exceptions.connection_error), undefined);
+            else{
+                conn.query(this.queries.GET_FRIENDS_ANSWERS, [email, question_id], (err, users)=> {
+                    if(err) callback(new Error(this.exceptions.query_error), undefined);
+                    else callback(undefined, users);
+                })
+            }
+        })
+    }
 }
 
 module.exports = QuestionsModel;

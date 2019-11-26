@@ -74,9 +74,16 @@ function handleShowQuestion(request, response, next) {
             else {
                 questionModel.checkQuestionIsAnswer(currentUser.email, question.id,
                     (err, answers) => {
-                        request.session.question = question;
-                        response.render('question-show',
-                            { question, currentUser, reply: (answers.length == 0) ? false : true });
+                        questionModel.getFriendsAnswers(currentUser.email, question.id, (err, users) => {
+                            if(err) next(err);
+                            else {
+                                //TODO: El div debe mostrar nombre no correo, implementar botones y logica de botones
+                                request.session.question = question;
+                                response.render('question-show',
+                                { question, currentUser, reply: (answers.length == 0) ? false : true , users });
+                            }
+                        }
+                        )
                     }
                 )
             }
@@ -108,10 +115,9 @@ function handleAnswerQuestion(request, response, next) {
  * @param {*} next 
  */
 function handleAnswerQuestionPost(request, response, next) {
-    //TODO: refactorizar funcion
 
     const currentUser = request.session.currentUser;
-    const option = (request.body.option == "new") ? "new" : request.body.option[0];
+    const option = (request.body.option == "new") ? "new" : request.body.option;
     const question = request.session.question;
 
     if (option == "new") {
@@ -124,19 +130,20 @@ function handleAnswerQuestionPost(request, response, next) {
                             if (err) next(err);
                             else {
                                 if (!correctInsert) next(err);
-                                else response.render('question-show', { question, currentUser, reply: true });
+                                else response.redirect(`../show-question/${question.id}`);
                             }
                         })
                 }
             })
     }
     else {
+        console.log(currentUser.email, option);
         questionModel.addUserAnswer(currentUser.email, option,
             (err, correctInsert) => {
                 if (err) next(err);
                 else {
                     if (!correctInsert) next(err);
-                    else response.render('question-show', { question, currentUser, reply: true });
+                    else response.redirect(`../show-question/${question.id}`);
                 }
             })
     }

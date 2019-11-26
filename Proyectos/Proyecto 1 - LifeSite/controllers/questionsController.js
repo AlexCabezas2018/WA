@@ -74,10 +74,13 @@ function handleShowQuestion(request, response, next) {
             else {
                 questionModel.checkQuestionIsAnswer(currentUser.email, question.id,
                     (err, answers) => {
-                        questionModel.getFriendsAnswers(currentUser.email, question.id, (err, users) => {
+                        questionModel.getFriendsAnswersByQuestion(currentUser.email, question.id, (err, users) => {
                             if(err) next(err);
                             else {
-                                //TODO: El div debe mostrar nombre no correo, implementar botones y logica de botones
+                                //TODO: El div debe mostrar nombre no correo
+                                
+                                //comprobar si he contestado ya como el poner adivinar acertado, fallaste
+
                                 request.session.question = question;
                                 response.render('question-show',
                                 { question, currentUser, reply: (answers.length == 0) ? false : true , users });
@@ -137,7 +140,6 @@ function handleAnswerQuestionPost(request, response, next) {
             })
     }
     else {
-        console.log(currentUser.email, option);
         questionModel.addUserAnswer(currentUser.email, option,
             (err, correctInsert) => {
                 if (err) next(err);
@@ -149,6 +151,12 @@ function handleAnswerQuestionPost(request, response, next) {
     }
 }
 
+/**
+ * Handles the answer like friend GET PETITION
+ */
+function handleAnswerLikeFriend(request, response, next){
+ //TODO Implemenentar Adivinar respuesta de amigo
+}
 module.exports = {
     handleIndex,
     handleRandomQuestions,
@@ -156,5 +164,6 @@ module.exports = {
     handleAddQuestionPost,
     handleShowQuestion,
     handleAnswerQuestion,
-    handleAnswerQuestionPost
+    handleAnswerQuestionPost,
+    handleAnswerLikeFriend
 }; 

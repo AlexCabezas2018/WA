@@ -44,3 +44,11 @@ CREATE TABLE user_answers (
 
     PRIMARY KEY (username,id_answer)
 )
+
+CREATE TABLE answer_like_friend(
+    emailUser VARCHAR(255) NOT NULL REFERENCES users(email),
+    emailFriend VARCHAR(255) NOT NULL REFERENCES users(email),
+    id_answer INT NOT NULL REFERENCES id(answers),
+    
+    PRIMARY KEY (emailUser, emailFriend, id_answer)
+ )

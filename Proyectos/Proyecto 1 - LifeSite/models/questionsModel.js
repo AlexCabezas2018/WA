@@ -171,7 +171,13 @@ class QuestionsModel {
         })
     }
 
-    getFriendsAnswers(email, question_id, callback){
+    /**
+     * Get list of friends who has answered the given question
+     * @param {*} email 
+     * @param {*} question_id 
+     * @param {*} callback 
+     */
+    getFriendsAnswersByQuestion(email, question_id, callback){
         this.pool.getConnection((err, conn) => {
             if(err) callback(new Error(this.exceptions.connection_error), undefined);
             else{
@@ -181,6 +187,23 @@ class QuestionsModel {
                 })
             }
         })
+    }
+
+    /**
+     * Return if a user has answered a question like friend
+     * @param {*} emailUser 
+     * @param {*} emailFriend 
+     * @param {*} id_answer 
+     * @param {*} callback 
+     */
+    checkUserAnswerLikeFriend(emailUser, emailFriend, id_answer, callback) {
+        this.pool.getConnection((err, conn ) => {
+            if(err) callback(new Error(this.exceptions.connection_error), undefined);
+            else{
+                //TODO
+            }
+        })
+        
     }
 }
 

@@ -18,7 +18,7 @@
             <a href="/questions">Preguntas</a>
             <a href="../../users/logout">Desconectar</a>
             <div class="user-header">
-                <img src="/img/contact-img.png" alt="imagen de usuario" id="header-img">
+                <img src="/users/getProfilePicture/<%=currentUser.id %>" alt="imagen de usuario" id="header-img">
                 <span><%=currentUser.puntuation%></span>
             </div>
         </div>
@@ -27,28 +27,28 @@
     <div class="container">
         <h2><%=question.question_body%></h2>
         <% if (!reply) { %>
-            <h3>No has contestado a esta pregunta</h3>
-            <a href="../answer-question/<%=question.id%>" id='create-question-button'>Contestar pregunta</a>
+        <h3>No has contestado a esta pregunta</h3>
+        <a href="../answer-question/<%=question.id%>" id='create-question-button'>Contestar pregunta</a>
         <%}%>
         
         <div class="stats">
             <% if(users.length == 0) {%>
-                <p>Ninguno de tus amigos ha contestado a esta pregunta</p>
-            <%}
+        <p>Ninguno de tus amigos ha contestado a esta pregunta</p>
+        <%}
                else {%>
-                <p>Los siguientes amigos han contestado a esta pregunta:</p>
-                <% users.forEach(user => { %>
-                    <div class="answer">
-                    <div class="user-profile">
-                        <img src="/img/contact-img.png" alt="" class="result-picture">
-                        <p><%=user.username_2%></p>
-                    </div>
-                    <div class="response">
-                        <a href="../answer-like-friend/<%=question.id%>" class="guess-button">Adivinar</a>
-                    </div>
-                </div>
-                <%}); %>
-            <%}%>
+        <p>Los siguientes amigos han contestado a esta pregunta:</p>
+        <% users.forEach(user => { %>
+        <div class="answer">
+            <div class="user-profile">
+                <img src="/img/contact-img.png" alt="" class="result-picture">
+                <p><%=user.username_2%></p>
+            </div>
+            <div class="response">
+                <a href="../answer-like-friend/<%=question.id%>" class="guess-button">Adivinar</a>
+            </div>
+        </div>
+        <%}); %>
+        <%}%>
         </div>
     </div>
 </body>

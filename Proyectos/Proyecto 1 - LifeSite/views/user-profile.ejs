@@ -19,7 +19,7 @@
             <a href="../../questions">Preguntas</a>
             <a href="../logout">Desconectar</a>
             <div class="user-header">
-                <img src="/img/contact-img.png" alt="imagen de usuario" id="header-img">
+                <img src="/users/getProfilePicture/<%=user.id %>" alt="imagen de usuario" id="header-img">
                 <span><%= user.puntuation %> pts</span>
             </div>
         </div>
@@ -32,10 +32,10 @@
         
         <div class="user">
             <div class="user-img">
-                <img src="/img/contact-img.png" alt="foto de perfil" id="user-image">
-            </div>
-            <div class="user-info">
-                <h3><%= user.username %></h3>
+                <img src="/users/getProfilePicture/<%=user.id %>" alt="foto de perfil" id="user-image">
+    </div>
+    <div class="user-info">
+        <h3><%= user.username %></h3>
         <p> <%= new Date().getFullYear() - user.birth_date.getFullYear()  %> años</p>
         <p> <%= user.gender %> </p>
         <p> <%= user.puntuation %> puntos</p>

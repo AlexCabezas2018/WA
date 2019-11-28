@@ -4,6 +4,8 @@
 const express = require('express');
 const path = require('path');
 const middlewares = require('../middlewares');
+const multer = require('multer');
+const multerFactory = multer({ storage: multer.memoryStorage() })
 
 /* CONTROLLERS */
 const usersController = require('../controllers/usersController');
@@ -26,14 +28,17 @@ usersRouter.get('/logout', middlewares.checkLoginMiddleware, usersController.han
 
 /* NEW USER*/
 usersRouter.get('/new-user', usersController.handleNewUser);
-usersRouter.post('/new-user', usersController.handleNewUserPost);
+usersRouter.post('/new-user', multerFactory.single('profile_img'), usersController.handleNewUserPost);
 
 /* PROFILE*/
 usersRouter.get('/profile/:id', middlewares.checkLoginMiddleware, usersController.handleProfile);
 
+/* Profile Picture */
+usersRouter.get('/getProfilePicture/:id', usersController.handleProfilePicture);
+
 /* UPDATE PROFILE */
 usersRouter.get('/update-profile', middlewares.checkLoginMiddleware, usersController.handleUpdateProfile);
-usersRouter.post('/update-profile', middlewares.checkLoginMiddleware, usersController.handleUpdateProfilePost);
+usersRouter.post('/update-profile', multerFactory.single('profile_img'), middlewares.checkLoginMiddleware, usersController.handleUpdateProfilePost);
 
 /* FRIENDS PAGE */
 usersRouter.get('/friends-page', middlewares.checkLoginMiddleware, usersController.handleFriendsPage);

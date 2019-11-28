@@ -14,14 +14,15 @@ class usersModel {
             FIND_BY_EMAIL: 'SELECT id, email FROM users WHERE email = ?',
             FIND_BY_ID: 'SELECT * FROM users WHERE id = ?',
             ADD_USER: 'INSERT INTO users VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-            GET_FRIENDS: 'SELECT username, id, profile_img FROM friendships JOIN users ON users.email = friendships.username_2 WHERE username_1 = ?',
-            GET_REQUESTS: 'SELECT username, id, profile_img, email FROM friend_requests JOIN users ON users.email = friend_requests.username_from WHERE username_to = ?',
+            GET_FRIENDS: 'SELECT username, id FROM friendships JOIN users ON users.email = friendships.username_2 WHERE username_1 = ?',
+            GET_REQUESTS: 'SELECT username, id, email FROM friend_requests JOIN users ON users.email = friend_requests.username_from WHERE username_to = ?',
             GET_MY_REQUESTS: 'SELECT username_to FROM friend_requests  WHERE username_from = ?',
             UPDATE_USER: 'UPDATE users SET pass=?, username=?, gender=?, birth_date=?, profile_img=? WHERE email=? ',
-            GET_USERS_BY_NAME: 'SELECT id, username, profile_img, email FROM users WHERE username LIKE ? AND email <> ?',
+            GET_USERS_BY_NAME: 'SELECT id, username, email FROM users WHERE username LIKE ? AND email <> ?',
             ADD_REQUEST: 'INSERT INTO friend_requests VALUES (?,?)',
             DELETE_REQUEST: 'DELETE FROM friend_requests WHERE username_to = ? AND username_from = ?',
-            INSERT_FRIEND: 'INSERT INTO friendships VALUES (?,?), (?,?)'
+            INSERT_FRIEND: 'INSERT INTO friendships VALUES (?,?), (?,?)',
+            GET_PROFILE_PICTURE: 'SELECT profile_img from users WHERE id = ?'
         }
     }
 
@@ -62,13 +63,12 @@ class usersModel {
                         else {
                             if (rows.length != 0) callback(new Error(this.exceptions.user_exists, undefined));
                             else {
-                                console.log(user)
                                 conn.query(this.queries.ADD_USER,
                                     [null, user.email, user.pass, user.name,
                                         user.gender, user.birth_date, user.profile_img, 0],
                                     (err, result) => {
                                         conn.release();
-                                        if (err) callback(new Error(this.exceptions.query_error), undefined);
+                                        if (err) callback(new Error(err.message), undefined);
                                         else {
                                             callback(null, result.insertId);
                                         }
@@ -105,6 +105,25 @@ class usersModel {
     }
 
     /**
+     * Returns the buffer containing the profile image of an user, given an id
+     * @param {*} email 
+     * @param {*} callback 
+     */
+    getUserProfilePicture(id, callback) {
+        this.pool.getConnection((err, conn) => {
+            if (err) callback(new Error(this.exceptions.connection_error), undefined);
+            else {
+                conn.query(this.queries.GET_PROFILE_PICTURE, [id],
+                    (err, rows) => {
+                        conn.release();
+                        if (err) callback(new Error(this.exceptions.query_error), undefined);
+                        else callback(null, rows.length > 0 ? rows[0].profile_img : null);
+                    })
+            }
+        });
+    }
+
+    /**
      * Return a list of friends given an email
      * @param {String} email 
      * @param {Function} callback 
@@ -115,6 +134,7 @@ class usersModel {
             else {
                 conn.query(this.queries.GET_FRIENDS, [email, email],
                     (err, rows) => {
+                        conn.release();
                         if (err) callback(new Error(this.exceptions.query_error), undefined);
                         else callback(undefined, rows);
                     })
@@ -133,6 +153,7 @@ class usersModel {
             else {
                 conn.query(this.queries.GET_USERS_BY_NAME, ['%' + name + '%', email],
                     (err, rows) => {
+                        conn.release();
                         if (err) callback(new Error(err.message), undefined);
                         else callback(undefined, rows);
                     }
@@ -153,6 +174,7 @@ class usersModel {
                 conn.query(this.queries.UPDATE_USER,
                     [user.pass, user.name, user.gender, user.birth_date, user.profile_img, user.email],
                     (err, rows) => {
+                        conn.release();
                         if (err) callback(new Error(err.message), undefined);
                         else callback(undefined, true);
                     })
@@ -206,6 +228,7 @@ class usersModel {
             if (err) callback(new Error(this.exceptions.connection_error), undefined);
             else conn.query(this.queries.ADD_REQUEST, [id_from, id_to],
                 (err, result) => {
+                    conn.release();
                     if (err) callback(new Error(err.message), undefined);
                     else callback(undefined, true);
                 })
@@ -217,6 +240,7 @@ class usersModel {
             if (err) callback(new Error(this.exceptions.connection_error), undefined);
             else {
                 conn.query(this.queries.DELETE_REQUEST, [email_from, email_to], (err, result) => {
+                    conn.release();
                     if (err) callback(new Error(this.exceptions.query_error), undefined);
                     else callback(undefined, true);
                 })
@@ -229,6 +253,7 @@ class usersModel {
             if (err) callback(new Error(this.exceptions.connection_error), undefined);
             else {
                 conn.query(this.queries.INSERT_FRIEND, [email_1, email_2, email_2, email_1], (err, result) => {
+                    conn.release();
                     if (err) callback(new Error(this.exceptions.query_error), undefined);
                     else callback(undefined, true);
                 })

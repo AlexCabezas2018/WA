@@ -1,4 +1,5 @@
 const usersModel = require('../models/usersModel');
+const path = require('path');
 
 const usersDAOModel = new usersModel();
 
@@ -83,7 +84,7 @@ function handleNewUserPost(request, response, next) {
         name: request.body.name,
         gender: request.body.gender,
         birth_date: request.body.birth_date,
-        profile_img: (request.body.profile_img == '') ? null : request.body.profile_img //TODO: No estamos insertando imágenes, tenemos que aprender a hacerlo
+        profile_img: request.file ? request.file.buffer : null,
     }
 
     usersDAOModel.createUser(usr, (err, usrId) => {
@@ -118,6 +119,23 @@ function handleProfile(request, response, next) {
 }
 
 /**
+ * Handles the profile picture GET petition to get the users profile images.
+ * @param {*} request 
+ * @param {*} response 
+ * @param {*} next 
+ */
+function handleProfilePicture(request, response, next) {
+    usersDAOModel.getUserProfilePicture(request.params.id,
+        (err, img) => {
+            if (err) next(err);
+            else {
+                if (!img) response.status(200).sendFile(path.join(__dirname, "..", "public", "img", "contact-img.png")); //TODO: Añadir imagen por defecto
+                else response.end(img);
+            }
+        })
+}
+
+/**
  * Handles the update profile view GET petition
  * @param {*} request 
  * @param {*} response 
@@ -139,7 +157,7 @@ function handleUpdateProfilePost(request, response, next) {
         name: (request.body.name == '') ? currentUser.username : request.body.name,
         gender: (request.body.gender == '') ? currentUser.gender : request.body.gender,
         birth_date: (request.body.birth_date == '') ? currentUser.birth_date.split('T')[0] : request.body.birth_date,
-        profile_img: request.body.profile_img, //TODO: Poder mantener la foto de perfil si no quiere modificarla.
+        profile_img: request.file ? request.file.buffer : Buffer.from(currentUser.profile_img.data, "binary"),
         email: currentUser.email
     }
 
@@ -306,6 +324,7 @@ module.exports = {
     handleLogin,
     handleLoginPost,
     handleLogout,
+    handleProfilePicture,
     handleNewUser,
     handleNewUserPost,
     handleProfile,

@@ -19,16 +19,16 @@
             <a href="../">Preguntas</a>
             <a href="../../users/logout">Desconectar</a>
             <div class="user-header">
-                <img src="/img/contact-img.png" alt="imagen de usuario" id="header-img">
+                <img src="/users/getProfilePicture/<%=currentUser.id %>" alt="imagen de usuario" id="header-img">
                 <span><%=currentUser.puntuation%></span>
             </div>
         </div>
     </header>
     <div class="container">
         <h2><%=question.question_body%></h2>
-        <form method="POST" action ="../answer-question/">
+        <form method="POST" action="../answer-question/">
             <% answers.forEach(answer => { %>
-                <div class="option"> <input type="radio" name="option" value="<%=answer.id%>"><%=answer.answer_body%></div>
+            <div class="option"> <input type="radio" name="option" value="<%=answer.id%>"><%=answer.answer_body%></div>
             <% });%>
             <div class="option" id='other'>
                 <input type="radio" name="option" value="new"> Otra:

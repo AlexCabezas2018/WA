@@ -20,18 +20,18 @@
     </header>
     <div class="container">
         <h2>Nuevo Usuario</h2>
-        <form method="POST" action="new-user" class="form-container-new-user">
+        <form method="POST" action="new-user" class="form-container-new-user" enctype="multipart/form-data">
             <div class="email">
                 <span>Email</span>
-                <input type="text" name="email" class="input-new-user">
+                <input type="text" name="email" class="input-new-user" required>
             </div>
             <div class="password">
                 <span>Contraseña</span>
-                <input type="password" name="pass" id="" class="input-new-user">
+                <input type="password" name="pass" id="" class="input-new-user" required>
             </div>
             <div class="name">
                 <span>Nombre completo</span>
-                <input type="text" name="name" class="input-new-user">
+                <input type="text" name="name" class="input-new-user" required>
             </div>
             <div class="gender">
                 <span id=gender-span>Sexo</span>
@@ -45,7 +45,7 @@
             </div>
             <div class="birth-date">
                 <span>Fecha de Nacimiento</span>
-                <input type="date" name="birth_date" id="" class="input-new-user">
+                <input type="date" name="birth_date" id="" class="input-new-user" required>
             </div>
             <div class="img-profile">
                 <span>Imagen de Perfil</span>

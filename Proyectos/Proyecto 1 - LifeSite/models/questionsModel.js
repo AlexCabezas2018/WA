@@ -83,9 +83,9 @@ class QuestionsModel {
         this.pool.getConnection((err, conn) => {
             if (err) callback(new Error(this.exceptions.connection_error), undefined);
             else {
-                conn.release();
                 conn.query(this.queries.FIND_QUESTION_BY_ID, [id],
                     (err, question) => {
+                        conn.release();
                         if (err) callback(new Error(this.exceptions.query_error), undefined);
                         else callback(undefined, question[0]);
                     })
@@ -102,9 +102,9 @@ class QuestionsModel {
         this.pool.getConnection((err, conn) => {
             if (err) callback(new Error(this.exceptions.connection_error), undefined);
             else {
-                conn.release();
                 conn.query(this.queries.FIND_ANSWERS_BY_QUESTION, [id_question],
                     (err, answers) => {
+                        conn.release();
                         if (err) callback(new Error(this.exceptions.query_error), undefined);
                         else callback(undefined, answers);
                     })
@@ -121,9 +121,9 @@ class QuestionsModel {
         this.pool.getConnection((err, conn) => {
             if (err) callback(new Error(this.exceptions.connection_error), undefined);
             else {
-                conn.release();
                 conn.query(this.queries.INSERT_USER_ANSWER, [email, id_answer],
                     (err, result) => {
+                        conn.release();
                         if (err) callback(new Error(this.exceptions.query_error), undefined);
                         else callback(undefined, true);
                     })
@@ -141,9 +141,9 @@ class QuestionsModel {
         this.pool.getConnection((err, conn) => {
             if (err) callback(new Error(this.exceptions.connection_error), undefined);
             else {
-                conn.release();
                 conn.query(this.queries.GET_ANSWER_BY_USER_AND_QUESTION, [email, question_id],
                     (err, rows) => {
+                        conn.release();
                         if (err) callback(new Error(this.exceptions.query_error), undefined);
                         else callback(undefined, rows);
                     })
@@ -161,9 +161,9 @@ class QuestionsModel {
         this.pool.getConnection((err, conn) => {
             if (err) callback(new Error(this.exceptions.connection_error), undefined);
             else {
-                conn.release();
                 conn.query(this.queries.INSERT_ANSWER, [question_id, answer_body],
                     (err, result) => {
+                        conn.release();
                         if (err) callback(new Error(err.message), undefined);
                         else callback(undefined, result.insertId);
                     })
@@ -177,12 +177,13 @@ class QuestionsModel {
      * @param {*} question_id 
      * @param {*} callback 
      */
-    getFriendsAnswersByQuestion(email, question_id, callback){
+    getFriendsAnswersByQuestion(email, question_id, callback) {
         this.pool.getConnection((err, conn) => {
-            if(err) callback(new Error(this.exceptions.connection_error), undefined);
-            else{
-                conn.query(this.queries.GET_FRIENDS_ANSWERS, [email, question_id], (err, users)=> {
-                    if(err) callback(new Error(this.exceptions.query_error), undefined);
+            if (err) callback(new Error(this.exceptions.connection_error), undefined);
+            else {
+                conn.query(this.queries.GET_FRIENDS_ANSWERS, [email, question_id], (err, users) => {
+                    conn.release();
+                    if (err) callback(new Error(this.exceptions.query_error), undefined);
                     else callback(undefined, users);
                 })
             }
@@ -197,13 +198,13 @@ class QuestionsModel {
      * @param {*} callback 
      */
     checkUserAnswerLikeFriend(emailUser, emailFriend, id_answer, callback) {
-        this.pool.getConnection((err, conn ) => {
-            if(err) callback(new Error(this.exceptions.connection_error), undefined);
-            else{
+        this.pool.getConnection((err, conn) => {
+            if (err) callback(new Error(this.exceptions.connection_error), undefined);
+            else {
                 //TODO
             }
         })
-        
+
     }
 }
 

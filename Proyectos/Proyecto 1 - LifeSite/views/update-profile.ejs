@@ -19,7 +19,8 @@
     </header>
     <div class="container">
         <h2>Modificar perfil </h2>
-        <form method="POST" action="update-profile" class="form-container-new-user">
+        <h3>Los campos no rellenados no serán modificados</h3>
+        <form method="POST" action="update-profile" class="form-container-new-user" enctype="multipart/form-data">
             <div class="password">
                 <span>Contraseña</span>
                 <input type="password" name="pass" id="" class="input-new-user">

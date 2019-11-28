@@ -19,7 +19,7 @@
             <a href="">Preguntas</a>
             <a href="logout">Desconectar</a>
             <div class="user-header">
-                <img src="/img/contact-img.png" alt="imagen de usuario" id="header-img">
+                <img src="/users/getProfilePicture/<%=currentUser.id %>" alt="imagen de usuario" id="header-img">
                 <span><%= currentUser.puntuation %> pts</span>
             </div>
         </div>
@@ -30,7 +30,7 @@
         <% users.forEach(user => {%>
         <div class="user-search">
             <div class="user-info-search">
-                <img src="/img/contact-img.png" alt="profile-picture" class='result-picture'>
+                <img src="/users/getProfilePicture/<%=user.id %>" alt="profile-picture" class='result-picture'>
                 <a href="profile/<%=user.id%>"><%=user.username%></a>
             </div>
             <% if(user.addRequest){%><a href="add-request/<%= user.id %> " class='request-button'>Solicitar amistad</a> <%}%>

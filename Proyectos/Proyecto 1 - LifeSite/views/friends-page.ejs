@@ -19,7 +19,7 @@
             <a href="../../questions">Preguntas</a>
             <a href="logout">Desconectar</a>
             <div class="user-header">
-                <img src="/img/contact-img.png" alt="imagen de usuario" id="header-img">
+                <img src="/users/getProfilePicture/<%=currentUser.id %>" alt="imagen de usuario" id="header-img">
                 <span><%= currentUser.puntuation %> pts</span>
             </div>
         </div>
@@ -33,7 +33,7 @@
             <% requests.forEach(elem => {%>
             <div class="friend">
                 <div class="friend-profile">
-                    <img src="/img/contact-img.png" alt="imagen de perfil" id="header-img">
+                    <img src="/users/getProfilePicture/<%=elem.id %>" alt="imagen de perfil" id="header-img">
                     <a href="profile/<%=elem.id%>"><%=elem.username%></a>
                 </div>
                 <div class="response">
@@ -58,7 +58,7 @@
             <% friends.forEach(friend => { %>
             <div class="friend">
                 <div class="friend-profile">
-                    <img src="/img/contact-img.png" alt="imagen de perfil" id="header-img">
+                    <img src="/users/getProfilePicture/<%=friend.id %>" alt="imagen de perfil" id="header-img">
                     <a href="profile/<%=friend.id%>"><%=friend.username%></a>
                 </div>
             </div>

@@ -16,7 +16,8 @@ class QuestionsModel {
             INSERT_USER_ANSWER: "INSERT INTO user_answers VALUES (?,?)",
             GET_ANSWER_BY_USER_AND_QUESTION: "SELECT * FROM user_answers JOIN answers ON user_answers.id_answer = answers.id JOIN questions ON answers.id_question = questions.id WHERE username = ? and id_question = ?",
             INSERT_ANSWER: "INSERT INTO answers VALUES (null,?,?)",
-            GET_FRIENDS_ANSWERS: "SELECT email, username_2 FROM users JOIN friendships ON users.email = friendships.username_1 JOIN user_answers ON friendships.username_2 = user_answers.username JOIN answers ON user_answers.id_answer = answers.id WHERE email = ? AND id_question = ?"
+            GET_FRIENDS_ANSWERS: "SELECT email, username_2 FROM users JOIN friendships ON users.email = friendships.username_1 JOIN user_answers ON friendships.username_2 = user_answers.username JOIN answers ON user_answers.id_answer = answers.id WHERE email = ? AND id_question = ?",
+            GET_ANSWER_LIKE_FRIEND: "SELECT * FROM answer_like_friend WHERE email_user = ? AND email_friend = ? and id_question"
         }
     }
 
@@ -191,17 +192,22 @@ class QuestionsModel {
     }
 
     /**
-     * Return if a user has answered a question like friend
+     * Return the answer from user like friend given the user, friend and question
      * @param {*} emailUser 
      * @param {*} emailFriend 
      * @param {*} id_answer 
      * @param {*} callback 
      */
-    checkUserAnswerLikeFriend(emailUser, emailFriend, id_answer, callback) {
+    getAnswerLikeFriend(emailUser, emailFriend, id_question, callback) {
         this.pool.getConnection((err, conn) => {
             if (err) callback(new Error(this.exceptions.connection_error), undefined);
             else {
-                //TODO
+                conn.release();
+                conn.query(this.queries.GET_ANSWER_LIKE_FRIEND, [emailUser, emailFriend, id_question],
+                    (err, answer) => {
+                        if (err) callback(new Error(this.exceptions.query_error), undefined);
+                        else callback(undefined, answer);
+                    })
             }
         })
 

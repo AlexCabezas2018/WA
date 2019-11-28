@@ -43,9 +43,23 @@
                         <img src="/img/contact-img.png" alt="" class="result-picture">
                         <p><%=user.username_2%></p>
                     </div>
-                    <div class="response">
-                        <a href="../answer-like-friend/<%=question.id%>" class="guess-button">Adivinar</a>
-                    </div>
+                    <% if(user.guess){%>
+                        <div class="response">
+                            <a href="../answer-like-friend/<%=question.id%>" class="guess-button">Adivinar</a>
+                        </div>
+                    <%}
+                       else { 
+                        if(user.correct){ %>
+                            <div class="response">
+                                <p class="guess-button"> Has acertado! </p>
+                            </div>
+                        <%}
+                        else { %>
+                            <div class="response">
+                                <p class="guess-button"> Has fallado! </p>
+                            </div>
+                        <% }
+                    }%>
                 </div>
                 <%}); %>
             <%}%>

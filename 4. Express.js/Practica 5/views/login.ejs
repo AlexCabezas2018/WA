@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>login</title>
+    <link href="https://fonts.googleapis.com/css?family=Concert+One&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Cabin&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/tasksPrint.css" media="print" />
+    <link rel="stylesheet" href="/css/tasksScreen.css" media="screen" />
+    <link rel="icon" href="/img/favicon.ico" />
+</head>
+<body>
+    <header>
+            <h1>TAREAS</h1>
+    </header>
+    <div class="container">
+        <form class="login-form" method="POST" action="login">
+            <input class="form-input" type="text" name="email" placeholder="Dirección de correo">
+            <input class="form-input"type="password" name="password" id="">
+            <input class="form-input"type="submit" value="Entrar">
+        </form>
+    </div>
+    <h2 id='error-message'><%=errorMsg%></h2>
+</body>
+</html>

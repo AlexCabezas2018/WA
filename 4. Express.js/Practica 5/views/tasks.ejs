@@ -17,10 +17,10 @@
     <header>
         <h1>TAREAS</h1>
         <div class="user">
-            <img src="/img/contact-img.png" alt="contact-image" />
+            <img src="/imagenUsuario" alt="contact-image" />
             <div class="user-info">
                 <p><%=user %></p>
-                <a href="">DESCONECTAR</a>
+                <a href="/logout">DESCONECTAR</a>
             </div>
         </div>
     </header>
@@ -37,7 +37,7 @@
             <%}) %>
 
             <form class="form-div" method="POST" action="addTask">
-                <input type="text" id="newtask" name="taskText" placeholder="Introduce tarea..." required/>
+                <input type="text" id="newtask" name="taskText" placeholder="Introduce tarea..." />
                 <input type="submit" id="add-task-button" value="AÑADIR">
             </form>
             <a id="remove-task-btn" href="deletedCompleted">ELIMINAR TAREAS COMPLETADAS</a>

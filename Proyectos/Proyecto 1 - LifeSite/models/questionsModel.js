@@ -10,14 +10,17 @@ class QuestionsModel {
         }
         this.queries = {
             RANDOM_QUESTIONS: "SELECT * FROM questions ORDER BY RAND() LIMIT 5",
-            INSERT_QUESTION: "INSERT INTO questions VALUES (null, ?)",
+            INSERT_QUESTION: "INSERT INTO questions VALUES (null, ?, ?)",
             FIND_QUESTION_BY_ID: "SELECT * FROM questions WHERE id = ?",
-            FIND_ANSWERS_BY_QUESTION: "SELECT * FROM answers WHERE id_question = ?",
+            FIND_ANSWERS_BY_QUESTION: "SELECT * FROM answers WHERE id_question = ? ORDER BY RAND()",
             INSERT_USER_ANSWER: "INSERT INTO user_answers VALUES (?,?)",
             GET_ANSWER_BY_USER_AND_QUESTION: "SELECT * FROM user_answers JOIN answers ON user_answers.id_answer = answers.id JOIN questions ON answers.id_question = questions.id WHERE username = ? and id_question = ?",
             INSERT_ANSWER: "INSERT INTO answers VALUES (null,?,?)",
-            GET_FRIENDS_ANSWERS: "SELECT email, username_2 FROM users JOIN friendships ON users.email = friendships.username_1 JOIN user_answers ON friendships.username_2 = user_answers.username JOIN answers ON user_answers.id_answer = answers.id WHERE email = ? AND id_question = ?",
-            GET_ANSWER_LIKE_FRIEND: "SELECT * FROM answer_like_friend WHERE email_user = ? AND email_friend = ? and id_question"
+            GET_FRIENDS_ANSWERS: "SELECT email, username_2, id_answer FROM users JOIN friendships ON users.email = friendships.username_1 JOIN user_answers ON friendships.username_2 = user_answers.username JOIN answers ON user_answers.id_answer = answers.id WHERE email = ? AND id_question = ?",
+            GET_ANSWER_LIKE_FRIEND: "SELECT * FROM answer_like_friend where email_user = ? AND id_question = ?",
+            INSERT_ANSWER_LIKE_FRIEND: "INSERT INTO answer_like_friend VALUES (?,?,?,?)",
+            GET_FRIENDS: "SELECT id, email, username FROM friendships JOIN users on friendships.username_2 = users.email WHERE username_1 = ?",
+            ADD_PUNTUATION: "UPDATE users set puntuation= ? WHERE id = ? "
         }
     }
 
@@ -49,7 +52,7 @@ class QuestionsModel {
         this.pool.getConnection((err, conn) => {
             if (err) callback(new Error(this.exceptions.connection_error), undefined);
             else {
-                conn.query(this.queries.INSERT_QUESTION, [question],
+                conn.query(this.queries.INSERT_QUESTION, [question, options.length],
                     (err, result) => {
                         conn.release();
                         if (err) callback(new Error(this.exceptions.query_error));
@@ -65,7 +68,7 @@ class QuestionsModel {
                             }, []);
                             //execute query
                             conn.query(ADD_ANSWER, answer_param, (err, result) => {
-                                if (err) callback(new Error(err.message), undefined);
+                                if (err) callback(new Error(this.exceptions.query_error), undefined);
                                 else callback(undefined, true);
                             })
                         }
@@ -99,16 +102,26 @@ class QuestionsModel {
      * @param {Int} id_question 
      * @param {Function} callback 
      */
-    getAnswerByQuestion(id_question, callback) {
+    getAnswerByQuestion(id_question, forUser, options, callback) {
         this.pool.getConnection((err, conn) => {
             if (err) callback(new Error(this.exceptions.connection_error), undefined);
             else {
+                if(forUser){
                 conn.query(this.queries.FIND_ANSWERS_BY_QUESTION, [id_question],
                     (err, answers) => {
                         conn.release();
                         if (err) callback(new Error(this.exceptions.query_error), undefined);
                         else callback(undefined, answers);
                     })
+                }
+                else{
+                    conn.query(this.queries.FIND_ANSWERS_BY_QUESTION + " LIMIT " + options, [id_question],
+                        (err, answers) => {
+                            conn.release();
+                            if (err) callback(new Error(err.message), undefined);
+                            else callback(undefined, answers);
+                    })
+                }
             }
         })
     }
@@ -192,25 +205,86 @@ class QuestionsModel {
     }
 
     /**
-     * Return the answer from user like friend given the user, friend and question
+     * Return the answers from user like friend given the user and question
      * @param {*} emailUser 
      * @param {*} emailFriend 
      * @param {*} id_answer 
      * @param {*} callback 
      */
-    getAnswerLikeFriend(emailUser, emailFriend, id_question, callback) {
+    getAnswersLikeFriend(emailUser, id_question, callback) {
         this.pool.getConnection((err, conn) => {
             if (err) callback(new Error(this.exceptions.connection_error), undefined);
             else {
-                conn.release();
-                conn.query(this.queries.GET_ANSWER_LIKE_FRIEND, [emailUser, emailFriend, id_question],
-                    (err, answer) => {
+                conn.query(this.queries.GET_ANSWER_LIKE_FRIEND, [emailUser, id_question],
+                    (err, answers) => {            
+                        conn.release();
                         if (err) callback(new Error(this.exceptions.query_error), undefined);
-                        else callback(undefined, answer);
+                        else callback(undefined, answers);
                     })
             }
         })
 
+    }
+
+    /**
+     * Insert a new row in answer_like_friend given user email, friend email, question and answer
+     * @param {*} emailUser 
+     * @param {*} emailFriend 
+     * @param {*} id_question 
+     * @param {*} id_answer 
+     * @param {*} callback 
+     */
+    addAnswerLikeFriend(emailUser, emailFriend, id_question, id_answer, callback){
+        this.pool.getConnection((err, conn) => {
+            if(err) callback(new Error(this.exceptions.connection_error), undefined);
+            else{
+                conn.query(this.queries.INSERT_ANSWER_LIKE_FRIEND, [emailUser, emailFriend, id_question, id_answer], 
+                    (err, result)=> {
+                        conn.release();
+                        if(err) callback(new Error(this.exceptions.query_error), undefined);
+                        else callback(undefined, true);
+                })
+            }
+        })
+    }
+
+    /**
+     * Return list of friends given an user
+     * @param {*} email 
+     * @param {*} callback 
+     */
+    getFriends(email, callback) {
+        this.pool.getConnection((err, conn) => {
+            if(err) callback(new Error(this.exceptions.connection_error), undefined);
+            else{
+                conn.query(this.queries.GET_FRIENDS, [email], 
+                    (err, friends)=> {
+                        conn.release();
+                        if(err) callback(new Error(this.exceptions.query_error), undefined);
+                        else callback(undefined, friends);
+                })
+            }
+        })
+    }
+
+    /**
+     * Update puntutation givcen an user and puntuation
+     * @param {*} puntuation 
+     * @param {*} email 
+     * @param {*} callback 
+     */
+    addPuntuation(puntuation, id, callback){
+        this.pool.getConnection((err, conn) => {
+            if(err) callback(new Error(this.exceptions.connection_error), undefined);
+            else{
+                conn.query(this.queries.ADD_PUNTUATION, [puntuation, id], 
+                    (err, result)=> {
+                        conn.release();
+                        if(err) callback(new Error(this.exceptions.query_error), undefined);
+                        else callback(undefined, true);
+                })
+            }
+        })
     }
 }
 

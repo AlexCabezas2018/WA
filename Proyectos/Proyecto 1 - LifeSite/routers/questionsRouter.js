@@ -29,6 +29,6 @@ questionsRouter.get('/answer-question/:id', middlewares.checkLoginMiddleware, qu
 questionsRouter.post('/answer-question', middlewares.checkLoginMiddleware, questionsController.handleAnswerQuestionPost);
 
 /* ANSWER LIKE FRIEND */
-questionsRouter.get('/answer-like-friend', middlewares.checkLoginMiddleware, questionsController.handleAnswerLikeFriend);
-
+questionsRouter.get('/answer-like-friend/:id', middlewares.checkLoginMiddleware, questionsController.handleAnswerLikeFriend);
+questionsRouter.post('/answer-like-friend', middlewares.checkLoginMiddleware, questionsController.handleAnswerLikeFriendPost);
 module.exports = questionsRouter;

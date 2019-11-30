@@ -1,8 +1,11 @@
 "use strict";
 
 const QuestionsModel = require('../models/questionsModel');
+const UserModel = require('../models/usersModel');
 const questionModel = new QuestionsModel();
+const userModel = new UserModel();
 
+//TODO: Al responder por un amigo sacar siempre respuesta correcta
 
 /**
  * Handles the / GET petition
@@ -37,7 +40,8 @@ function handleRandomQuestions(request, response, next) {
  * @param {*} next 
  */
 function handleAddQuestion(request, response) {
-    response.render('add-question');
+    const currentUser = request.session.currentUser;
+    response.render('add-question', { currentUser });
 }
 
 /**
@@ -48,8 +52,11 @@ function handleAddQuestion(request, response) {
  */
 function handleAddQuestionPost(request, response, next) {
     const question = request.body.question;
-    const options = [request.body.option_1, request.body.option_2,
+    let options = [request.body.option_1, request.body.option_2,
     request.body.option_3, request.body.option_4];
+
+    //get the options
+    options = options.filter(option => option != "");
     questionModel.addQuestion(question, options, (err, correctInsert) => {
         if (err) next(err);
         else {
@@ -67,60 +74,56 @@ function handleAddQuestionPost(request, response, next) {
  */
 function handleShowQuestion(request, response, next) {
     const currentUser = request.session.currentUser;
-
+    request.session.friend == undefined;
     //busco la pregunta
     questionModel.getQuestionById(request.params.id,
         (err, question) => {
             if (err) next(err);
-            else { // una vez encontrada la pregunta, busco si la he contestado
+            else {
                 questionModel.checkQuestionIsAnswer(currentUser.email, question.id,
                     (err, answers) => { // actualizado si la he contestado
                         const reply = (answers.length == 0) ? false : true;
 
-                        //busco a mis amigos que la han respondido
+                        //get friend who has answered the question
                         questionModel.getFriendsAnswersByQuestion(currentUser.email, question.id,
                             (err, friends) => {
                                 if (err) next(err);
                                 else {
-                                    //TODO: El div debe mostrar nombre no correo
+                                    //get my friends answers
+                                    questionModel.getAnswersLikeFriend(currentUser.email, question.id,
+                                        (err, answersLikeFriend) => {
 
-                                    //por cada amigo busco en la tabla respuestas por amigo si existe una con user = ? friend = ? id_question= ? 
-                                    //actualizamos si adivinamos o no
-                                    friends.forEach(friend => {
-                                        questionModel.getAnswerLikeFriend(currentUser.email, friend.username_2, question.id,
-                                            (err, id_answerLikeFriend) => {
-                                                if (err) next(err);
-                                                else {
-                                                    if (id_answerLikeFriend.length == 0) friend.guess = true;
-                                                    else {
-                                                        friend.guess = false;
-                                                        friend.myAnswer = id_answerLikeFriend[0];
-                                                    }
-                                                }
-                                            }
-                                        )
-                                    })
+                                            questionModel.getFriends(currentUser.email,
+                                                (err, friendList) => {
 
-                                    console.log(friends);
+                                                    friends.forEach(friend => {
+                                                        //for each friend check if we have answered like him
+                                                        const answered = answersLikeFriend.filter(answer => (answer.email_friend == friend.username_2)).length;
+                                                        //actualizamos adivinar
+                                                        if (!answered) friend.guess = true;
+                                                        else {
+                                                            friend.guess = false;
+                                                            //for each friend check if the answer it's the same or not
+                                                            const correct = answersLikeFriend.filter(answer => (answer.id_answer == friend.id_answer)).length;
+                                                            friend.correct = correct;
+                                                        }
+                                                    });
 
-                                    //actualizamos si es correcta o no
-                                    friends.forEach(friend => {
-                                        if (!friend.guess) {
-                                            questionModel.checkQuestionIsAnswer(friend.username_2, question.id,
-                                                (err, id_friendAnswer) => {
-                                                    if (err) next(err);
-                                                    else {
-                                                        if (!friend.guess) friend.correct = (friend.myAnswer == id_friendAnswer) ? true : false;
-                                                    }
+                                                    //update friends attributes
+                                                    friends.forEach(friend => {
+                                                        friendList.forEach(elem => {
+                                                            if (friend.username_2 == elem.email) {
+                                                                friend.username = elem.username;
+                                                                friend.email = elem.email;
+                                                                friend.id = elem.id;
+                                                            }
+                                                        })
+                                                    })
+                                                    request.session.question = question;
+                                                    response.render('question-show',
+                                                        { question, currentUser, reply, users: friends });
                                                 })
-                                        }
-                                    })
-
-                                    console.log(friends);
-                                    //comprobar si he contestado ya como el poner adivinar acertado, fallaste
-                                    request.session.question = question;
-                                    response.render('question-show',
-                                        { question, currentUser, reply, users: friends });
+                                        })
                                 }
                             }
                         )
@@ -140,8 +143,9 @@ function handleShowQuestion(request, response, next) {
 function handleAnswerQuestion(request, response, next) {
     const question = request.session.question;
     const currentUser = request.session.currentUser;
+    const user = true;
 
-    questionModel.getAnswerByQuestion(request.params.id,
+    questionModel.getAnswerByQuestion(request.params.id, user, undefined,
         (err, answers) => {
             if (err) next(err);
             else response.render('question-view', { answers, question, currentUser });
@@ -192,7 +196,65 @@ function handleAnswerQuestionPost(request, response, next) {
  * Handles the answer like friend GET PETITION
  */
 function handleAnswerLikeFriend(request, response, next) {
-    //TODO Implemenentar Adivinar respuesta de amigo
+    const currentUser = request.session.currentUser;
+    const question = request.session.question;
+
+    userModel.getUserById(request.params.id,
+        (err, friend) => {
+            if (err) next(err);
+            else {
+                request.session.friend = friend;
+                const user = false;
+                questionModel.getAnswerByQuestion(question.id, user, question.initial_options,
+                    (err, answers) => {
+                        if (err) next(err);
+                        else response.render('question-view-friend', { answers, question, currentUser, friend });
+                    })
+            }
+        })
+}
+
+/**
+ * Handles the answer like friend POST PETITION
+ * @param {*} request 
+ * @param {*} response 
+ * @param {*} next 
+ */
+function handleAnswerLikeFriendPost(request, response, next) {
+    const currentUser = request.session.currentUser;
+    const answer_id = request.body.option;
+    const question = request.session.question;
+    const friend = request.session.friend;
+
+    questionModel.addAnswerLikeFriend(currentUser.email, friend.email, question.id, answer_id,
+        (err, correctInsert) => {
+            if (err) next(err);
+            else {
+                if (!correctInsert) next(err);
+                else {
+                    questionModel.checkQuestionIsAnswer(friend.email, question.id,
+                        (err, friendAnswer) => {
+                            if (err) next(err);
+                            else {
+                                if (answer_id == friendAnswer[0].id_answer) {
+                                    questionModel.addPuntuation(currentUser.puntuation + 50, currentUser.id,
+                                        (err, correctUpdate) => {
+                                            if (err) next(err);
+                                            else {
+                                                if (!correctUpdate) next(err);
+                                                else {
+                                                    response.redirect(`show-question/${question.id}`);
+                                                    request.session.currentUser.puntuation += 50;
+                                                }
+                                            }
+                                        })
+                                }
+                                else response.redirect(`show-question/${question.id}`);
+                            }
+                        })
+                }
+            }
+        })
 }
 module.exports = {
     handleIndex,
@@ -202,5 +264,6 @@ module.exports = {
     handleShowQuestion,
     handleAnswerQuestion,
     handleAnswerQuestionPost,
-    handleAnswerLikeFriend
+    handleAnswerLikeFriend,
+    handleAnswerLikeFriendPost
 }; 

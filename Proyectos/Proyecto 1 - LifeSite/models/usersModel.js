@@ -22,7 +22,9 @@ class usersModel {
             ADD_REQUEST: 'INSERT INTO friend_requests VALUES (?,?)',
             DELETE_REQUEST: 'DELETE FROM friend_requests WHERE username_to = ? AND username_from = ?',
             INSERT_FRIEND: 'INSERT INTO friendships VALUES (?,?), (?,?)',
-            GET_PROFILE_PICTURE: 'SELECT profile_img from users WHERE id = ?'
+            GET_PROFILE_PICTURE: 'SELECT profile_img from users WHERE id = ?',
+            ADD_IMAGE: "INSERT INTO user_images VALUES (null, ?,?)",
+            GET_IMAGES_FROM_USER: "SELECT image FROM user_images WHERE username = ?"
         }
     }
 
@@ -154,7 +156,7 @@ class usersModel {
                 conn.query(this.queries.GET_USERS_BY_NAME, ['%' + name + '%', email],
                     (err, rows) => {
                         conn.release();
-                        if (err) callback(new Error(err.message), undefined);
+                        if (err) callback(new Error(this.exceptions.query_error), undefined);
                         else callback(undefined, rows);
                     }
                 )
@@ -175,7 +177,7 @@ class usersModel {
                     [user.pass, user.name, user.gender, user.birth_date, user.profile_img, user.email],
                     (err, rows) => {
                         conn.release();
-                        if (err) callback(new Error(err.message), undefined);
+                        if (err) callback(new Error(this.exceptions.query_error), undefined);
                         else callback(undefined, true);
                     })
             }
@@ -223,18 +225,30 @@ class usersModel {
         });
     }
 
+    /**
+     * Add a request given the user_from and the user_to
+     * @param {*} id_from 
+     * @param {*} id_to 
+     * @param {*} callback 
+     */
     addRequest(id_from, id_to, callback) {
         this.pool.getConnection((err, conn) => {
             if (err) callback(new Error(this.exceptions.connection_error), undefined);
             else conn.query(this.queries.ADD_REQUEST, [id_from, id_to],
                 (err, result) => {
                     conn.release();
-                    if (err) callback(new Error(err.message), undefined);
+                    if (err) callback(new Error(this.exceptions.query_error), undefined);
                     else callback(undefined, true);
                 })
         })
     }
 
+    /**
+     * Delete a request given the user_from and the user_to
+     * @param {*} email_from 
+     * @param {*} email_to 
+     * @param {*} callback 
+     */
     deleteRequest(email_from, email_to, callback) {
         this.pool.getConnection((err, conn) => {
             if (err) callback(new Error(this.exceptions.connection_error), undefined);
@@ -248,6 +262,12 @@ class usersModel {
         })
     }
 
+    /**
+     * Add a friend given the user email and the friend email
+     * @param {*} email_1 
+     * @param {*} email_2 
+     * @param {*} callback 
+     */
     addFriend(email_1, email_2, callback) {
         this.pool.getConnection((err, conn) => {
             if (err) callback(new Error(this.exceptions.connection_error), undefined);
@@ -259,6 +279,45 @@ class usersModel {
                 })
             }
         })
+    }
+
+    /**
+     * Add an image to  user's images given the user and the image
+     * @param {*} email 
+     * @param {*} image 
+     * @param {*} callback 
+     */
+    addImage(email, image, callback) {
+        this.pool.getConnection((err, conn) => {
+            if (err) callback(new Error(this.exceptions.connection_error), undefined);
+            else {
+                conn.query(this.queries.ADD_IMAGE, [email, image],
+                    (err, result) => {
+                        conn.release();
+                        if (err) callback(new Error(err.message), undefined);
+                        else callback(undefined, true);
+                    })
+            }
+        })
+    }
+
+    /**
+     * Returns an array of images given an user
+     * @param {*} email 
+     * @param {*} callback 
+     */
+    getUserPictures(email, callback) {
+        this.pool.getConnection((err, conn) => {
+            if (err) callback(new Error(this.exceptions.connection_error), undefined);
+            else {
+                conn.query(this.queries.GET_IMAGES_FROM_USER, [email],
+                    (err, images) => {
+                        conn.release();
+                        if (err) callback(new Error(err.message), undefined);
+                        else callback(undefined, images);
+                    })
+            }
+        })    
     }
 
 }

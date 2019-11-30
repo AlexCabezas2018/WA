@@ -18,8 +18,8 @@
             <a href="../questions">Preguntas</a>
             <a href="../users/logout">Desconectar</a>
             <div class="user-header">
-                <img src="/img/contact-img.png" alt="imagen de usuario" id="header-img">
-                <span>50 pts</span>
+                <img src="/users/getProfilePicture/<%=currentUser.id %>" alt="imagen de usuario" id="header-img">
+                <span><%=currentUser.puntuation%> pts</span>
             </div>
         </div>
     </header>
@@ -28,9 +28,9 @@
         <form id="add-question-form" method="POST" action="add-question">
             <input class="add-option" type="text" name="question" placeholder="Pregunta " required>
             <input class="add-option" type="text" name="option_1" placeholder="Opcion 1 " required>
-            <input class="add-option" type="text" name="option_2" placeholder="Opcion 2 " required>
-            <input class="add-option" type="text" name="option_3" placeholder="Opcion 3 " required>
-            <input class="add-option" type="text" name="option_4" placeholder="Opcion 4 " required>
+            <input class="add-option" type="text" name="option_2" placeholder="Opcion 2 " >
+            <input class="add-option" type="text" name="option_3" placeholder="Opcion 3 " >
+            <input class="add-option" type="text" name="option_4" placeholder="Opcion 4 " >
             <input id="send-question" type="submit" value="Enviar Pregunta">
         </form>
     </div>

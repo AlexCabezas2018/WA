@@ -14,20 +14,19 @@
     <header>
         <img src="/img/logo.png" alt="logo">
         <div class="links">
-            <!--TODO: Cuando accedes a la páginas desde la página de amigos, el enlace de perfil debe llevarte al perfil del usuario loggeado, no al perfil del amigo-->
-            <a href="">Perfil</a>
+            <a href="../profile/<%= currentUser.id %>">Perfil</a>
             <a href="../friends-page">Amigos</a>
             <a href="../../questions">Preguntas</a>
             <a href="../logout">Desconectar</a>
             <div class="user-header">
-                <img src="/users/getProfilePicture/<%=user.id %>" alt="imagen de usuario" id="header-img">
-                <span><%= user.puntuation %> pts</span>
+                <img src="/users/getProfilePicture/<%=currentUser.id %>" alt="imagen de usuario" id="header-img">
+                <span><%= currentUser.puntuation %> pts</span>
             </div>
         </div>
 
     </header>
     <div class="container">
-        <%if(user.id == sessionId){%>
+        <%if(user.id == currentUser.id){%>
         <h2>Tu perfil</h2>
         <%}else{%><h2>Perfil de <%= user.username %></h2><%}%>
         
@@ -42,9 +41,20 @@
         <p> <%= user.puntuation %> puntos</p>
     </div>
     </div>
-    <%if(user.id == sessionId){%>
+    <%if(user.id == currentUser.id){%>
     <a href="../update-profile" class="button edit-profile-button">Modificar perfil</a>
     <%}%>
+
+    <%if(user.id == currentUser.id){%>
+        <h2>Tus imágenes</h2>        
+        <form method="POST" action="../add-picture" class="form-pictures" enctype="multipart/form-data">
+            <h3>Subir imagen</h3>
+            <input type="file" name="picture">
+            <input type="submit" value="Subir Imagen">
+        </form>
+        <%}else{%><h2>Imágenes de  <%= user.username %></h2><%}%>
+        <div class="user-images">
+        </div>
     </div>
 </body>
 

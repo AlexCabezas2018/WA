@@ -3,6 +3,8 @@ const path = require('path');
 
 const usersDAOModel = new usersModel();
 
+
+
 /**
  * Handles the login GET petition
  * @param {*} request 
@@ -102,6 +104,7 @@ function handleNewUserPost(request, response, next) {
  * @param {*} next 
  */
 function handleProfile(request, response, next) {
+    const { currentUser } = request.session;
     usersDAOModel.getUserById(request.params.id,
         (err, usr) => {
             if (err) {
@@ -112,7 +115,7 @@ function handleProfile(request, response, next) {
                 else response
                     .status(200)
                     .render('user-profile',
-                        { user: usr, sessionId: request.session.currentUser.id });
+                        { user: usr, currentUser });
             }
         }
     );
@@ -129,7 +132,7 @@ function handleProfilePicture(request, response, next) {
         (err, img) => {
             if (err) next(err);
             else {
-                if (!img) response.status(200).sendFile(path.join(__dirname, "..", "public", "img", "contact-img.png")); //TODO: Añadir imagen por defecto
+                if (!img) response.status(200).sendFile(path.join(__dirname, "..", "public", "img", "contact-img.png"));
                 else response.end(img);
             }
         })
@@ -320,6 +323,39 @@ function handleRejectRequest(request, response, next) {
     })
 }
 
+/**
+ * Handles the user picture  POST PETITION
+ * @param {*} request 
+ * @param {*} response 
+ * @param {*} next 
+ */
+function handleUserPicturesPost(request, response, next) {
+    const { currentUser } = request.session;
+
+    if (request.file != undefined) {
+        usersDAOModel.addImage(currentUser.email, request.file.buffer,
+            (err, result) => {
+                if (err) next(err);
+                else {
+                    if (!result) next(err);
+                    else response.redirect(`profile/${request.session.currentUser.id}`);
+                }
+            })
+    }
+    else response.redirect(`profile/${request.session.currentUser.id}`);
+
+}
+
+/**
+ * Handles the users-pictures GET petition to get the users pictures images.
+ * @param {*} request 
+ * @param {*} response 
+ * @param {*} next 
+ */
+function handleUserPictures(request, response, next) {
+    //TODO: 
+}
+
 module.exports = {
     handleLogin,
     handleLoginPost,
@@ -334,5 +370,7 @@ module.exports = {
     handleSearch,
     handleAddRequest,
     handleAcceptRequest,
-    handleRejectRequest
+    handleRejectRequest,
+    handleUserPicturesPost,
+    handleUserPictures
 }

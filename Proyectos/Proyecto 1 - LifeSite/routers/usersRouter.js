@@ -54,6 +54,9 @@ usersRouter.get('/add-request/:id', middlewares.checkLoginMiddleware, usersContr
 usersRouter.get('/accept-request/:id', middlewares.checkLoginMiddleware, usersController.handleAcceptRequest);
 usersRouter.get('/reject-request/:id', middlewares.checkLoginMiddleware, usersController.handleRejectRequest);
 
-module.exports = usersRouter;
+/* UPLOAD IMAGES*/
+usersRouter.get('/getUserPictures', middlewares.checkLoginMiddleware, usersController.handleUserPictures);
+usersRouter.post('/add-picture', multerFactory.single('picture'), middlewares.checkLoginMiddleware, usersController.handleUserPicturesPost);
 
-//TODO: Realizar el resto de rutas
+
+module.exports = usersRouter;

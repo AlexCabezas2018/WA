@@ -202,8 +202,25 @@ p {
     background-color: rgb(129, 131, 255);
 }
 
-/*Pagina lista de amigos y solicitudes*/
+.user-images{
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
 
+.form-pictures {
+    display: flex;
+    flex-direction: column;
+    padding: 1%;
+    margin: auto;
+    margin-bottom: 3%;
+    background-color: rgb(160, 13, 23);
+    border-radius: 30px;
+    color:white;
+}
+
+
+/*Página de amigos*/
 .friend-requests{
     display: flex;
     flex-direction: column;
@@ -498,7 +515,7 @@ div.container h3 {
 }
 
 #option-input {
-    width: 40%;
+    width: 80%;
     height: 30px;
     font-size: 18px;
     margin-left: 1%;
@@ -518,6 +535,12 @@ div.container h3 {
 
 #submit-button:hover {
     background-color: rgb(199, 199, 199);
+}
+
+.form-answers{
+    display: flex;
+    flex-direction: column;
+    width: 50%;
 }
 /*Pagina responder preguntas para amigos*/
 

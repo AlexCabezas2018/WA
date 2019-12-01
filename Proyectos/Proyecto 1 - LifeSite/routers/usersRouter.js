@@ -55,8 +55,7 @@ usersRouter.get('/accept-request/:id', middlewares.checkLoginMiddleware, usersCo
 usersRouter.get('/reject-request/:id', middlewares.checkLoginMiddleware, usersController.handleRejectRequest);
 
 /* UPLOAD IMAGES*/
-usersRouter.get('/getUserPictures', middlewares.checkLoginMiddleware, usersController.handleUserPictures);
+usersRouter.get('/img/:id', middlewares.checkLoginMiddleware, usersController.handleUserPictures)
 usersRouter.post('/add-picture', multerFactory.single('picture'), middlewares.checkLoginMiddleware, usersController.handleUserPicturesPost);
-
 
 module.exports = usersRouter;

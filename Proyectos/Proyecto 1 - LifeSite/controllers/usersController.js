@@ -3,8 +3,6 @@ const path = require('path');
 
 const usersDAOModel = new usersModel();
 
-
-
 /**
  * Handles the login GET petition
  * @param {*} request 
@@ -112,10 +110,18 @@ function handleProfile(request, response, next) {
             }
             else {
                 if (!usr) next(err);
-                else response
-                    .status(200)
-                    .render('user-profile',
-                        { user: usr, currentUser });
+                else {
+                    //Pedimos las imágenes
+                    usersDAOModel.getImagesById(usr.id, (err, imgs) => {
+                        if (err) next(err);
+                        else {
+                            response
+                                .status(200)
+                                .render('user-profile',
+                                    { user: usr, currentUser, userImgsIds: imgs });
+                        }
+                    })
+                }
             }
         }
     );
@@ -332,28 +338,33 @@ function handleRejectRequest(request, response, next) {
 function handleUserPicturesPost(request, response, next) {
     const { currentUser } = request.session;
 
-    if (request.file != undefined) {
-        usersDAOModel.addImage(currentUser.email, request.file.buffer,
+    if (request.file) {
+        usersDAOModel.addImage(currentUser.id, request.file.buffer,
             (err, result) => {
                 if (err) next(err);
                 else {
                     if (!result) next(err);
-                    else response.redirect(`profile/${request.session.currentUser.id}`);
+                    else {
+                        currentUser.puntuation -= 100;
+                        usersDAOModel.updatePuntuation(currentUser.email, currentUser.puntuation, (err, res) => {
+                            if (err) next(err);
+                            else response.status(200).redirect('back');
+                        })
+                    }
                 }
             })
     }
-    else response.redirect(`profile/${request.session.currentUser.id}`);
+    else response.status(200).redirect('back');
 
 }
 
-/**
- * Handles the users-pictures GET petition to get the users pictures images.
- * @param {*} request 
- * @param {*} response 
- * @param {*} next 
- */
 function handleUserPictures(request, response, next) {
-    //TODO: 
+    usersDAOModel.getImageByIdImage(request.params.id, (err, img) => {
+        if (err) next(err);
+        else {
+            response.status(200).end(img);
+        }
+    })
 }
 
 module.exports = {

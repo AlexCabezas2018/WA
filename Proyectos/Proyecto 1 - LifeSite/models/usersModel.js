@@ -24,7 +24,9 @@ class usersModel {
             INSERT_FRIEND: 'INSERT INTO friendships VALUES (?,?), (?,?)',
             GET_PROFILE_PICTURE: 'SELECT profile_img from users WHERE id = ?',
             ADD_IMAGE: "INSERT INTO user_images VALUES (null, ?,?)",
-            GET_IMAGES_FROM_USER: "SELECT image FROM user_images WHERE username = ?"
+            GET_IMAGES_FROM_USER: "SELECT id FROM user_images WHERE username = ?",
+            GET_IMAGE_BY_ID: "SELECT image FROM user_images WHERE id = ?",
+            UPDATE_PUNTUATION: "UPDATE users SET puntuation = ? WHERE email = ? "
         }
     }
 
@@ -287,11 +289,11 @@ class usersModel {
      * @param {*} image 
      * @param {*} callback 
      */
-    addImage(email, image, callback) {
+    addImage(id, image, callback) {
         this.pool.getConnection((err, conn) => {
             if (err) callback(new Error(this.exceptions.connection_error), undefined);
             else {
-                conn.query(this.queries.ADD_IMAGE, [email, image],
+                conn.query(this.queries.ADD_IMAGE, [id, image],
                     (err, result) => {
                         conn.release();
                         if (err) callback(new Error(err.message), undefined);
@@ -302,22 +304,55 @@ class usersModel {
     }
 
     /**
-     * Returns an array of images given an user
-     * @param {*} email 
+     * Returns an array of the ids of the images given an user
+     * @param {*} id 
      * @param {*} callback 
      */
-    getUserPictures(email, callback) {
+    getImagesById(id, callback) {
         this.pool.getConnection((err, conn) => {
             if (err) callback(new Error(this.exceptions.connection_error), undefined);
             else {
-                conn.query(this.queries.GET_IMAGES_FROM_USER, [email],
+                conn.query(this.queries.GET_IMAGES_FROM_USER, [id],
                     (err, images) => {
                         conn.release();
                         if (err) callback(new Error(err.message), undefined);
                         else callback(undefined, images);
-                    })
+                    });
             }
-        })    
+        });
+    }
+
+    /**
+     * Returns a single photo given its id
+     * @param {*} id 
+     * @param {*} callback 
+     */
+    getImageByIdImage(id, callback) {
+        this.pool.getConnection((err, conn) => {
+            if (err) callback(new Error(this.exceptions.connection_error), undefined);
+            else {
+                conn.query(this.queries.GET_IMAGE_BY_ID, [id],
+                    (err, img) => {
+                        conn.release();
+                        if (err) callback(new Error(err.message), undefined);
+                        else callback(undefined, img[0].image);
+                    });
+            }
+        });
+    }
+
+    updatePuntuation(email, puntuation, callback) {
+        this.pool.getConnection((err, conn) => {
+            if (err) callback(new Error(this.exceptions.connection_error), undefined);
+            else {
+                conn.query(this.queries.UPDATE_PUNTUATION, [puntuation, email],
+                    (err, result) => {
+                        conn.release();
+                        if (err) callback(new Error(err.message), undefined);
+                        else callback(undefined, true);
+                    });
+            }
+        });
     }
 
 }

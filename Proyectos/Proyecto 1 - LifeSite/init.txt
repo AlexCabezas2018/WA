@@ -5,7 +5,7 @@ CREATE OR REPLACE TABLE users (
     username VARCHAR(255) NOT NULL,
     gender VARCHAR(255) NOT NULL,
     birth_date DATE,
-    profile_img BLOB,
+    profile_img LONGBLOB,
     puntuation INT DEFAULT 0,
     
     PRIMARY KEY(id, email)
@@ -25,13 +25,13 @@ CREATE OR REPLACE TABLE friendships (
     PRIMARY KEY (username_1,username_2)
 );
 
-CREATE TABLE questions (
+CREATE OR REPLACE TABLE questions (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     question_body VARCHAR(255) NOT NULL ,
     initial_options INT NOT NULL
 );
 
-CREATE TABLE answers(
+CREATE OR REPLACE TABLE answers(
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     id_question INT NOT NULL,
     answer_body VARCHAR(255) NOT NULL,
@@ -39,24 +39,24 @@ CREATE TABLE answers(
     FOREIGN KEY (id_question) REFERENCES questions(id)
 );
 
-CREATE TABLE user_answers (
+CREATE OR REPLACE TABLE user_answers (
     username VARCHAR(255) NOT NULL REFERENCES users(email),
     id_answer INT NOT NULL REFERENCES answers(id),
 
     PRIMARY KEY (username,id_answer)
-)
+);
 
-CREATE TABLE answer_like_friend(
+CREATE OR REPLACE TABLE answer_like_friend(
     email_user VARCHAR(255) NOT NULL REFERENCES users(email),
     email_friend VARCHAR(255) NOT NULL REFERENCES users(email),
     id_question INT NOT NULL REFERENCES id(questions),
     id_answer INT NOT NULL REFERENCES id(answers),
     
     PRIMARY KEY (email_user, email_friend, id_question)
-)
+);
 
- CREATE TABLE user_images(
+CREATE OR REPLACE TABLE user_images(
     id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-	username VARCHAR(255) NOT NULL REFERENCES users(email) ,
-    image BLOB
- )
+	username VARCHAR(255) NOT NULL REFERENCES users(id) ,
+    image LONGBLOB
+);

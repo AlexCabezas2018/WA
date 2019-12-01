@@ -44,17 +44,20 @@
     <%if(user.id == currentUser.id){%>
     <a href="../update-profile" class="button edit-profile-button">Modificar perfil</a>
     <%}%>
-
     <%if(user.id == currentUser.id){%>
-        <h2>Tus imágenes</h2>        
-        <form method="POST" action="../add-picture" class="form-pictures" enctype="multipart/form-data">
-            <h3>Subir imagen</h3>
-            <input type="file" name="picture">
-            <input type="submit" value="Subir Imagen">
-        </form>
-        <%}else{%><h2>Imágenes de  <%= user.username %></h2><%}%>
-        <div class="user-images">
-        </div>
+    <h2>Tus imágenes</h2>
+    <%}else{%><h2>Imágenes de <%= user.username %></h2><%}%>
+    <div class="user-images">
+        <% userImgsIds.forEach(img => {%>
+    <img src="/users/img/<%=img.id %>" alt="Imágen de usuario">
+    <% }) %>
+
+    </div>
+    <form method="POST" action="../add-picture" class="form-pictures" enctype="multipart/form-data">
+        <h3>Subir imagen</h3>
+        <input type="file" name="picture">
+        <input type="submit" value="Subir Imagen">
+    </form>
     </div>
 </body>
 

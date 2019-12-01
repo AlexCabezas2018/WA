@@ -206,6 +206,12 @@ p {
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
+    margin-bottom: 2%;
+}
+
+.user-images > img {
+    max-width: 240px; 
+    max-height: 135px;
 }
 
 .form-pictures {

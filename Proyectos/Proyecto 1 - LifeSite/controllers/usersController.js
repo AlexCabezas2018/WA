@@ -338,23 +338,29 @@ function handleRejectRequest(request, response, next) {
 function handleUserPicturesPost(request, response, next) {
     const { currentUser } = request.session;
 
-    if (request.file) {
-        usersDAOModel.addImage(currentUser.id, request.file.buffer,
-            (err, result) => {
-                if (err) next(err);
-                else {
-                    if (!result) next(err);
-                    else {
-                        currentUser.puntuation -= 100;
-                        usersDAOModel.updatePuntuation(currentUser.email, currentUser.puntuation, (err, res) => {
-                            if (err) next(err);
-                            else response.status(200).redirect('back');
-                        })
-                    }
-                }
-            })
+    if(currentUser.puntuation < 100){
+        response.setFlash('Necesitas un mínimo de 100 puntos para subir una imagen');
+        response.redirect(`profile/${request.session.currentUser.id}`);
     }
-    else response.status(200).redirect('back');
+    else {
+        if (request.file) {
+            usersDAOModel.addImage(currentUser.id, request.file.buffer,
+                (err, result) => {
+                    if (err) next(err);
+                    else {
+                        if (!result) next(err);
+                        else {
+                            currentUser.puntuation -= 100;
+                            usersDAOModel.updatePuntuation(currentUser.email, currentUser.puntuation, (err, res) => {
+                                if (err) next(err);
+                                else response.status(200).redirect('back');
+                            })
+                        }
+                    }
+                })
+        }
+        else response.status(200).redirect('back');
+    }
 
 }
 

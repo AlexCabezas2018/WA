@@ -53,11 +53,15 @@
     <% }) %>
 
     </div>
-    <form method="POST" action="../add-picture" class="form-pictures" enctype="multipart/form-data">
+   
+    <%if(user.id == currentUser.id){%>
+        <form method="POST" action="../add-picture" class="form-pictures" enctype="multipart/form-data">
         <h3>Subir imagen</h3>
         <input type="file" name="picture">
         <input type="submit" value="Subir Imagen">
-    </form>
+    </form>    
+    <%}%>
+
     <%- include("flash") %>
     </div>
 </body>

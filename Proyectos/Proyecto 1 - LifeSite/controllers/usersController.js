@@ -103,7 +103,14 @@ function handleNewUserPost(request, response, next) {
  */
 function handleProfile(request, response, next) {
     const { currentUser } = request.session;
-    usersDAOModel.getUserById(request.params.id,
+    let id = Number(request.params.id);
+
+    if(isNaN(id)) {
+        next();
+        return;
+    }
+    
+    usersDAOModel.getUserById(id,
         (err, usr) => {
             if (err) {
                 next(err);
@@ -161,12 +168,17 @@ function handleUpdateProfile(request, response) {
  */
 function handleUpdateProfilePost(request, response, next) {
     const { currentUser } = request.session;
+    let profileImg = () => {
+        if(request.file) return request.file.buffer;
+        return currentUser.profile_img ? Buffer.from(currentUser.profile_img.data, "binary") : null; 
+    }
+
     const usr = {
         pass: (request.body.pass == '') ? currentUser.pass : request.body.pass,
         name: (request.body.name == '') ? currentUser.username : request.body.name,
         gender: (request.body.gender == '') ? currentUser.gender : request.body.gender,
         birth_date: (request.body.birth_date == '') ? currentUser.birth_date.split('T')[0] : request.body.birth_date,
-        profile_img: request.file ? request.file.buffer : Buffer.from(currentUser.profile_img.data, "binary"),
+        profile_img: profileImg(),
         email: currentUser.email
     }
 
@@ -267,7 +279,6 @@ function handleAddRequest(request, response, next) {
                         else {
                             if (correctInsert) response.redirect('../friends-page');
                             else {
-                                console.log(err.message);
                                 next(err);
                             }
                         }

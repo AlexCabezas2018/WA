@@ -2,7 +2,7 @@
 
 const QuestionsModel = require('../models/questionsModel');
 const UserModel = require('../models/usersModel');
-const questionModel = new QuestionsModel();
+const questionDAOModel = new QuestionsModel();
 const userModel = new UserModel();
 
 //TODO: Al responder por un amigo sacar siempre respuesta correcta
@@ -25,7 +25,7 @@ function handleIndex(request, response) {
 function handleRandomQuestions(request, response, next) {
     const currentUser = request.session.currentUser;
 
-    questionModel.getRandomQuestions((err, questions) => {
+    questionDAOModel.getRandomQuestions((err, questions) => {
         if (err) next(err);
         else {
             response.render('random-questions', { questions, currentUser });
@@ -57,7 +57,7 @@ function handleAddQuestionPost(request, response, next) {
 
     //get the options
     options = options.filter(option => option != "");
-    questionModel.addQuestion(question, options, (err, correctInsert) => {
+    questionDAOModel.addQuestion(question, options, (err, correctInsert) => {
         if (err) next(err);
         else {
             if (!correctInsert) next(err);
@@ -75,25 +75,33 @@ function handleAddQuestionPost(request, response, next) {
 function handleShowQuestion(request, response, next) {
     const currentUser = request.session.currentUser;
     request.session.friend == undefined;
+
+    let id = Number(request.params.id);
+
+    if(isNaN(id)) {
+        next();
+        return;
+    }
+
     //busco la pregunta
-    questionModel.getQuestionById(request.params.id,
+    questionDAOModel.getQuestionById(id,
         (err, question) => {
             if (err) next(err);
             else {
-                questionModel.checkQuestionIsAnswer(currentUser.email, question.id,
+                questionDAOModel.checkQuestionIsAnswer(currentUser.email, question.id,
                     (err, answers) => { // actualizado si la he contestado
                         const reply = (answers.length == 0) ? false : true;
 
                         //get friend who has answered the question
-                        questionModel.getFriendsAnswersByQuestion(currentUser.email, question.id,
+                        questionDAOModel.getFriendsAnswersByQuestion(currentUser.email, question.id,
                             (err, friends) => {
                                 if (err) next(err);
                                 else {
                                     //get my friends answers
-                                    questionModel.getAnswersLikeFriend(currentUser.email, question.id,
+                                    questionDAOModel.getAnswersLikeFriend(currentUser.email, question.id,
                                         (err, answersLikeFriend) => {
 
-                                            questionModel.getFriends(currentUser.email,
+                                            questionDAOModel.getFriends(currentUser.email,
                                                 (err, friendList) => {
 
                                                     friends.forEach(friend => {
@@ -145,7 +153,7 @@ function handleAnswerQuestion(request, response, next) {
     const currentUser = request.session.currentUser;
     const user = true;
 
-    questionModel.getAnswerByQuestion(request.params.id, user, undefined,
+    questionDAOModel.getAnswerByQuestion(request.params.id, user, undefined,
         (err, answers) => {
             if (err) next(err);
             else response.render('question-view', { answers, question, currentUser });
@@ -165,11 +173,11 @@ function handleAnswerQuestionPost(request, response, next) {
     const question = request.session.question;
 
     if (option == "new") {
-        questionModel.addAnswer(question.id, request.body.answer_body,
+        questionDAOModel.addAnswer(question.id, request.body.answer_body,
             (err, id_answer) => {
                 if (err) next(err);
                 else {
-                    questionModel.addUserAnswer(currentUser.email, id_answer,
+                    questionDAOModel.addUserAnswer(currentUser.email, id_answer,
                         (err, correctInsert) => {
                             if (err) next(err);
                             else {
@@ -181,7 +189,7 @@ function handleAnswerQuestionPost(request, response, next) {
             })
     }
     else {
-        questionModel.addUserAnswer(currentUser.email, option,
+        questionDAOModel.addUserAnswer(currentUser.email, option,
             (err, correctInsert) => {
                 if (err) next(err);
                 else {
@@ -205,7 +213,7 @@ function handleAnswerLikeFriend(request, response, next) {
             else {
                 request.session.friend = friend;
                 const user = false;
-                questionModel.getAnswerByQuestion(question.id, user, question.initial_options,
+                questionDAOModel.getAnswerByQuestion(question.id, user, question.initial_options,
                     (err, answers) => {
                         if (err) next(err);
                         else response.render('question-view-friend', { answers, question, currentUser, friend });
@@ -226,25 +234,25 @@ function handleAnswerLikeFriendPost(request, response, next) {
     const question = request.session.question;
     const friend = request.session.friend;
 
-    questionModel.addAnswerLikeFriend(currentUser.email, friend.email, question.id, answer_id,
+    questionDAOModel.addAnswerLikeFriend(currentUser.email, friend.email, question.id, answer_id,
         (err, correctInsert) => {
             if (err) next(err);
             else {
                 if (!correctInsert) next(err);
                 else {
-                    questionModel.checkQuestionIsAnswer(friend.email, question.id,
+                    questionDAOModel.checkQuestionIsAnswer(friend.email, question.id,
                         (err, friendAnswer) => {
                             if (err) next(err);
                             else {
                                 if (answer_id == friendAnswer[0].id_answer) {
-                                    questionModel.addPuntuation(currentUser.puntuation + 50, currentUser.id,
+                                    questionDAOModel.addPuntuation(currentUser.puntuation + 50, currentUser.id,
                                         (err, correctUpdate) => {
                                             if (err) next(err);
                                             else {
                                                 if (!correctUpdate) next(err);
                                                 else {
-                                                    response.redirect(`show-question/${question.id}`);
                                                     request.session.currentUser.puntuation += 50;
+                                                    response.redirect(`show-question/${question.id}`);
                                                 }
                                             }
                                         })

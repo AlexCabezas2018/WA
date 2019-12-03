@@ -28,7 +28,7 @@
         <h2><%=question.question_body%></h2>
         <form method="POST" action="../answer-question/" class="form-answers">
             <% answers.forEach(answer => { %>
-            <div class="option"> <input type="radio" name="option" value="<%=answer.id%>"><%=answer.answer_body%></div>
+            <div class="option"> <input type="radio" name="option" value="<%=answer.id_answer%>"><%=answer.answer_body%></div>
             <% });%>
             <div class="option" id='other'>
                 <input type="radio" name="option" value="new"> Otra:

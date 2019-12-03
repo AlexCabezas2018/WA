@@ -151,9 +151,9 @@ function handleShowQuestion(request, response, next) {
 function handleAnswerQuestion(request, response, next) {
     const question = request.session.question;
     const currentUser = request.session.currentUser;
-    const user = true;
 
-    questionDAOModel.getAnswerByQuestion(request.params.id, user, undefined,
+
+    questionDAOModel.getAnswersByQuestion(request.params.id, undefined,
         (err, answers) => {
             if (err) next(err);
             else response.render('question-view', { answers, question, currentUser });
@@ -212,12 +212,34 @@ function handleAnswerLikeFriend(request, response, next) {
             if (err) next(err);
             else {
                 request.session.friend = friend;
-                const user = false;
-                questionDAOModel.getAnswerByQuestion(question.id, user, question.initial_options,
-                    (err, answers) => {
-                        if (err) next(err);
-                        else response.render('question-view-friend', { answers, question, currentUser, friend });
-                    })
+
+                //get the chosen answer given an user and question 
+                questionDAOModel.checkQuestionIsAnswer(friend.email, question.id, 
+                    (err, friendAnswer)=> {
+                        if(err) next(err);
+                        else {
+                            //get all options
+                            questionDAOModel.getAnswersByQuestion(question.id, question.initial_options,
+                                (err, answers) => {
+                                    if (err) next(err);
+                                    else {
+                                        //get all options except user option
+                                        answers = answers.filter(elem => elem.id_answer != friendAnswer[0].id_answer);
+                                        answers.sort(() => .5 - Math.random()).splice(0, answers.length - 1);
+                                        //push the user option
+                                        answers.push(friendAnswer[0]);
+                                        //shuffle options
+                                        answers.sort(function() {
+                                            return .5 - Math.random();
+                                          });
+                                        response.render('question-view-friend', { answers, question, currentUser, friend });
+                                    }
+                                })
+
+                        }
+                })
+
+                
             }
         })
 }

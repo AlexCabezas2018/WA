@@ -40,7 +40,7 @@ const daoUsers = new DAOUsers(pool);
 
 /* Middleware de acceso */
 function currentUser(request, response, next) {
-    if(request.session.currentUser) {
+    if (request.session.currentUser) {
         response.locals.userEmail = request.session.currentUser;
         next();
     }
@@ -57,24 +57,28 @@ app.get("/tasks", currentUser, (request, response) => {
             response.status(500).end();
         }
 
-        //TODO: quitar user de parámetro porque está en response.locals y eso el global para todas las vistas
-        else response.status(200).render('tasks', { taskList: list, user: response.locals.userEmail });
+        else response.status(200).render('tasks', { taskList: list });
     })
 });
 
 app.post("/addTask", (request, response) => {
-    const { text, tags } = utils.createTask(request.body.taskText);
-    const task = { text, tags, user: request.session.currentUser, done: 0 }
+    if (request.body.taskText == '') {
+        response.status(500).redirect('back');
+    }
+    else {
+        const { text, tags } = utils.createTask(request.body.taskText);
+        const task = { text, tags, user: request.session.currentUser, done: 0 }
 
-    daoTasks.insertTask(request.session.currentUser, task, err => {
-        if (err) {
-            console.log(err.message);
-            response.status(500).end();
-        }
-        else {
-            response.status(200).redirect("tasks");
-        }
-    });
+        daoTasks.insertTask(request.session.currentUser, task, err => {
+            if (err) {
+                console.log(err.message);
+                response.status(500).end();
+            }
+            else {
+                response.status(200).redirect("tasks");
+            }
+        });
+    }
 });
 
 app.get("/finish/:id", currentUser, (request, response) => {
@@ -104,19 +108,19 @@ app.get("/deletedCompleted", currentUser, (request, response) => {
 /* Practica 5 */
 
 app.get('/login', (request, response) => {
-    response.status(200).render('login', {errorMsg: null})
+    response.status(200).render('login', { errorMsg: null })
 });
 
 app.post('/login', (request, response) => {
-    daoUsers.isUserCorrect(request.body.email, request.body.password, 
+    daoUsers.isUserCorrect(request.body.email, request.body.password,
         (err, isCorrectUser) => {
-            if(err) response.status(500).render('login', {errorMsg: err.message})
+            if (err) response.status(500).render('login', { errorMsg: err.message })
             else {
-                if(isCorrectUser) {
+                if (isCorrectUser) {
                     request.session.currentUser = request.body.email;
                     response.status(200).redirect('tasks');
                 }
-                else response.status(400).render('login', {errorMsg: 'Usuario o contraseña inválidos'});
+                else response.status(400).render('login', { errorMsg: 'Usuario o contraseña inválidos' });
             }
         })
 })
@@ -130,12 +134,12 @@ app.get('/logout', currentUser, (request, response) => {
 app.get('/imagenUsuario', (request, response) => {
     daoUsers.getUserImageName(request.session.currentUser, (
         err, userPath) => {
-            if(err) response.status(500).end();
-            else {
-                if(!userPath) response.status(200).sendFile(path.join(__dirname, 'public', 'img', 'NoPerfil.png'));
-                else response.status(200).sendFile(path.join(__dirname, 'profile_imgs', userPath));
-            }
-        });
+        if (err) response.status(500).end();
+        else {
+            if (!userPath) response.status(200).sendFile(path.join(__dirname, 'public', 'img', 'NoPerfil.png'));
+            else response.status(200).sendFile(path.join(__dirname, 'profile_imgs', userPath));
+        }
+    });
 })
 
 app.listen(config.port, function (err) {

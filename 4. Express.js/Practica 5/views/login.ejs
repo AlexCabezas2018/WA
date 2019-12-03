@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,17 +12,19 @@
     <link rel="stylesheet" href="/css/tasksScreen.css" media="screen" />
     <link rel="icon" href="/img/favicon.ico" />
 </head>
+
 <body>
     <header>
-            <h1>TAREAS</h1>
+        <h1>TAREAS</h1>
     </header>
     <div class="container">
         <form class="login-form" method="POST" action="login">
             <input class="form-input" type="text" name="email" placeholder="Dirección de correo">
-            <input class="form-input"type="password" name="password" id="">
-            <input class="form-input"type="submit" value="Entrar">
+            <input class="form-input" type="password" name="password" placeholder="Contraseña">
+            <input id="form-submit" type="submit" value="Entrar">
         </form>
     </div>
     <h2 id='error-message'><%=errorMsg%></h2>
 </body>
+
 </html>

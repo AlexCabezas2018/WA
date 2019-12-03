@@ -56,6 +56,8 @@ app.get("/tasks", currentUser, (request, response) => {
             console.log(err.message);
             response.status(500).end();
         }
+
+        //TODO: quitar user de parámetro porque está en response.locals y eso el global para todas las vistas
         else response.status(200).render('tasks', { taskList: list, user: response.locals.userEmail });
     })
 });

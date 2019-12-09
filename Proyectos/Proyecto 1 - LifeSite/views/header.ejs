@@ -1,0 +1,13 @@
+<header>
+    <img src="/img/logo.png" alt="logo">
+    <div class="links">
+        <a href="/users/profile/<%= currentUser.id %>">Perfil</a>
+        <a href="/users/friends-page">Amigos</a>
+        <a href="/questions">Preguntas</a>
+        <a href="/users/logout">Desconectar</a>
+        <div class="user-header">
+            <img src="/users/getProfilePicture/<%=currentUser.id %>" alt="imagen de usuario" id="header-img">
+            <span><%= currentUser.puntuation %> pts</span>
+        </div>
+    </div>
+</header>

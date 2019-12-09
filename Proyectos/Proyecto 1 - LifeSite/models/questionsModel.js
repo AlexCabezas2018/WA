@@ -102,7 +102,7 @@ class QuestionsModel {
      * @param {Int} id_question 
      * @param {Function} callback 
      */
-    getAnswersByQuestion(id_question, options, callback) {
+    getAnswersByQuestion(id_question, callback) {
         this.pool.getConnection((err, conn) => {
             if (err) callback(new Error(this.exceptions.connection_error), undefined);
             else {
@@ -206,7 +206,7 @@ class QuestionsModel {
             if (err) callback(new Error(this.exceptions.connection_error), undefined);
             else {
                 conn.query(this.queries.GET_ANSWER_LIKE_FRIEND, [emailUser, id_question],
-                    (err, answers) => {            
+                    (err, answers) => {
                         conn.release();
                         if (err) callback(new Error(this.exceptions.query_error), undefined);
                         else callback(undefined, answers);
@@ -224,16 +224,16 @@ class QuestionsModel {
      * @param {*} id_answer 
      * @param {*} callback 
      */
-    addAnswerLikeFriend(emailUser, emailFriend, id_question, id_answer, callback){
+    addAnswerLikeFriend(emailUser, emailFriend, id_question, id_answer, callback) {
         this.pool.getConnection((err, conn) => {
-            if(err) callback(new Error(this.exceptions.connection_error), undefined);
-            else{
-                conn.query(this.queries.INSERT_ANSWER_LIKE_FRIEND, [emailUser, emailFriend, id_question, id_answer], 
-                    (err, result)=> {
+            if (err) callback(new Error(this.exceptions.connection_error), undefined);
+            else {
+                conn.query(this.queries.INSERT_ANSWER_LIKE_FRIEND, [emailUser, emailFriend, id_question, id_answer],
+                    (err, result) => {
                         conn.release();
-                        if(err) callback(new Error(this.exceptions.query_error), undefined);
+                        if (err) callback(new Error(this.exceptions.query_error), undefined);
                         else callback(undefined, true);
-                })
+                    })
             }
         })
     }
@@ -245,14 +245,14 @@ class QuestionsModel {
      */
     getFriends(email, callback) {
         this.pool.getConnection((err, conn) => {
-            if(err) callback(new Error(this.exceptions.connection_error), undefined);
-            else{
-                conn.query(this.queries.GET_FRIENDS, [email], 
-                    (err, friends)=> {
+            if (err) callback(new Error(this.exceptions.connection_error), undefined);
+            else {
+                conn.query(this.queries.GET_FRIENDS, [email],
+                    (err, friends) => {
                         conn.release();
-                        if(err) callback(new Error(this.exceptions.query_error), undefined);
+                        if (err) callback(new Error(this.exceptions.query_error), undefined);
                         else callback(undefined, friends);
-                })
+                    })
             }
         })
     }
@@ -263,16 +263,16 @@ class QuestionsModel {
      * @param {*} email 
      * @param {*} callback 
      */
-    addPuntuation(puntuation, id, callback){
+    addPuntuation(puntuation, id, callback) {
         this.pool.getConnection((err, conn) => {
-            if(err) callback(new Error(this.exceptions.connection_error), undefined);
-            else{
-                conn.query(this.queries.ADD_PUNTUATION, [puntuation, id], 
-                    (err, result)=> {
+            if (err) callback(new Error(this.exceptions.connection_error), undefined);
+            else {
+                conn.query(this.queries.ADD_PUNTUATION, [puntuation, id],
+                    (err, result) => {
                         conn.release();
-                        if(err) callback(new Error(this.exceptions.query_error), undefined);
+                        if (err) callback(new Error(this.exceptions.query_error), undefined);
                         else callback(undefined, true);
-                })
+                    })
             }
         })
     }

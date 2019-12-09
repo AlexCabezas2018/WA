@@ -153,7 +153,7 @@ function handleAnswerQuestion(request, response, next) {
     const currentUser = request.session.currentUser;
 
 
-    questionDAOModel.getAnswersByQuestion(request.params.id, undefined,
+    questionDAOModel.getAnswersByQuestion(request.params.id,
         (err, answers) => {
             if (err) next(err);
             else {
@@ -222,7 +222,6 @@ function handleAnswerQuestionPost(request, response, next) {
 function handleAnswerLikeFriend(request, response, next) {
     const currentUser = request.session.currentUser;
     const question = request.session.question;
-
     userModel.getUserById(request.params.id,
         (err, friend) => {
             if (err) next(err);
@@ -235,13 +234,13 @@ function handleAnswerLikeFriend(request, response, next) {
                         if (err) next(err);
                         else {
                             //get all options
-                            questionDAOModel.getAnswersByQuestion(question.id, question.initial_options,
+                            questionDAOModel.getAnswersByQuestion(question.id,
                                 (err, answers) => {
                                     if (err) next(err);
                                     else {
                                         //get all options except user option
                                         answers = answers.filter(elem => elem.id_answer != friendAnswer[0].id_answer);
-                                        answers.sort(() => .5 - Math.random()).splice(0, answers.length - 1);
+                                        answers = answers.sort(() => .5 - Math.random()).splice(0, question.initial_options - 1);
                                         //push the user option
                                         answers.push(friendAnswer[0]);
                                         //shuffle options

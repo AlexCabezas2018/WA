@@ -11,20 +11,7 @@
 </head>
 
 <body>
-    <header>
-        <img src="/img/logo.png" alt="logo">
-        <div class="links">
-            <a href="../profile/<%= currentUser.id %>">Perfil</a>
-            <a href="../friends-page">Amigos</a>
-            <a href="../../questions">Preguntas</a>
-            <a href="../logout">Desconectar</a>
-            <div class="user-header">
-                <img src="/users/getProfilePicture/<%=currentUser.id %>" alt="imagen de usuario" id="header-img">
-                <span><%= currentUser.puntuation %> pts</span>
-            </div>
-        </div>
-
-    </header>
+    <%-include("header") %>
     <div class="container">
         <%if(user.id == currentUser.id){%>
         <h2>Tu perfil</h2>

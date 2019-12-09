@@ -20,18 +20,29 @@
             <a href="../../users/logout">Desconectar</a>
             <div class="user-header">
                 <img src="/users/getProfilePicture/<%=currentUser.id %>" alt="imagen de usuario" id="header-img">
-                <span><%=currentUser.puntuation%></span>
+                <span><%=currentUser.puntuation%> pts</span>
             </div>
         </div>
     </header>
     <div class="container">
         <h2><%=question.question_body%></h2>
+        <% if(errors.length > 0) { %>
+        <div class='login-error-msgs'>
+            Hemos encontrado algunos errores:
+            <ul>
+                <% errors.forEach(error => { %>
+                <li><%=error.msg %></li>
+                <%})%>
+            </ul>
+        </div>
+        <% } %>
         <form method="POST" action="../answer-question/" class="form-answers">
             <% answers.forEach(answer => { %>
-            <div class="option"> <input type="radio" name="option" value="<%=answer.id_answer%>"><%=answer.answer_body%></div>
+            <div class="option"> <input type="radio" name="option" value="<%=answer.id_answer%>"><%=answer.answer_body%>
+            </div>
             <% });%>
             <div class="option" id='other'>
-                <input type="radio" name="option" value="new"> Otra:
+                <input type="radio" name="option" value="new" checked> Otra:
                 <input type="text" name="answer_body">
             </div>
             <input type="submit" value="Responder" value="submit-button">

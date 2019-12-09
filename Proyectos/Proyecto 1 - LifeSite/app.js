@@ -6,6 +6,7 @@ const questionsRouter = require('./routers/questionsRouter');
 const path = require('path');
 const session = require('express-session');
 const config = require('./config');
+const expressValidator = require('express-validator');
 
 const app = Express();
 
@@ -16,6 +17,7 @@ app.use(session({
     secret: 'foobar34',
     resave: false,
 }));
+app.use(expressValidator());
 
 /* ROUTERS */
 app.use('/users', userRouter); // Applying usersRouter to the main route

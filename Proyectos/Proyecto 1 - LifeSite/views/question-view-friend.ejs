@@ -29,7 +29,8 @@
         <h3>¿Qué crees que opina <%=friend.username%> ? </h3>
         <form method="POST" action="../answer-like-friend" class="form-answers">
             <% answers.forEach(answer => { %>
-            <div class="option"> <input type="radio" name="option" value="<%=answer.id_answer%>"><%=answer.answer_body%></div>
+            <div class="option"> <input checked type="radio" name="option"
+                    value="<%=answer.id_answer%>"><%=answer.answer_body%></div>
             <% });%>
             <input type="submit" value="Responder" value="submit-button">
         </form>

@@ -19,6 +19,16 @@
     </header>
     <div class="container">
         <h2>Modificar perfil </h2>
+        <% if(errors.length > 0) { %>
+        <div class='login-error-msgs'>
+            Hemos encontrado algunos errores:
+            <ul>
+                <% errors.forEach(error => { %>
+                <li><%=error %></li>
+                <%})%>
+            </ul>
+        </div>
+        <% } %>
         <h3>Los campos no rellenados no serán modificados</h3>
         <form method="POST" action="update-profile" class="form-container-new-user" enctype="multipart/form-data">
             <div class="password">
@@ -30,7 +40,7 @@
                 <input type="text" name="name" class="input-new-user">
             </div>
             <div class="gender">
-                <span id=gender-span>Sexo</span>
+                <span id='gender-span'>Sexo</span>
                 <div class="gender-options">
                     <select name="gender" id="">
                         <option value="Masculino">Masculino</option>

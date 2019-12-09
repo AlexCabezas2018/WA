@@ -78,7 +78,7 @@ function handleShowQuestion(request, response, next) {
 
     let id = Number(request.params.id);
 
-    if(isNaN(id)) {
+    if (isNaN(id)) {
         next();
         return;
     }
@@ -156,7 +156,10 @@ function handleAnswerQuestion(request, response, next) {
     questionDAOModel.getAnswersByQuestion(request.params.id, undefined,
         (err, answers) => {
             if (err) next(err);
-            else response.render('question-view', { answers, question, currentUser });
+            else {
+                request.session.answers = answers;
+                response.render('question-view', { answers, question, currentUser, errors: [] });
+            }
         })
 }
 
@@ -173,20 +176,33 @@ function handleAnswerQuestionPost(request, response, next) {
     const question = request.session.question;
 
     if (option == "new") {
-        questionDAOModel.addAnswer(question.id, request.body.answer_body,
-            (err, id_answer) => {
-                if (err) next(err);
-                else {
-                    questionDAOModel.addUserAnswer(currentUser.email, id_answer,
-                        (err, correctInsert) => {
-                            if (err) next(err);
-                            else {
-                                if (!correctInsert) next(err);
-                                else response.redirect(`../show-question/${question.id}`);
-                            }
-                        })
-                }
-            })
+        request.checkBody('answer_body', "El campo no debe ser vacío").notEmpty()
+        request.getValidationResult().then(results => {
+            if (results.isEmpty()) {
+                questionDAOModel.addAnswer(question.id, request.body.answer_body,
+                    (err, id_answer) => {
+                        if (err) next(err);
+                        else {
+                            questionDAOModel.addUserAnswer(currentUser.email, id_answer,
+                                (err, correctInsert) => {
+                                    if (err) next(err);
+                                    else {
+                                        if (!correctInsert) next(err);
+                                        else response.redirect(`../show-question/${question.id}`);
+                                    }
+                                })
+                        }
+                    })
+            }
+            else {
+                response.status(400).render('question-view', {
+                    question: request.session.question,
+                    answers: request.session.answers,
+                    currentUser: request.session.currentUser,
+                    errors: results.array()
+                })
+            }
+        })
     }
     else {
         questionDAOModel.addUserAnswer(currentUser.email, option,
@@ -214,9 +230,9 @@ function handleAnswerLikeFriend(request, response, next) {
                 request.session.friend = friend;
 
                 //get the chosen answer given an user and question 
-                questionDAOModel.checkQuestionIsAnswer(friend.email, question.id, 
-                    (err, friendAnswer)=> {
-                        if(err) next(err);
+                questionDAOModel.checkQuestionIsAnswer(friend.email, question.id,
+                    (err, friendAnswer) => {
+                        if (err) next(err);
                         else {
                             //get all options
                             questionDAOModel.getAnswersByQuestion(question.id, question.initial_options,
@@ -229,17 +245,17 @@ function handleAnswerLikeFriend(request, response, next) {
                                         //push the user option
                                         answers.push(friendAnswer[0]);
                                         //shuffle options
-                                        answers.sort(function() {
+                                        answers.sort(function () {
                                             return .5 - Math.random();
-                                          });
+                                        });
                                         response.render('question-view-friend', { answers, question, currentUser, friend });
                                     }
                                 })
 
                         }
-                })
+                    })
 
-                
+
             }
         })
 }

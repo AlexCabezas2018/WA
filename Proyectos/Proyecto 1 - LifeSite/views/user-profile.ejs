@@ -36,7 +36,7 @@
     </div>
     <div class="user-info">
         <h3><%= user.username %></h3>
-        <p> <%= new Date().getFullYear() - user.birth_date.getFullYear()  %> años</p>
+        <p> <%= currentAge %> años</p>
         <p> <%= user.gender %> </p>
         <p> <%= user.puntuation %> puntos</p>
     </div>
@@ -53,13 +53,13 @@
     <% }) %>
 
     </div>
-   
+
     <%if(user.id == currentUser.id){%>
-        <form method="POST" action="../add-picture" class="form-pictures" enctype="multipart/form-data">
+    <form method="POST" action="../add-picture" class="form-pictures" enctype="multipart/form-data">
         <h3>Subir imagen</h3>
         <input type="file" name="picture">
         <input type="submit" value="Subir Imagen">
-    </form>    
+    </form>
     <%}%>
 
     <%- include("flash") %>

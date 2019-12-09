@@ -1,5 +1,6 @@
 const usersModel = require('../models/usersModel');
 const path = require('path');
+const expressValidator = require('express-validator');
 
 const usersDAOModel = new usersModel();
 
@@ -56,7 +57,7 @@ function handleLoginPost(request, response, next) {
  */
 function handleLogout(request, response) {
     console.log(`[INFO]: User ${request.session.currentUser.id} disconnected!`);
-    request.session.currentUser = undefined;
+    request.session.destroy();
     response.status(200).redirect('login');
 }
 
@@ -68,7 +69,7 @@ function handleLogout(request, response) {
 function handleNewUser(request, response) {
     request.session.currentUser = undefined;
     response.status(200);
-    response.render('new-user');
+    response.render('new-user', { errors: [] });
 }
 
 /**
@@ -78,21 +79,33 @@ function handleNewUser(request, response) {
  * @param {*} next 
  */
 function handleNewUserPost(request, response, next) {
-    const usr = {
-        email: request.body.email,
-        pass: request.body.pass,
-        name: request.body.name,
-        gender: request.body.gender,
-        birth_date: request.body.birth_date,
-        profile_img: request.file ? request.file.buffer : null,
-    }
+    request.checkBody('email', "Dirección de correo no válida").isEmail();
+    request.checkBody('pass', "La contraseña debe tener más de 5 caracteres").isLength({ min: 5 });
+    request.checkBody('birth_date', "Fecha no válida").isBefore();
 
-    usersDAOModel.createUser(usr, (err, usrId) => {
-        if (err) {
-            next(err);
+    request.getValidationResult().then(result => {
+        if (result.isEmpty()) {
+            const usr = {
+                email: request.body.email,
+                pass: request.body.pass,
+                name: request.body.name,
+                gender: request.body.gender,
+                birth_date: request.body.birth_date,
+                profile_img: request.file ? request.file.buffer : null,
+            }
+
+            usersDAOModel.createUser(usr, (err, usrId) => {
+                if (err) {
+                    next(err);
+                }
+                else response.status(200).redirect(`login`);
+            });
         }
-        else response.redirect(`login`);
-    });
+        else {
+            response.status(400).render('new-user', { errors: result.array() })
+        }
+    })
+
 }
 
 /**
@@ -105,11 +118,11 @@ function handleProfile(request, response, next) {
     const { currentUser } = request.session;
     let id = Number(request.params.id);
 
-    if(isNaN(id)) {
+    if (isNaN(id)) {
         next();
         return;
     }
-    
+
     usersDAOModel.getUserById(id,
         (err, usr) => {
             if (err) {
@@ -125,7 +138,7 @@ function handleProfile(request, response, next) {
                             response
                                 .status(200)
                                 .render('user-profile',
-                                    { user: usr, currentUser, userImgsIds: imgs });
+                                    { user: usr, currentUser, userImgsIds: imgs, currentAge: new Date().getFullYear() - usr.birth_date.getFullYear() });
                         }
                     })
                 }
@@ -157,7 +170,7 @@ function handleProfilePicture(request, response, next) {
  * @param {*} response 
  */
 function handleUpdateProfile(request, response) {
-    response.status(200).render('update-profile', { currentId: request.session.currentUser.id });
+    response.status(200).render('update-profile', { currentId: request.session.currentUser.id, errors: [] });
 }
 
 /**
@@ -169,8 +182,8 @@ function handleUpdateProfile(request, response) {
 function handleUpdateProfilePost(request, response, next) {
     const { currentUser } = request.session;
     let profileImg = () => {
-        if(request.file) return request.file.buffer;
-        return currentUser.profile_img ? Buffer.from(currentUser.profile_img.data, "binary") : null; 
+        if (request.file) return request.file.buffer;
+        return currentUser.profile_img ? Buffer.from(currentUser.profile_img.data, "binary") : null;
     }
 
     const usr = {
@@ -182,13 +195,22 @@ function handleUpdateProfilePost(request, response, next) {
         email: currentUser.email
     }
 
-    usersDAOModel.updateUser(usr, (err, correctUpdate) => {
-        if (err) next(err);
-        else {
-            if (correctUpdate) response.redirect(`profile/${request.session.currentUser.id}`);
-            else next(err);
-        }
-    });
+    let errors = [];
+    if (usr.pass.length < 5) errors.push('La nueva contraseña debe contener más de 5 caracteres');
+    if (new Date(usr.birth_date) > new Date()) errors.push('Fecha inválida')
+
+    if (errors.length == 0) {
+        usersDAOModel.updateUser(usr, (err, correctUpdate) => {
+            if (err) next(err);
+            else {
+                if (correctUpdate) response.redirect(`profile/${request.session.currentUser.id}`);
+                else next(err);
+            }
+        });
+    }
+    else {
+        response.status(200).render('update-profile', { currentId: request.session.currentUser.id, errors });
+    }
 }
 
 /**
@@ -349,7 +371,7 @@ function handleRejectRequest(request, response, next) {
 function handleUserPicturesPost(request, response, next) {
     const { currentUser } = request.session;
 
-    if(currentUser.puntuation < 100){
+    if (currentUser.puntuation < 100) {
         response.setFlash('Necesitas un mínimo de 100 puntos para subir una imagen');
         response.redirect(`profile/${request.session.currentUser.id}`);
     }

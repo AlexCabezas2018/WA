@@ -217,15 +217,16 @@ p {
 }
 
 .user-images{
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
+    overflow-x: scroll;
     margin-bottom: 2%;
+    white-space: nowrap;
 }
 
-.user-images > img {
+div.user-images > img {
     max-width: 240px; 
     max-height: 135px;
+    margin: 0 1.5%;
+    display: inline-block;
 }
 
 .form-pictures {

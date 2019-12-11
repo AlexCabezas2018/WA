@@ -5,8 +5,6 @@ const UserModel = require('../models/usersModel');
 const questionDAOModel = new QuestionsModel();
 const userModel = new UserModel();
 
-//TODO: Al responder por un amigo sacar siempre respuesta correcta
-
 /**
  * Handles the / GET petition
  * @param {*} request 

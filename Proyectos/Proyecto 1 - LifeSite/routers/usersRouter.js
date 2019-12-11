@@ -34,7 +34,7 @@ usersRouter.post('/new-user', multerFactory.single('profile_img'), usersControll
 usersRouter.get('/profile/:id', middlewares.checkLoginMiddleware, usersController.handleProfile);
 
 /* Profile Picture */
-usersRouter.get('/getProfilePicture/:id', usersController.handleProfilePicture);
+usersRouter.get('/getProfilePicture/:id', middlewares.checkLoginMiddleware, usersController.handleProfilePicture);
 
 /* UPDATE PROFILE */
 usersRouter.get('/update-profile', middlewares.checkLoginMiddleware, usersController.handleUpdateProfile);

@@ -98,17 +98,20 @@ body {
 }
 
 div.task h2 {
-  width: 60%;
+  max-width: 80%;
+  display: flex; 
+  flex-wrap: wrap;
 }
 
 .tag {
   background-color: rgb(230, 69, 80);
   border: 1px solid white;
   border-radius: 6px;
-  font-size: 0.8em;
+  font-size: 0.6em;
   align-items: center;
-  padding: 1.5%;
-  margin-left: 10px;
+  padding: 3px;
+  margin: auto 0;
+  margin-left: 5px;
 }
 
 #done {
@@ -218,4 +221,30 @@ div.task h2 {
 
 #preview {
   min-width: 96%;
+}
+
+input[type="text"] {
+  height: 30px;
+  border-radius: 15px;
+  font-size: 1.2em;
+  padding-left: 0.3%;
+}
+
+form.form-div > label {
+  font-size: 1.2em;
+} 
+
+#addTag {
+  padding: 0.6%;
+  border-radius: 5px;
+  font-family: "Cabin", sans-serif;
+}
+
+#addTag:hover {
+  background-color: #bebcbc;
+  cursor: pointer;
+}
+
+#preview .tag:hover {
+  cursor: pointer;
 }

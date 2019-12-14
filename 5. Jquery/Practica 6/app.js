@@ -62,11 +62,11 @@ app.get("/tasks", currentUser, (request, response) => {
 });
 
 app.post("/addTask", (request, response) => {
-    if (request.body.taskText == '') {
+    if (request.body.taskDesc == '') {
         response.status(500).redirect('back');
     }
     else {
-        const { text, tags } = utils.createTask(request.body.taskText);
+        const { text, tags } = utils.createTask(request.body.taskDesc);
         const task = { text, tags, user: request.session.currentUser, done: 0 }
 
         daoTasks.insertTask(request.session.currentUser, task, err => {

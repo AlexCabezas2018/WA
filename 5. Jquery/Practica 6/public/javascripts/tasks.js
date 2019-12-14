@@ -17,8 +17,8 @@ $(() => {
         let tag = $(`<span>${tagName}</span>`);
 
         tag.addClass("tag"); //Añadimos estilo
-        if (!addedTags.includes(tagName)) {
-            addedTags.push(tagName);
+        if (tagName && !addedTags.includes("@" + tagName.replace(/ /g, "_"))) {
+            addedTags.push("@" + tagName.replace(/ /g, "_"));
             textDiv.append(tag);
         }
 
@@ -30,7 +30,7 @@ $(() => {
     //Cuando pulsas en el tag, desaparece.
     preview.children("h2").on("click", "span", (event) => {
         $(event.target).remove();
-        addedTags.splice(addedTags.indexOf(($(event.target).text())), 1); //Lo eliminamos de las ya añadidas para que pueda volver a escribirse
+        addedTags.splice(addedTags.indexOf(("@" + $(event.target).text().replace(/ /g, "_"))), 1); //Lo eliminamos de las ya añadidas para que pueda volver a escribirse
     })
 
     $("#add-task-button").on("click", (event) => {
@@ -40,12 +40,7 @@ $(() => {
             event.preventDefault();
         }
         else {
-            taskDesc.val(`${taskText} ${addedTags.join(" @")}`);
+            taskDesc.val(`${taskText} ${addedTags.slice(1, addedTags.length).join(" ")}`);
         }
     })
-
-    //TODO Manejar lo de la base de datos
-
-
-
 })

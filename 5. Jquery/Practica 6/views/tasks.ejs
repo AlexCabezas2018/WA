@@ -32,7 +32,7 @@
             <div class="task" <% if(task.done) {%>id="done" <%}%> >
                 <h2>
                     <div id="taskText"><%=task.text %></div> <% task.tags.forEach(tag => { %> <span class="tag">
-                <%=tag%></span>
+                <%=tag.replace(/_/g, ' ')%></span>
                 <% }) %>
                 </h2>
                 <% if(task.done) %><a href="finish/<%=task.id%>" class="done-task-button">Marcar finalizada</a>

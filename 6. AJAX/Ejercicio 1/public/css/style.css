@@ -1,0 +1,17 @@
+
+h1{
+    background-color: darkred;
+    color: white;
+    text-align: center;
+    font-size: 3em;
+}
+
+table{
+    margin: auto;
+}
+tr,th,td{
+    border: 2px solid black;
+}
+th,td{
+    padding: 1em;
+}

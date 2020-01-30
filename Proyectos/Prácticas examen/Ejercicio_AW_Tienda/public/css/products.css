@@ -1,0 +1,123 @@
+.products-container {
+    display: flex;
+    flex-direction: row;
+    margin: 0 auto;
+    max-width: 70%;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.product {
+    background-color: darkred;
+    border: 1px solid black;
+    color: white;
+    border-radius: 10px;
+    margin: 1%;
+    padding: 0.5%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-basis: 20%;
+}
+
+.product > form > input {
+    color: black;
+    background-color: lightgray;
+    text-decoration: none;
+    padding: 2%;
+    border-radius: 10px;
+    margin-top: 10%;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.product > p {
+    font-size: 0.9em;
+}
+
+.product > form > input:hover {
+    background-color: #939393;
+}
+
+.product > a > img { 
+    width: 100px;
+    height: 100px;
+    border-radius: 10px;
+    border: 1px solid white;
+}
+
+.product-list-container {
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    max-width: 40%;
+}
+
+.product-list-item {
+    background-color: darkred;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 2% 0;
+    padding: 1%;
+    border: 1px solid black;
+    border-radius: 10px;
+}
+
+.product-list-main-content > img {
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
+    border: 1px solid white;
+    margin-right: 4%;
+}
+
+.product-list-main-content {
+    display: flex;
+    align-items: center;
+}
+
+.product-list-main-content > a {
+    text-decoration: none;
+    color: white;
+    font-size: 1.2em;
+}
+
+.product-list-main-content > a:hover {
+    color: lightgray;
+}
+
+.filter-container {
+    background-color: darkred;
+    justify-content: center;
+    padding: 1%;
+    border: 1px solid black;
+    margin: 0 auto;
+    font-size: 1.3em;
+    border-radius: 10px;
+    width: 50%;
+    color: white;
+}
+
+#create-product-button {
+    color: black;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    margin: 0 auto;
+    background-color: lightgray;
+    text-decoration: none;
+    padding: 1%;
+    border-radius: 10px;
+    font-size: 1.7em;
+    width: 30%;
+    font-weight: bold;
+    border: 1px solid black;
+    margin-bottom: 2%;
+}
+
+#create-product-button:hover {
+    background-color: rgb(175, 175, 175);
+}
+

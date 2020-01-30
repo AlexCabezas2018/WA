@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://fonts.googleapis.com/css?family=PT+Sans&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/create-product.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="/js/create-product-client-script.js"></script>
+    <title>Create Product</title>
+</head>
+
+<body>
+    <%- include('header') %>
+    <h2>¡Crea tu producto!</h2>
+    <form class='create-product-form-container' action="/store/create_product" method="POST"
+        enctype="multipart/form-data">
+        <label for="name">Nombre:</label>
+        <input name='name' id="name" type="text" required placeholder="Nombre...">
+        <label for="Category">Categoria:</label>
+        <select name="categories" id="categories-select">
+            <option value="verdura">Verdura</option>
+            <option value="fruta">Fruta</option>
+            <option value="electrónica">Electrónica</option>
+        </select>
+        <label for="description">Descripcion:</label>
+        <textarea name="description" id="desc" cols="30" rows="1"></textarea>
+        <label for="quantity">Cantidad:</label>
+        <input name='amount' id='quant' type="number" required>
+        <label for="price">Precio:</label>
+        <input id='price' type="number" name="price" id="" required>
+        <label for="product-image">Imágen</label>
+        <input type="file" name="product-image" id="file">
+        <input id='create-product-button' type="submit" value="Crear producto">
+    </form>
+    <h2>Previsualizaciones</h2>
+    <div class="item-preview">
+        <a href="">
+            <img class='prod-img' src="/img/product-img.png" alt="Imágen del producto">
+        </a>
+    </div>
+    <div class="item-full-preview">
+        <img class='prod-img' src="/img/product-img.png" alt="Imágen del producto">
+    </div>
+
+</body>
+
+</html>

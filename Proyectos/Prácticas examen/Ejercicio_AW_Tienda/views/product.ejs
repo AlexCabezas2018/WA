@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://fonts.googleapis.com/css?family=PT+Sans&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/product.css">
+    <title>Producto</title>
+</head>
+
+<body>
+    <%- include('header') %>
+    <div class="container">
+        <h2>Información del producto</h2>
+        <div class="product">
+            <img src="/store/product/photo/<%=product.id%>" alt="Imágen del producto">
+            <div class="product-information">
+                <h3>Nombre: <%= product.name %> </h3>
+                <h3>Categoría: <%= product.category %> </h3>
+                <h3>Descripción: <%= product.description %> </h3>
+                <h3>Actualmente tenemos <b><%= product.amount %> </b> unidades de <%= product.name %> </h3>
+                <h2>Precio: <%= product.price %> pto/unidad</h2>
+            </div>
+        </div>
+        <form action="/store/buy/<%=product.id%>" method="POST">
+            <input type="submit" value="COMPRAR">
+        </form>
+    </div>
+
+</body>
+
+</html>

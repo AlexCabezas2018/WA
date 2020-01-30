@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Conversación con <%=friend.username%></title>
+    <link rel="stylesheet" href="/css/conversations.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/css?family=PT+Sans&display=swap" rel="stylesheet">
+</head>
+<body>
+    <%-include("header") %>
+    <h2>Conversación con <%= friend.username %></h2>
+    <div class="messages-container">
+        <% msgs.forEach(msg => { %>
+            <div class="message <%= msg.sent ? 'to' : 'from' %>">
+                <h3><%=msg.msg%></h3>
+            </div>
+        <% }); %>
+    </div>
+    <form action="/users/conversations/<%=friend.id%>" method="post" class="message-form">
+        <textarea name="message_content" id="" cols="30" rows="3" placeholder="Envía un mensaje..."></textarea>
+        <input type="submit" value="Enviar">
+    </form>
+</body>
+</html>

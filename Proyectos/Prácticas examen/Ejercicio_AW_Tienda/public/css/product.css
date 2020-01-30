@@ -1,0 +1,29 @@
+.product {
+    display: flex;
+    align-items: center;
+    color: white;
+    background-color: darkred;
+    border: 2px solid black;
+    border-radius: 10px;
+    min-width: 40%;
+    padding: 2%;
+}
+
+.product > img {
+    width: 170px;
+    height: 170px;
+    border: 1px solid white;
+    border-radius: 10px;
+    margin: 2%;
+}
+
+.container > form > input {
+    color: black;
+    background-color: lightgray;
+    text-decoration: none;
+    border-radius: 10px;
+    margin-top: 10%;
+    font-size: 2.6em;
+    font-weight: bold;
+    padding: 5%;
+}

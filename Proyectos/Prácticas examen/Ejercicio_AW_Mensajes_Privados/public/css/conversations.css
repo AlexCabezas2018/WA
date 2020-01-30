@@ -1,0 +1,36 @@
+.messages-container {
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: 50%;
+    min-width: 25%;
+    margin: 0 auto;
+}
+.message {
+    max-width: 50%;
+    padding: 0.5%;
+    border-radius: 10px;
+    margin: 2%;
+}
+
+.to {
+    background-color: lightgray;
+    margin-left: auto;
+}
+
+.from {
+    background-color: #38ff50;
+    margin-right: auto;
+}
+
+.message-form {
+    display:flex;
+    flex-direction: row;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+.message-form > textarea {
+    width: 50%;
+    font-size: 1.5em;
+}

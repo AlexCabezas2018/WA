@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Tienda</title>
+    <link href="https://fonts.googleapis.com/css?family=PT+Sans&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/products.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="/js/products-filter-client-script.js"></script>
+</head>
+
+<body>
+    <%-include("header") %>
+    <h2>Nuestros productos</h2>
+    <a href="/store/create_product" id='create-product-button'>¡Crea tu producto!</a>
+    <div class="products-container">
+        <% products.forEach(product => {%>
+        <div class="product">
+            <a href="/store/product/<%=product.id%>">
+                <img src="/store/product/photo/<%=product.id%>" alt="Imágen del producto">
+            </a>
+            <h3><%=product.name%></h3>
+            <p><%=product.price%>pts / <%=product.amount%> uds</p>
+            <form action="/store/buy/<%=product.id%>" method="POST">
+                <input type="submit" value="COMPRAR">
+            </form>
+        </div>
+        <%});%>
+    </div>
+    <h2>Filtros</h2>
+    <div class="filter-container">
+        <label for="category">Categoria: </label>
+        <%- include('filter-selector') %>
+    </div>
+    <%- include("flash") %>
+    <h2>Tu historial del compras</h2>
+    <div class="product-list-container">
+        <% productsList.forEach(product => {%>
+        <div class="product-list-item">
+            <div class="product-list-main-content">
+                <img src="/store/product/photo/<%=product.id_product%>" alt="Imágen de producto">
+                <a href="/store/product/<%=product.id_product%>"><%=product.name%></a>
+            </div>
+            <h3>x<%=product.units%></h3>
+        </div>
+        <%});%>
+    </div>
+</body>
+
+</html>

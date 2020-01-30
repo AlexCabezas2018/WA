@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Amigos y solicitudes de amistad</title>
+    <link href="https://fonts.googleapis.com/css?family=PT+Sans&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <%-include("header") %>
+    <div class="container">
+        <h2>Solicitudes de amistad</h2>
+        <div class="friends-list">
+
+            <% requests.forEach(elem => {%>
+            <div class="friend">
+                <div class="friend-profile">
+                    <img src="/users/getProfilePicture/<%=elem.id %>" alt="imagen de perfil" id="header-img">
+                    <a href="profile/<%=elem.id%>"><%=elem.username%></a>
+                </div>
+                <div class="response">
+                    <a href="accept-request/<%=elem.id%>" class="accept-reject-button"
+                        id='accept-friend-button'>Aceptar</a>
+                    <a href="reject-request/<%=elem.id%>" class="accept-reject-button"
+                        id='reject-friend-button'>Rechazar</a>
+                </div>
+            </div>
+            <%});%>
+        </div>
+        <h2>Búsqueda de amigos</h2>
+        <div class="search-friend">
+            <form method="POST" action="search" id="search-form">
+                <input type="search" name="name" id="search-bar-input" required>
+                <input type="submit" class="search-button" value="Buscar">
+            </form>
+        </div>
+
+        <h2>Mis amigos</h2>
+        <div class="friends-list">
+            <% friends.forEach(friend => { %>
+            <div class="friend">
+                <div class="friend-profile">
+                    <img src="/users/getProfilePicture/<%=friend.id %>" alt="imagen de perfil" id="header-img">
+                    <a href="profile/<%=friend.id%>"><%=friend.username%></a>
+                </div>
+            </div>
+            <% }); %>
+        </div>
+
+    </div>
+</body>
+
+</html>
